@@ -1,0 +1,22 @@
+{
+  "name": "auth_advance",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Subham-Maity/auth_advance.git",
+  "author": "Subham <97989643+Subham-Maity@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "config": "^3.3.9",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.10",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.0.3",
+    "nanoid": "^5.0.4",
+    "pino": "^8.17.1",
+    "pino-pretty": "^10.3.0",
+    "zod": "^3.22.4"
+  }
+}
