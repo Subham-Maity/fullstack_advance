@@ -1,13 +1,15 @@
 /*❗~~~~IMPORTS~~~~❗*/
 
 // Importing the necessary modules
-import express, {Application, Request, Response} from "express";
+import express, {Application, NextFunction, Request, Response} from "express";
 import bodyParser from "body-parser";
 
 //Importing the Security
 import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import compression from "compression";
+import cookieParser from "cookie-parser";
 
 
 //Importing the widgets
@@ -17,7 +19,7 @@ import morgan from "morgan";
 import { v4 as uuidv4 } from 'uuid';
 
 //Importing the error handler
-import globalErrorHandler from "./utils/globalErrorHandler";
+import globalErrorHandler from "./utils/errorHandler/globalErrorHandler";
 import {corsUrl} from "../config/default";
 
 /*❗~~~~CONFIG~~~~❗*/
@@ -34,7 +36,8 @@ const app: Application = express();
 app.use(cors({
   origin: corsUrl,
   optionsSuccessStatus: 200,
-  exposedHeaders: ['X-Total-Count']
+  exposedHeaders: ['X-Total-Count'],//for pagination
+  credentials: true//for cookies
 }));
 
 // Middleware for parsing JSON - This will parse incoming requests with JSON payloads
@@ -68,6 +71,12 @@ morgan.token('origin', function getOrigin(req: any) {
 // res[content-length] - Content length of the response , date - Date and time of the request
 app.use(morgan(':id :origin :remote-addr :method :url :status :response-time ms - :res[content-length] :date[Asia/Kolkata]'));
 
+
+// Middleware for compressing HTTP responses - This will compress HTTP responses to improve performance
+app.use(compression());
+
+//Cookie parser used for cookies in the app - This will parse cookies in the app
+app.use(cookieParser());
 
 
 // Middleware for parsing application/x-www-form-urlencoded - This will parse incoming requests with urlencoded payloads

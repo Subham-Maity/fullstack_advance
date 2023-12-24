@@ -1,14 +1,16 @@
 import connectDB from "../config/dbConnect";
-import log from "./utils/logger";
-
+import log from "./utils/logger/logger";
+import http from 'http';
 import app from "./app";
-import swaggerDocs from "./utils/swagger";
+import swaggerDocs from "./utils/documentation/swagger";
 import {port} from "../config/default";
 
+
+const server = http.createServer(app);
 connectDB()
     .then(() => {
         // Start the server only when the DB connection is successful
-        app.listen(port, () => {
+        server.listen(port, () => {
             swaggerDocs(app, port);
             log.info(`Server live on: http://localhost:${port}`);
 

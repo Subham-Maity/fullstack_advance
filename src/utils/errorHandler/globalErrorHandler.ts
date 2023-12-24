@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import ErrorHandler from './errorHandler';
-import log from "./logger";
+import log from "../logger/logger";
 
 
 /***How It Works**:
