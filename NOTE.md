@@ -134,4 +134,5 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 - `Outside`: Here you will get all the server-side code.
 
 ##### `Client`:
-- `pages/api/auth`: This includes `login` and `register` methods.
+- Components 
+  - Username(User name set) - Formik Validation, Error Handling,
