@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="66465581-49a2-4646-b211-b4330c8b85d6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/client/src/Api/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/app/(auth)/password/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/app/(auth)/recovery/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/app/(auth)/register/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/app/(auth)/reset/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/app/profile/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Auth/Password/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Auth/Recovery/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Auth/Register/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Auth/Reset/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/PageNotFound/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Profile/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Username/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/convert/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/hook/fetch.hook.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/middleware/protected/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/store/store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/validate/validate.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/JWT.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/controller/Stateless/auth/auth.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/controller/Stateless/mailer/mailer.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/controller/Stateless/user/user.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/middleware/Stateless/auth/isAuthenticated.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/model/Stateless/users/users.model.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/router/Stateless/auth/auth.router.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/router/Stateless/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/router/Stateless/user/user.router.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/types/Stateless/user/user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/utils/Stateless/jwt/jwt.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/server/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/server/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NOTE.md" beforeDir="false" afterPath="$PROJECT_DIR$/NOTE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/dbConnect.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/config/dbConnect.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/default.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/config/default.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/controller/Stateful/auth/auth.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/user/user.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/controller/Stateful/user/user.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware/auth/isAuthenticated.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/middleware/Stateful/auth/isAuthenticated.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware/auth/isOwner.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/middleware/Stateful/auth/isOwner.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware/error/catchAsyncError.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/middleware/error/catchAsyncError.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware/error/error.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/middleware/error/error.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/users/users.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/model/Stateful/users/users.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/auth/auth.router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/router/Stateful/auth/auth.router.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/router/Stateful/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/user/user.router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/router/Stateful/user/user.router.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/server.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/user/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/types/Stateful/user/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/crypto/crypt.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/utils/Stateful/crypto/crypt.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/documentation/swagger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/utils/documentation/swagger.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/errorHandler/errorHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/utils/errorHandler/errorHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/errorHandler/globalErrorHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/utils/errorHandler/globalErrorHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/logger/logger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/utils/logger/logger.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2Zwq0RhbMf80UJVueSKmNHWbbis" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Github/auth_advance/server/src/types/Stateless",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Github\\auth_advance\\server\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "actions.on.save",
+    "ts.external.directory.path": "C:\\Github\\auth_advance\\client\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Github\auth_advance\server\src\types\Stateless" />
+      <recent name="C:\Github\auth_advance\server\src\router\Stateless" />
+      <recent name="C:\Github\auth_advance\server\src\model\Stateless" />
+      <recent name="C:\Github\auth_advance\server\src\middleware\Stateless" />
+      <recent name="C:\Github\auth_advance\server\src\controller\Stateless" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Github\auth_advance\server" />
+      <recent name="C:\Github\auth_advance\client\src\app" />
+      <recent name="C:\Github\auth_advance\client\src" />
+      <recent name="C:\Github\auth_advance\client\src\components" />
+      <recent name="C:\Github\auth_advance\src\controller\Stateless" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="66465581-49a2-4646-b211-b4330c8b85d6" name="Changes" comment="" />
+      <created>1703343267402</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703343267402</updated>
+      <workItem from="1703343269745" duration="12038000" />
+      <workItem from="1703409069458" duration="4525000" />
+      <workItem from="1703413789535" duration="30640000" />
+      <workItem from="1703455918277" duration="3954000" />
+      <workItem from="1703496456355" duration="10240000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
