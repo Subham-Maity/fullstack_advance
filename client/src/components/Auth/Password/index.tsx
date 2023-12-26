@@ -13,14 +13,17 @@ import { useFormik } from "formik";
 import { passwordValidate } from "@/validate/formik/validate";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import { INITIAL_FORM_STATE_PASSWORD } from "@/validate/formik/intialValues";
+import {
+  INITIAL_FORM_STATE_PASSWORD,
+  INITIAL_FORM_STATE_RESET_PASSWORD,
+} from "@/validate/formik/intialValues";
 import { Values } from "@/types/validation/validation";
 
 const Password = () => {
   const router = useRouter();
 
   const formik = useFormik({
-    initialValues: INITIAL_FORM_STATE_PASSWORD,
+    initialValues: INITIAL_FORM_STATE_RESET_PASSWORD,
     validate: passwordValidate,
     validateOnBlur: false,
     validateOnChange: false,
