@@ -135,4 +135,6 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 
 ##### `Client`:
 - Components 
-  - Username(User name set) - Formik Validation, Error Handling,
+  - Username(User name set) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts) 
+  - Password(Password set) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
+  - Recovery(OTP to reset password) - 

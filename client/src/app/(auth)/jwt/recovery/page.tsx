@@ -1,9 +1,10 @@
 import React from 'react';
+import Recovery from "@/components/Auth/Recovery";
 
 const Page = () => {
     return (
         <div>
-        Recovery
+       <Recovery/>
         </div>
     );
 };

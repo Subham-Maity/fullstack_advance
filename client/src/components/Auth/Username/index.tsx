@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import { usernameValidate } from "@/validate/formik/validate";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import {INITIAL_FORM_STATE_USERNAME} from "@/validate/formik/intialValues";
+import { INITIAL_FORM_STATE_USERNAME } from "@/validate/formik/intialValues";
 import { Values } from "@/types/validation/validation";
 
 const Username = () => {
@@ -62,7 +62,7 @@ const Username = () => {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 Not a Member{" "}
-                <Link className="text-red-500" href="/register">
+                <Link className="text-red-500" href="jwt/register">
                   Register Now
                 </Link>
               </span>
