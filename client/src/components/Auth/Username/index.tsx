@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import avatar from "../../../public/profile.png";
+import avatar from "../../../../public/profile.png";
 import styles from "./Username.module.css";
 //Image and Link
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import { usernameValidate } from "@/validate/formik/validate";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import { INITIAL_FORM_STATE } from "@/validate/formik/intialValues";
+import {INITIAL_FORM_STATE_USERNAME} from "@/validate/formik/intialValues";
 import { Values } from "@/types/validation/validation";
 
 const Username = () => {
@@ -21,7 +21,7 @@ const Username = () => {
   // const setUsername = useAuthStore((state: any) => state.setUsername);
 
   const formik = useFormik({
-    initialValues: INITIAL_FORM_STATE,
+    initialValues: INITIAL_FORM_STATE_USERNAME,
     validate: usernameValidate,
     validateOnBlur: false,
     validateOnChange: false,

@@ -1,9 +1,10 @@
 import React from 'react';
+import Username from "@/components/Auth/Username";
 
 const Page = () => {
     return (
         <div>
-            Password
+            <Username/>
         </div>
     );
 };

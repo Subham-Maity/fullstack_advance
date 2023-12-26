@@ -1,7 +1,9 @@
 //Validation types
 export type Values = {
-  username: string;
+  username?: string;
+  password?: string
 };
+
 
 export type Errors = {
   [key: string]: string;
