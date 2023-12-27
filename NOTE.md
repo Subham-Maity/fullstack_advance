@@ -139,4 +139,4 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
   - Recovery(OTP to reset password) 
   - Reset(Reset Password) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
   - Register (Register User) - Convert — converts the file to a Base64 string , Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
-  - Profile -  
+  - Profile - Convert — converts the file to a Base64 string , Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
