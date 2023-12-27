@@ -93,7 +93,6 @@ ________
 
 
 ### [**3. JWT-based Authentication with Access Tokens & Refresh Tokens (Stateless)**]()
-
 ### Frontend: [**Next.js**](https://nextjs.org/) + Backend: [**Express.js**](https://expressjs.com/)
 #### **Introduction**:
 - **Access Token**: A short-lived token that is used to access protected resources on behalf of the user.
@@ -131,10 +130,13 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 #### **Contents**:
 
 - `Client`: This includes our frontend code using Next.js 14
-- `Outside`: Here you will get all the server-side code.
+- `Server`: Here you will get all the server-side code.
 
 ##### `Client`:
 - Components 
   - Username(User name set) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts) 
-  - Password(Password set) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
-  - Recovery(OTP to reset password) - 
+  - Password(Password set)—Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
+  - Recovery(OTP to reset password) 
+  - Reset(Reset Password) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
+  - Register (Register User) - Convert — converts the file to a Base64 string , Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
+  - Profile -  

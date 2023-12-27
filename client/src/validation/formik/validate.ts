@@ -2,9 +2,10 @@ import toast from "react-hot-toast";
 import { Errors, Values } from "@/types/validation/validation";
 import {
   FORM_VALIDATION_PASSWORD,
+  FORM_VALIDATION_REGISTER,
   FORM_VALIDATION_RESET_PASSWORD,
   FORM_VALIDATION_USERNAME,
-} from "@/validate/yup/yup";
+} from "@/validation/yup/yup";
 
 /** validate login page username */
 //This function is used to validate the username field if it is empty or not and if it contains any space or not.
@@ -52,6 +53,24 @@ export async function resetPasswordValidate(values: Values) {
       errors[error.path] = toast.error(error.message);
     });
   });
+
+  return errors;
+}
+
+//
+
+/**validate register page */
+// This function is used to validate the email, username, password, and confirmation password fields.
+export async function registerValidate(values: Values) {
+  let errors: Errors = {};
+
+  await FORM_VALIDATION_REGISTER.validate(values, { abortEarly: false }).catch(
+    function (err) {
+      err.inner.forEach((error: any) => {
+        errors[error.path] = toast.error(error.message);
+      });
+    },
+  );
 
   return errors;
 }

@@ -10,13 +10,13 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import { passwordValidate } from "@/validate/formik/validate";
+import { passwordValidate } from "@/validation/formik/validate";
 //Toaster
 import { Toaster } from "react-hot-toast";
 import {
   INITIAL_FORM_STATE_PASSWORD,
   INITIAL_FORM_STATE_RESET_PASSWORD,
-} from "@/validate/formik/intialValues";
+} from "@/validation/formik/intialValues";
 import { Values } from "@/types/validation/validation";
 
 const Password = () => {

@@ -10,10 +10,10 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import { usernameValidate } from "@/validate/formik/validate";
+import { usernameValidate } from "@/validation/formik/validate";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import { INITIAL_FORM_STATE_USERNAME } from "@/validate/formik/intialValues";
+import { INITIAL_FORM_STATE_USERNAME } from "@/validation/formik/intialValues";
 import { Values } from "@/types/validation/validation";
 
 const Username = () => {
