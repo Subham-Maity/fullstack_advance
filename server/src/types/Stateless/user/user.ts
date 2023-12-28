@@ -1,13 +1,14 @@
-import { Document } from "mongoose";
+// Define the fields for User2
+interface IUser2Fields {
+  username?: any;
+  password?: any;
+  email?: any;
+  firstName?: string;
+  lastName?: string;
+  mobile?: number;
+  address?: string;
+  profile?: string;
+}
 
-export type TUser = {
-  email: string;
-  username: string;
-  authentication: {
-    password: any;
-    salt?: any;
-    sessionToken?: any;
-  };
-};
-
-export interface IUser extends TUser, Document {}
+// Define the interface extending IUser2Fields and Document
+export interface IUser2 extends IUser2Fields, Document {}
