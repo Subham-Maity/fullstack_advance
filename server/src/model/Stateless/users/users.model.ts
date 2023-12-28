@@ -2,7 +2,7 @@
 import mongoose, { model, Schema } from "mongoose";
 import { IUser2 } from "../../../types/Stateless/user/user";
 
-const User2Schema = new Schema({
+const User2Schema: Schema<IUser2> = new Schema({
   username: {
     type: String,
     required: [true, "Please provide unique Username"],
@@ -36,7 +36,7 @@ const User2Schema = new Schema({
 });
 
 // Create User2 Model
-const User2Model = model("User2", User2Schema);
+const User2Model = model<IUser2>("User2", User2Schema);
 export default User2Model || mongoose.models.User2;
 
 /* ❗ User2 Actions ❗ */
