@@ -1,7 +1,7 @@
 /*❗~~~~IMPORTS~~~~❗*/
 
 // Importing the necessary modules
-import express, {Application, Request, Response} from "express";
+import express, { Application, Request, Response } from "express";
 import bodyParser from "body-parser";
 
 //Importing the Security
@@ -15,15 +15,14 @@ import cookieParser from "cookie-parser";
 import moment from "moment-timezone";
 import morgan from "morgan";
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 //Importing the error handler
 import globalErrorHandler from "./utils/errorHandler/globalErrorHandler";
-import {corsUrl} from "../config/default";
+import { corsUrl } from "../config/default";
 
 //Importing the routes
 import router from "./router/Stateful";
-
 
 /*❗~~~~CONFIG~~~~❗*/
 // Loading environment variables from .env file
@@ -33,6 +32,10 @@ dotenv.config();
 
 // Initializing express app - This is the app object that will be used throughout the app
 const app: Application = express();
+
+//By using app.disable('x-powered-by'), the X-Powered-By header will not be sent with each HTTP response,
+// making it less explicit which technology is being used to serve the application.
+app.disable("x-powered-by");
 
 // Middleware for handling CORS - This will handle CORS errors
 app.use(
@@ -102,9 +105,6 @@ app.use("/api/v1/auth", router.authentication);
 
 //User routes - getAllUsers, updateUser, deleteUser
 app.use("/api/v1/", router.users);
-
-
-
 
 // Default route for the API - This will be used to test if the API is live
 app.get("/", (req: Request, res: Response) => {
