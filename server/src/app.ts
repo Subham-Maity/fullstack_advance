@@ -100,7 +100,7 @@ app.use(globalErrorHandler);
 /*❗~~~~ROUTES~~~~❗*/
 
 //Stateful routes
-//Authentication routes-Signup,Login
+//Authentication routes-Signup, Login
 app.use("/api/v1/auth", router.authentication);
 
 //User routes - getAllUsers, updateUser, deleteUser
