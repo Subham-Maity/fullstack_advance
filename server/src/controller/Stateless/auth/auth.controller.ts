@@ -1,5 +1,10 @@
 import * as express from "express";
 import catchAsyncError from "../../../middleware/error/catchAsyncError";
+import UserModel, {
+  userExistsByEmail,
+  userExistsByUsername,
+} from "../../../model/Stateless/users/users.model";
+import { bcryptHelper } from "../../../utils/Stateless/bcryptHelper/bcryptHelper";
 
 /** REGISTER USER */
 
@@ -17,7 +22,53 @@ import catchAsyncError from "../../../middleware/error/catchAsyncError";
  */
 export const register = catchAsyncError(
   async (req: express.Request, res: express.Response) => {
-    res.json({ message: "register" });
+    // Destructure the request body to get the username, password, profile, and email.
+    const { username, password, profile, email } = req.body;
+    // Check if the password is provided. If not, return an error message.
+    if (!password) {
+      return res.status(400).send({ error: "Password is required" });
+    }
+    const customSaltRounds = 10;
+    try {
+      //this function is defined in the model file
+      //it checks if the user already exists in the database
+      const userExists = await userExistsByUsername(username);
+      // If a user with the provided username exists, return an error message.
+      if (userExists) {
+        return res.status(400).send({ error: "Username already exists" });
+      }
+
+      //this function is defined in the model file
+      //it checks if the user already exists in the database
+      const emailExists = await userExistsByEmail(email);
+      // If a user with the provided email exists, return an error message.
+      if (emailExists) {
+        return res.status(400).send({ error: "Email already exists" });
+      }
+      //this function is defined in the model file
+      const hashedPassword = await bcryptHelper(password, customSaltRounds);
+      const user = new UserModel({
+        username,
+        password: hashedPassword,
+        profile: profile || "", //if a profile is not provided, it will be set to an empty string
+        email,
+      });
+
+      const result = await user.save();
+      return res.status(201).send({
+        message: "User created successfully",
+        result,
+      });
+    } catch (error: any) {
+      // Specific error handling for different cases
+      if (error.code === "SOME_SPECIFIC_ERROR_CODE") {
+        // Handle a specific error case differently
+        return res.status(500).send({ error: "Specific error occurred" });
+      } else {
+        // General error handling
+        return res.status(500).send({ error: "Unable to register user" });
+      }
+    }
   },
 );
 

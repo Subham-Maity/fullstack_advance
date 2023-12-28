@@ -1,6 +1,6 @@
 import * as express from "express";
 import { Router } from "express";
-import { registerMail } from "../../../utils/Stateless/mailer/mailer.controller";
+import { registerMail } from "../../../utils/Stateless/mailer/mailer";
 
 const mail: Router = express.Router();
 

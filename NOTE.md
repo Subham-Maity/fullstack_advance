@@ -143,3 +143,25 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
+- utils: bcrypt—for hashing the password
+- **Middleware**: This includes two types:
+   - **Error Handler**: Handles the error.
+- **Controller**: This includes `auth` (with `register)`,
+- **Routes**:
+    - **Auth**
+        - `register`: POST request to `http://localhost:5050/api/v2/auth/register`
+            - Example body:
+            ```json
+            {
+              "username" : "codexam_123",
+              "password" : "Codexam@123",
+              "email": "subham@codexam.com",
+              "firstName" : "Subham",
+              "lastName": "Maity",
+              "mobile": "1234567890",
+              "address" : "india",
+              "profile": ""
+           }
+          ```
+      - **User**
+- **User**
