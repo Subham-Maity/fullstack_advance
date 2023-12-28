@@ -1,13 +1,13 @@
 import * as express from "express";
 import { Router } from "express";
+
 import {
-  deleteUser,
-  getAllUsers,
+  getUser,
   updateUser,
-} from "../../../controller/Stateful/user/user.controller";
+} from "../../../controller/Stateless/user/user.controller";
 
-const auth: Router = express.Router();
+const users: Router = express.Router();
 
-auth.get("/user/:username", getAllUsers).put("/updateuser", updateUser);
+users.get("/user/:username", getUser).put("/updateuser", updateUser);
 
-export default auth;
+export default users;

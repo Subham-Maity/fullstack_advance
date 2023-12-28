@@ -22,7 +22,10 @@ import globalErrorHandler from "./utils/errorHandler/globalErrorHandler";
 import { corsUrl } from "../config/default";
 
 //Importing the routes
-import router from "./router/Stateful";
+//Stateful routes
+import statelful from "./router/Stateful";
+//Stateless routes
+import stateless from "./router/Stateless";
 
 /*❗~~~~CONFIG~~~~❗*/
 // Loading environment variables from .env file
@@ -101,10 +104,16 @@ app.use(globalErrorHandler);
 
 //Stateful routes
 //Authentication routes-Signup, Login
-app.use("/api/v1/auth", router.authentication);
+app.use("/api/v1/auth", statelful.authentication);
 
 //User routes - getAllUsers, updateUser, deleteUser
-app.use("/api/v1/", router.users);
+app.use("/api/v1", statelful.users);
+
+//Stateless routes
+
+app.use("/api/v2/auth", stateless.authentication);
+app.use("/api/v2", stateless.users);
+app.use("/api/v2", stateless.mail);
 
 // Default route for the API - This will be used to test if the API is live
 app.get("/", (req: Request, res: Response) => {
