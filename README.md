@@ -7,12 +7,12 @@ with every line of code meticulously documented for easy understanding.
 
 ## ⫸ Levels
 
--  ### [✅READ HERE](./NOTE.md)
+-  ### [✅READ HERE](README/NOTE.md)
 
 ---
 
 ## ⫸ Installation
 
-- ### [✅READ HERE](./START.md)
+- ### [✅READ HERE](README/START.md)
 
 ---

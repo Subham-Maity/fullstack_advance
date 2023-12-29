@@ -110,9 +110,13 @@ app.use("/api/v1/auth", statelful.authentication);
 app.use("/api/v1", statelful.users);
 
 //Stateless routes
-
+//Authentication routes-Signup, Login
 app.use("/api/v2/auth", stateless.authentication);
+//Token routes - generateAccessToken, logout
+app.use("/api/v2/auth/token", stateless.token);
+//User routes - getAllUsers, updateUser, deleteUser
 app.use("/api/v2", stateless.users);
+//Mail routes - sendMail
 app.use("/api/v2", stateless.mail);
 
 // Default route for the API - This will be used to test if the API is live

@@ -94,6 +94,8 @@ ________
 
 ### [**3. JWT-based Authentication with Access Tokens & Refresh Tokens (Stateless)**]()
 ### Frontend: [**Next.js**](https://nextjs.org/) + Backend: [**Express.js**](https://expressjs.com/)
+
+
 #### **Introduction**:
 - **Access Token**: A short-lived token that is used to access protected resources on behalf of the user.
 - **Refresh Token**: A long-lived token that is used to refresh the access token when it expires.
@@ -109,7 +111,7 @@ ________
 ⁙⫸ With Authentication + User Operations
 
 #### **Understanding the Flow**:
-![JWT](./images/JWT.png)
+![JWT](../images/JWT.png)
 - User logs in with their credentials (username, password, etc.).
 - Server verifies the credentials. If they're valid, the server generates an Access Token and a Refresh Token.
 - The Access Token is a short-lived token (usually about 15 minutes to 1 hour) that carries the user information necessary to access a resource.
@@ -119,6 +121,10 @@ ________
 - When the Access Token expires, the client uses the Refresh Token to request a new Access Token.
 - Server verifies the Refresh Token and issues a new Access Token (and possibly a new Refresh Token).
 - If the Refresh Token is expired or invalid, the user will need to authenticate again to get a new pair of tokens.
+
+#### **TOKEN Mechanism**:
+-  ##### [✅READ HERE](./JWT_TOKEN.md)
+
 #### **Instructions**:
 
 You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`routes`,`utils` and `controller` folder. 
@@ -143,33 +149,46 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
-- utils: bcrypt—for hashing the password
+- **utils:** bcrypt—for hashing the password , token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) [more](./JWT_TOKEN.md)
 - **Middleware**: This includes two types:
    - **Error Handler**: Handles the error.
-- **Controller**: This includes `auth` - `register)`, `login`
+- **Controller**: This includes `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token)
 - **Routes**:
     - **Auth**
         - `register`: POST request to `http://localhost:5050/api/v2/auth/register`
             - Example body:
             ```json
-            {
-              "username" : "codexam_123",
-              "password" : "Codexam@123",
-              "email": "subham@codexam.com",
-              "firstName" : "Subham",
-              "lastName": "Maity",
-              "mobile": "1234567890",
-              "address" : "india",
-              "profile": ""
-           }
-          ```
-      - **Login**
+               {
+                 "username" : "codexam_123",
+                 "password" : "Codexam@123",
+                 "email": "subham@codexam.com",
+                 "firstName" : "Subham",
+                 "lastName": "Maity",
+                 "mobile": "1234567890",
+                 "address" : "india",
+                 "profile": ""
+                }
+            ```
         - `login`: POST request to `http://localhost:5050/api/v2/auth/login`
             - Example body:
             ```json
-            {
-              "username" : "codexam_123",
-              "password" : "Codexam@123"
-            }
+              {
+               "username" : "codexam_123",
+               "password" : "Codexam@123"
+               }
             ```
-          
+  - **Auth/Token**
+      - `get refressToken`: POST request to `http://localhost:5050/api/v2/auth/token`
+          - Example body:
+          ```json
+             {
+               "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+              }
+          ```
+      - `logout`: DELETE request to `http://localhost:5050/api/v2/auth/token`
+          - Example body:
+          ```json
+             {
+               "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+              }
+          ```

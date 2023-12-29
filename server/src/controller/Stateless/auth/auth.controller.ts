@@ -5,11 +5,10 @@ import UserModel, {
   userExistsByEmail,
   userExistsByUsername,
 } from "../../../model/Stateless/users/users.model";
-import {
-  bcryptHelper,
-  comparePasswords,
-} from "../../../utils/Stateless/bcryptHelper/bcryptHelper";
-import { generateToken } from "../../../utils/Stateless/jwt/jwt";
+import { bcryptHash } from "../../../utils/Stateless/bcrypt/bcryptHash";
+import { comparePasswords } from "../../../utils/Stateless/bcrypt/bcryptCompare";
+import { CUSTOM_SALT_ROUNDS } from "../../../../config/default";
+import { saveToken } from "../../../utils/Stateless/token/saveToken";
 
 /** REGISTER USER */
 
@@ -33,7 +32,7 @@ export const register = catchAsyncError(
     if (!password) {
       return res.status(400).send({ error: "Password is required" });
     }
-    const customSaltRounds = 10;
+
     try {
       //this function is defined in the model file
       //it checks if the user already exists in the database
@@ -51,7 +50,7 @@ export const register = catchAsyncError(
         return res.status(400).send({ error: "Email already exists" });
       }
       //this function is defined in the model file
-      const hashedPassword = await bcryptHelper(password, customSaltRounds);
+      const hashedPassword = await bcryptHash(password, CUSTOM_SALT_ROUNDS);
       const user = new UserModel({
         username,
         password: hashedPassword,
@@ -116,21 +115,21 @@ export const login = catchAsyncError(
         username: user.username,
       };
 
-      // If the passwords match, generate a token and send it to the client.
-      const token = generateToken(customPayload, "1h");
+      // Save the generated tokens in the database
+      const tokens = await saveToken(customPayload);
 
-      // Send the token to the client. The client will store the token in local storage.
+      // Send the response to the client along with the tokens
       return res.status(200).send({
         msg: "Login Successful...!",
         username: user.username,
-        token,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
       });
-    } catch (error: any) {
+    } catch (error) {
       return res.status(500).send({ error: "Internal Server Error" });
     }
   },
 );
-
 /** VERIFY USER */
 
 /** GET: http://localhost:5050/api/v2/auth/verify
