@@ -7,10 +7,11 @@ export default {
   host: process.env.HOST || "localhost", // You can remove the default value
   corsOrigin: process.env.CORS_ORIGIN || "http://localhost:3000", // You can remove the default value
   db: process.env.MONGO_URL,
+  JWT_Secret: "secret" || process.env.JWT_SECRET, // You can remove the default value or  OpenSSL> OpenSSL> genrsa -out private.pem 2048
 };
 
 export const port: string | number = process.env.PORT || 5050; // You can remove the default value
 export const corsUrl: string = process.env.CORS_URL || "http://localhost:3000"; // You can remove the default value
 export const SECRET: string = process.env.SECRET_KEY || "secret"; // You can remove the default value
 
-export const session_Token = process.env.SESSION_TOKEN || "SUBHAM-AUTH";// You can remove the default value
+export const session_Token = process.env.SESSION_TOKEN || "SUBHAM-AUTH"; // You can remove the default value

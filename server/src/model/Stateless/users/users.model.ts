@@ -49,13 +49,18 @@ export const userExistsByEmail = async (email: string): Promise<boolean> => {
   const user = await User2Model.findOne({ email });
   return !!user;
 };
-//Get a single user by username
+//Get a single user by username as a boolean promise
 
 export const userExistsByUsername = async (
   username: string,
 ): Promise<boolean> => {
   const user = await User2Model.findOne({ username });
   return !!user;
+};
+
+// Get a single User by username as a promise object
+export const findUserByUsername = async (username: string) => {
+  return User2Model.findOne({ username });
 };
 
 // Get an User2 by ID

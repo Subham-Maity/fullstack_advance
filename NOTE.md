@@ -146,7 +146,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 - utils: bcrypt—for hashing the password
 - **Middleware**: This includes two types:
    - **Error Handler**: Handles the error.
-- **Controller**: This includes `auth` (with `register)`,
+- **Controller**: This includes `auth` - `register)`, `login`
 - **Routes**:
     - **Auth**
         - `register`: POST request to `http://localhost:5050/api/v2/auth/register`
@@ -163,5 +163,13 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
               "profile": ""
            }
           ```
-      - **User**
-- **User**
+      - **Login**
+        - `login`: POST request to `http://localhost:5050/api/v2/auth/login`
+            - Example body:
+            ```json
+            {
+              "username" : "codexam_123",
+              "password" : "Codexam@123"
+            }
+            ```
+          

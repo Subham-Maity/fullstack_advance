@@ -1,10 +1,15 @@
 import * as express from "express";
 import catchAsyncError from "../../../middleware/error/catchAsyncError";
 import UserModel, {
+  findUserByUsername,
   userExistsByEmail,
   userExistsByUsername,
 } from "../../../model/Stateless/users/users.model";
-import { bcryptHelper } from "../../../utils/Stateless/bcryptHelper/bcryptHelper";
+import {
+  bcryptHelper,
+  comparePasswords,
+} from "../../../utils/Stateless/bcryptHelper/bcryptHelper";
+import { generateToken } from "../../../utils/Stateless/jwt/jwt";
 
 /** REGISTER USER */
 
@@ -83,7 +88,46 @@ export const register = catchAsyncError(
 
 export const login = catchAsyncError(
   async (req: express.Request, res: express.Response) => {
-    res.json({ message: "login" });
+    // Extract username and password from request body and check if they are provided
+    const { username, password } = req.body;
+
+    try {
+      //This function is defined in the model file
+      // Find the user with the provided username in the database
+      const user = await findUserByUsername(username);
+      // If no user is found, return an error message.
+      if (!user) {
+        return res.status(404).send({ error: "Username not found" });
+      }
+
+      //This function is defined in the bcryptHelper file
+      // If a user is found, compare the provided password with the password in the database
+      const passwordCheck = await comparePasswords(password, user.password);
+
+      // If the passwords don't match, return an error message.
+      if (!passwordCheck) {
+        return res.status(400).send({ error: "Password does not match" });
+      }
+
+      // Create a custom payload to send to the client.
+      // The payload contains the user's id and username.
+      const customPayload = {
+        userId: user._id,
+        username: user.username,
+      };
+
+      // If the passwords match, generate a token and send it to the client.
+      const token = generateToken(customPayload, "1h");
+
+      // Send the token to the client. The client will store the token in local storage.
+      return res.status(200).send({
+        msg: "Login Successful...!",
+        username: user.username,
+        token,
+      });
+    } catch (error: any) {
+      return res.status(500).send({ error: "Internal Server Error" });
+    }
   },
 );
 
