@@ -1,3 +1,4 @@
+import * as express from "express";
 import { verifyRefreshToken } from "../../../utils/Stateless/token/tokenVerify";
 import { generateAccessToken } from "../../../utils/Stateless/token/jwtAccess";
 import {
@@ -5,7 +6,6 @@ import {
   UserToken,
 } from "../../../model/Stateless/token/userToken.model";
 import catchAsyncError from "../../../middleware/error/catchAsyncError";
-import * as express from "express";
 import { ACCESS_TOKEN_EXPIRATION } from "../../../../config/default";
 
 /** POST: http://localhost:5050/api/v2/auth/token

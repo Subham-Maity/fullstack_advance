@@ -1,4 +1,4 @@
-import mongoose, { model, Schema, Document } from "mongoose";
+import { model, Schema } from "mongoose";
 import { IUserToken } from "../../../types/Stateless/token/token";
 
 const UserTokenSchema: Schema<IUserToken> = new Schema({
