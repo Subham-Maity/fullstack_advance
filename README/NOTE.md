@@ -1,6 +1,8 @@
 ## Introduction
 
 If you’re familiar with Node.js basics, start by running the code. As you explore and read the comments, you’ll gradually understand how it works.
+
+- Click on the header it will redirect to the respective codebase, download the code and run it.
 ___________
 
 ### [**1. Perfect Boilerplate For Starting The Project**](https://github.com/Subham-Maity/auth_advance/tree/2850177ad4eafe1679648ee9bf7140e7b6a1de5b)
@@ -54,7 +56,7 @@ ___________
 #### **Routes**:
 
 - **Auth**
-    - `register`: POST request to `http://localhost:{your_port}/api/v1/auth/register`
+    - `register`: POST request to `/api/v1/auth/register`
         - Example body:
       ```json
       {
@@ -63,7 +65,7 @@ ___________
         "username": "Subham"
       }
       ```
-    - `login`: POST request to `http://localhost:{your_port}/api/v1/auth/login`
+    - `login`: POST request to `/api/v1/auth/login`
         - Example body:
       ```json
       {
@@ -73,9 +75,9 @@ ___________
       }
       ```
 - **User**
-    - `getAllUser`: GET request to `http://localhost:{your_port}/api/v1/users`. This is wrapped with
+    - `getAllUser`: GET request to `/api/v1/users`. This is wrapped with
       the `authentication` middleware, so you need to log in first to get the data.
-    - `updateUserById`: PATCH request to `http://localhost:{your_port}/api/v1/users/{id}`. This is wrapped with
+    - `updateUserById`: PATCH request to `/api/v1/users/{id}`. This is wrapped with
       the `authentication` and `owner` middleware, so you need to log in first to update the data.
         - Example body:
       ```json
@@ -83,7 +85,7 @@ ___________
         "username": "XAM"
       }
       ```
-    - `deleteUserById`: DELETE request to `http://localhost:{your_port}/api/v1/users/{id}`. This is wrapped with
+    - `deleteUserById`: DELETE request to `/api/v1/users/{id}`. This is wrapped with
       the `authentication` and `owner` middleware, so you need to log in first to delete the data.
 
 
@@ -154,10 +156,10 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
    - **Error Handler**: Handles the error.
 - **Controller**: This includes 
    - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login),
-   - `user` -  `getUser`(get user data without a password) 
+   - `user` -  `getUser`(get user data without a password), `updateUser`(update user data)
 - **Routes**:
     - **Auth**
-        - `register`: POST request to `http://localhost:5050/api/v2/auth/register`
+        - `register`: POST request to `/api/v2/auth/register`
             - Example body:
             ```json
                {
@@ -171,7 +173,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                  "profile": ""
                 }
             ```
-        - `login`: POST request to `http://localhost:5050/api/v2/auth/login`
+        - `login`: POST request to `/api/v2/auth/login` wrapper with `verifyUser` controller
             - Example body:
             ```json
               {
@@ -180,14 +182,14 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                }
             ```
   - **Auth/Token**
-      - `get refressToken`: POST request to `http://localhost:5050/api/v2/auth/token`
+      - `get refressToken`: POST request to `/api/v2/auth/token`
           - Example body:
           ```json
              {
                "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
              }
           ```
-      - `logout`: DELETE request to `http://localhost:5050/api/v2/auth/token`
+      - `logout`: DELETE request to `/api/v2/auth/token`
           - Example body:
           ```json
              {
@@ -195,5 +197,15 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
              }
           ```
   - **User**
-      - `get User`: GET request to `http://localhost:5050/api/v2/user/codexam_123`
+      - `get User`: GET request to `/api/v2/user/codexam_123` here `codexam_123` is the username
+      - `update User`: PUT request to `/api/v2/updateuser?id=658ec47dcb30d4ea193d457a` here `658ec47dcb30d4ea193d457a` is the id
+          - Example body:
+          ```json
+             {
+               "username" : "codexam_123",
+               "password" : "Codexam@123",
+               "email": "Subham@Codexam.com"
+             }
+            
+          ```
           

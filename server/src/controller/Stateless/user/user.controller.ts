@@ -1,6 +1,9 @@
 import * as express from "express";
 import catchAsyncError from "../../../middleware/error/catchAsyncError";
-import { findUserByUsername } from "../../../model/Stateless/users/users.model";
+import {
+  findUserByUsername,
+  updateUserById,
+} from "../../../model/Stateless/users/users.model";
 import AppError from "../../../middleware/error/appError";
 
 /** Get User */
@@ -60,7 +63,39 @@ export const getUser = catchAsyncError(
  */
 
 export const updateUser = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
-    res.json({ message: "updateUser" });
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    try {
+      // Extract the userId from the authenticated request
+      // Assuming id is the parameter name
+      const userId = req.query.id as string;
+
+      // Check if the userId is present in the request body
+      if (!userId) {
+        return next(new AppError("User Not Found", 401));
+      }
+
+      // Extract the data to be updated from the request body
+      const body = req.body;
+
+      // Update the data for the user identified by userId
+      // Update the user data using the updateUserById function from the model
+      const updatedUser = await updateUserById(userId, body);
+
+      // Check if any records were modified during the update
+      if (!updatedUser) {
+        return next(new AppError("Record Not Updated", 400));
+      }
+
+      // Send a success response if the record was updated
+      res.status(201).send({ msg: "Record Updated...!" });
+    } catch (error) {
+      // Handle any errors that occur during the update process
+      console.error(error);
+      return next(new AppError("Internal Server Error", 500));
+    }
   },
 );

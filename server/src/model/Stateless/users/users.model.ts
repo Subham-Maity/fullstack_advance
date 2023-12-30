@@ -75,5 +75,14 @@ export const deleteUserById = (id: string) =>
   User2Model.findOneAndDelete({ _id: id });
 
 // Update an User2 by ID
-export const updateUserById = (id: string, values: Record<string, any>) =>
-  User2Model.findByIdAndUpdate(id, values);
+// Update an User2 by ID
+export const updateUserById = async (
+  id: string,
+  values: Record<string, any>,
+) => {
+  try {
+    return await User2Model.findByIdAndUpdate(id, values, { new: true });
+  } catch (error: any) {
+    throw new Error(`Error updating user: ${error.message}`);
+  }
+};
