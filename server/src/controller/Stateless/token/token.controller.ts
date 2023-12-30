@@ -7,6 +7,7 @@ import {
 } from "../../../model/Stateless/token/userToken.model";
 import catchAsyncError from "../../../middleware/error/catchAsyncError";
 import { ACCESS_TOKEN_EXPIRATION } from "../../../../config/default";
+import AppError from "../../../middleware/error/appError";
 
 /** POST: http://localhost:5050/api/v2/auth/token
  * @param : {
@@ -14,16 +15,18 @@ import { ACCESS_TOKEN_EXPIRATION } from "../../../../config/default";
  * }
  */
 export const generateAccessTokenHandler = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
     try {
       //It will find the token in the request body
       const { refreshToken } = req.body; // Assuming refreshToken is sent in the request body
 
       //If the token is not found in the database, it will return an error message
       if (!refreshToken) {
-        return res
-          .status(400)
-          .json({ error: true, message: "Refresh token is required" });
+        return next(new AppError("Refresh token is required", 400));
       }
 
       //It will find the token in the database
@@ -31,9 +34,7 @@ export const generateAccessTokenHandler = catchAsyncError(
 
       //If the token is not found in the database, it will return an error message
       if (!tokenDetails) {
-        return res
-          .status(400)
-          .json({ error: true, message: "Invalid refresh token" });
+        return next(new AppError("Invalid refresh token", 400));
       }
 
       //It will find the token in the database
@@ -50,9 +51,7 @@ export const generateAccessTokenHandler = catchAsyncError(
       });
     } catch (err) {
       console.error(err);
-      res
-        .status(400)
-        .json({ error: true, message: "Failed to generate access token" });
+      return next(new AppError("Failed to generate access token", 400));
     }
   },
 );
@@ -63,7 +62,11 @@ export const generateAccessTokenHandler = catchAsyncError(
  * }
  */
 export const logoutHandler = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
     try {
       //It will find the token in the request body
       const userToken = await UserToken(req.body.refreshToken);
@@ -73,6 +76,7 @@ export const logoutHandler = catchAsyncError(
           .status(200)
           .json({ error: false, message: "Logged Out Successfully" });
       }
+
       //It will delete the token in the database based on the userId
       await deleteUserTokenById(userToken.userId);
 
@@ -82,7 +86,7 @@ export const logoutHandler = catchAsyncError(
         .json({ error: false, message: "Logged Out Successfully" });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: true, message: "Internal Server Error" });
+      return next(new AppError("Internal Server Error", 500));
     }
   },
 );

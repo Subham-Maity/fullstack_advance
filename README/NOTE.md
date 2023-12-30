@@ -5,8 +5,7 @@ ___________
 
 ### [**1. Perfect Boilerplate For Starting The Project**](https://github.com/Subham-Maity/auth_advance/tree/2850177ad4eafe1679648ee9bf7140e7b6a1de5b)
 
-  ⁙⫸ This boilerplate is perfect for starting a project without any `schema`, `controller`, `routes`,
-  or `authentication`.
+  ⁙⫸ This boilerplate is perfect for starting a project without any `schema`, `controller`, `routes`, or `authentication`.
 
 
 #### **Getting Started**:
@@ -18,11 +17,10 @@ ___________
 #### **Additional Information**:
 
   - If any dependency is missing, install it manually.
-  - If any dependency needs to be updated, update it manually or use `npm outdated` or `yarn outdated` to check the
-  outdated dependencies. Then use `npm update` or `yarn update` to update the dependencies.
+  - If any dependency needs to be updated, update it manually or use `npm outdated` or `yarn outdated` to check the outdated dependencies. Then use `npm update` or `yarn update` to update the dependencies.
   - You can change the port number in the `.env` file as per your requirements.
 
-_______
+___________
 
 
 ### [**2. Cookie-based Proper Authentication with Server Token (Stateful)**](https://github.com/Subham-Maity/rest_advance/tree/98c41fb3375e4f0aa9a7f04e0d807582ca2aa54e)
@@ -89,11 +87,13 @@ _______
       the `authentication` and `owner` middleware, so you need to log in first to delete the data.
 
 
-________
+___________
 
 
 ### [**3. JWT-based Authentication with Access Tokens & Refresh Tokens (Stateless)**]()
-### Frontend: [**Next.js**](https://nextjs.org/) + Backend: [**Express.js**](https://expressjs.com/)
+
+### **○** Frontend: [**Next.js**](https://nextjs.org/)
+### **○** Backend: [**Express.js**](https://expressjs.com/)
 
 
 #### **Introduction**:
@@ -152,7 +152,9 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 - **utils:** bcrypt—for hashing the password , token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) [more](./JWT_TOKEN.md)
 - **Middleware**: This includes two types:
    - **Error Handler**: Handles the error.
-- **Controller**: This includes `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token)
+- **Controller**: This includes 
+   - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login),
+   - `user` -  `getUser`(get user data without a password) 
 - **Routes**:
     - **Auth**
         - `register`: POST request to `http://localhost:5050/api/v2/auth/register`
@@ -183,12 +185,15 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
           ```json
              {
                "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-              }
+             }
           ```
       - `logout`: DELETE request to `http://localhost:5050/api/v2/auth/token`
           - Example body:
           ```json
              {
                "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-              }
+             }
           ```
+  - **User**
+      - `get User`: GET request to `http://localhost:5050/api/v2/user/codexam_123`
+          

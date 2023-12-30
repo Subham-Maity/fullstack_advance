@@ -10,6 +10,7 @@ import { comparePasswords } from "../../../utils/Stateless/bcrypt/bcryptCompare"
 import { CUSTOM_SALT_ROUNDS } from "../../../../config/default";
 import { saveToken } from "../../../utils/Stateless/token/saveToken";
 import { CookieOptions } from "express";
+import AppError from "../../../middleware/error/appError";
 
 /** REGISTER USER */
 
@@ -26,12 +27,16 @@ import { CookieOptions } from "express";
  }
  */
 export const register = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
     // Destructure the request body to get the username, password, profile, and email.
     const { username, password, profile, email } = req.body;
     // Check if the password is provided. If not, return an error message.
     if (!password) {
-      return res.status(400).send({ error: "Password is required" });
+      return next(new AppError("Password is required", 400));
     }
 
     try {
@@ -40,7 +45,7 @@ export const register = catchAsyncError(
       const userExists = await userExistsByUsername(username);
       // If a user with the provided username exists, return an error message.
       if (userExists) {
-        return res.status(400).send({ error: "Username already exists" });
+        return next(new AppError("Username already exists", 400));
       }
 
       //this function is defined in the model file
@@ -48,7 +53,7 @@ export const register = catchAsyncError(
       const emailExists = await userExistsByEmail(email);
       // If a user with the provided email exists, return an error message.
       if (emailExists) {
-        return res.status(400).send({ error: "Email already exists" });
+        return next(new AppError("Email already exists", 400));
       }
       //this function is defined in the model file
       const hashedPassword = await bcryptHash(password, CUSTOM_SALT_ROUNDS);
@@ -68,10 +73,10 @@ export const register = catchAsyncError(
       // Specific error handling for different cases
       if (error.code === "SOME_SPECIFIC_ERROR_CODE") {
         // Handle a specific error case differently
-        return res.status(500).send({ error: "Specific error occurred" });
+        return next(new AppError("Specific error occurred", 500));
       } else {
         // General error handling
-        return res.status(500).send({ error: "Unable to register user" });
+        return next(new AppError("Unable to register user", 500));
       }
     }
   },
@@ -87,7 +92,11 @@ export const register = catchAsyncError(
  */
 
 export const login = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
     // Extract username and password from request body and check if they are provided
     const { username, password } = req.body;
 
@@ -97,7 +106,7 @@ export const login = catchAsyncError(
       const user = await findUserByUsername(username);
       // If no user is found, return an error message.
       if (!user) {
-        return res.status(404).send({ error: "Username not found" });
+        return next(new AppError("Username not found", 404));
       }
 
       //This function is defined in the bcryptHelper file
@@ -106,7 +115,7 @@ export const login = catchAsyncError(
 
       // If the passwords don't match, return an error message.
       if (!passwordCheck) {
-        return res.status(400).send({ error: "Password does not match" });
+        return next(new AppError("Password does not match", 400));
       }
 
       // Create a custom payload to send to the client.
@@ -139,7 +148,7 @@ export const login = catchAsyncError(
           refreshToken: tokens.refreshToken,
         });
     } catch (error) {
-      return res.status(500).send({ error: "Internal Server Error" });
+      return next(new AppError("Internal Server Error", 500));
     }
   },
 );
