@@ -7,15 +7,15 @@ import {
   register,
   resetPassword,
   verifyOTP,
-  verifyUser,
 } from "../../../controller/Stateless/auth/auth.controller";
+import { verifyUser } from "../../../controller/Stateless/auth/verifyUser.controller";
 
 const auth: Router = express.Router();
 
 auth
   .post("/register", register)
-  .post("/authenticate", verifyUser)
-  .post("/login", login)
+  .post("/authenticate")
+  .post("/login", verifyUser, login) //first verify the user then login the user
   .get("/generateOTP", generateOTP)
   .get("/verifyOTP", verifyOTP)
   .get("/createResetSession", createResetSession)

@@ -143,20 +143,6 @@ export const login = catchAsyncError(
     }
   },
 );
-/** VERIFY USER */
-
-/** GET: http://localhost:5050/api/v2/auth/verify
- * @param : {
- * "username" : "codexam_123",
- * "password" : "Codexam@123"
- * }
- */
-
-export const verifyUser = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
-    res.json({ message: "verify" });
-  },
-);
 
 /** GENERATE OTP */
 /** GET: http://localhost:5050/api/v2/auth/generateOTP
