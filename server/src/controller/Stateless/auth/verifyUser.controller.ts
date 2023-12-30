@@ -12,6 +12,12 @@ import { findUserByUsername } from "../../../model/Stateless/users/users.model";
  * }
  */
 
+/**
+ * Security Enhancement: Verifying the existence of a user before allowing access to log-in
+ * or authentication routes can prevent unnecessary login attempts for non-existing users.
+ * Optimization: Reducing database queries by checking user
+ * existence before processing certain routes can optimize performance.
+ */
 export const verifyUser = catchAsyncError(
   async (
     req: express.Request,
@@ -19,15 +25,20 @@ export const verifyUser = catchAsyncError(
     next: express.NextFunction,
   ) => {
     try {
+      // get the username from the request body
+      // if the request method is GET, then get the username from the request query instead of the request body
+      // this is because we will be using GET requests to verify the user in the frontend
       const { username } = req.method == "GET" ? req.query : req.body;
 
       // check the user existence
-      let exist = await findUserByUsername(username);
+      const userExists = await findUserByUsername(username);
       // if user not exists then return an error message
-      if (!exist) return res.status(404).send({ error: "Can't find User!" });
-      next();
+      if (!userExists) {
+        return res.status(404).send({ error: "User not found" }); // Generic error for non-existing user
+      }
+      next(); // User exists, proceed to the next middleware
     } catch (error) {
-      return res.status(404).send({ error: "Authentication Error" });
+      return res.status(500).send({ error: "Authentication Error" }); // Generic error for any authentication-related issue
     }
   },
 );
