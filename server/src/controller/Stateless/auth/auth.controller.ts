@@ -9,6 +9,7 @@ import { bcryptHash } from "../../../utils/Stateless/bcrypt/bcryptHash";
 import { comparePasswords } from "../../../utils/Stateless/bcrypt/bcryptCompare";
 import { CUSTOM_SALT_ROUNDS } from "../../../../config/default";
 import { saveToken } from "../../../utils/Stateless/token/saveToken";
+import { CookieOptions } from "express";
 
 /** REGISTER USER */
 
@@ -118,13 +119,25 @@ export const login = catchAsyncError(
       // Save the generated tokens in the database
       const tokens = await saveToken(customPayload);
 
-      // Send the response to the client along with the tokens
-      return res.status(200).send({
-        msg: "Login Successful...!",
-        username: user.username,
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      });
+      // Define cookie options
+      const cookieOptions: CookieOptions = {
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // Token expiration time
+        httpOnly: true, // Cookie accessible only via HTTP(S)
+        secure: false, // Set to true if you're using https
+        sameSite: "strict", // Restricts cookie to same-site requests
+        // You can add more options like domain, path, etc., based on your needs
+      };
+
+      // Send the response to the client along with the tokens and set the cookie
+      return res
+        .status(200)
+        .cookie("token", tokens.accessToken, cookieOptions)
+        .json({
+          msg: "Login Successful...!",
+          username: user.username,
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        });
     } catch (error) {
       return res.status(500).send({ error: "Internal Server Error" });
     }
