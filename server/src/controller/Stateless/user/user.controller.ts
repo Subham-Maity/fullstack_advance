@@ -5,6 +5,7 @@ import {
   updateUserById,
 } from "../../../model/Stateless/users/users.model";
 import AppError from "../../../middleware/error/appError";
+import log from "../../../utils/logger/logger";
 
 /** Get User */
 
@@ -44,7 +45,7 @@ export const getUser = catchAsyncError(
       // return the user data in the response
       res.status(200).json(userData);
     } catch (err) {
-      console.error(err);
+      log.error("Failed to get user", err);
       return next(new AppError("Internal Server Error", 500));
     }
   },
@@ -70,8 +71,9 @@ export const updateUser = catchAsyncError(
   ) => {
     try {
       // Extract the userId from the authenticated request
-      // Assuming id is the parameter name
+
       const userId = req.query.id as string;
+      // const userId = req.body.user as string;
 
       // Check if the userId is present in the request body
       if (!userId) {
@@ -94,7 +96,7 @@ export const updateUser = catchAsyncError(
       res.status(201).send({ msg: "Record Updated...!" });
     } catch (error) {
       // Handle any errors that occur during the update process
-      console.error(error);
+      log.error("Failed to update user", error);
       return next(new AppError("Internal Server Error", 500));
     }
   },

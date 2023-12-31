@@ -7,7 +7,12 @@ import UserModel, {
 } from "../../../model/Stateless/users/users.model";
 import { bcryptHash } from "../../../utils/Stateless/bcrypt/bcryptHash";
 import { comparePasswords } from "../../../utils/Stateless/bcrypt/bcryptCompare";
-import { CUSTOM_SALT_ROUNDS } from "../../../../config/default";
+import {
+  ACCESS_TOKEN_EXPIRATION,
+  CUSTOM_SALT_ROUNDS,
+  REFRESH_TOKEN_EXPIRATION,
+  REFRESH_TOKEN_EXPIRATION_HASH_SECRET,
+} from "../../../../config/default";
 import { saveToken } from "../../../utils/Stateless/token/saveToken";
 import { CookieOptions } from "express";
 import AppError from "../../../middleware/error/appError";
@@ -126,7 +131,12 @@ export const login = catchAsyncError(
       };
 
       // Save the generated tokens in the database
-      const tokens = await saveToken(customPayload);
+      const tokens = await saveToken(
+        customPayload,
+        ACCESS_TOKEN_EXPIRATION,
+        REFRESH_TOKEN_EXPIRATION,
+        REFRESH_TOKEN_EXPIRATION_HASH_SECRET,
+      );
 
       // Define cookie options
       const cookieOptions: CookieOptions = {

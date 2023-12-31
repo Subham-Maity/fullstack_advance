@@ -1,3 +1,4 @@
+![diagram](../images/diagramjwt.png)
 1. **generateAccessToken**: This function generates an access token using the payload (an object containing user details) and a secret key. It uses the `jwt.sign()` method to create a JSON Web Token (JWT) using the payload and the secret key. The JWT is then returned by the function.
 
 2. **generateRefreshToken**: Similar to `generateAccessToken`, this function generates a refresh token. It also takes a payload and an expiration time as inputs. The function uses the `jwt.sign()` method to create a JWT using the payload and a different secret key. The JWT is then returned by the function.

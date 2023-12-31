@@ -151,8 +151,10 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
-- **utils:** bcrypt—for hashing the password , token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) [more](./JWT_TOKEN.md)
-- **Middleware**: This includes two types:
+- **utils:** bcrypt—for hashing the password , token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) `jwtSign`(sign the token) , `jwtVerify`(verify the token)...  [more](./JWT_TOKEN.md) 
+- **Middleware**: 
+   - **Owner**: Ensures the user is the owner of the account.
+   - **Authenticated**: Ensures the user is authenticated and the token is valid.
    - **Error Handler**: Handles the error.
 - **Controller**: This includes 
    - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login),
@@ -173,7 +175,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                  "profile": ""
                 }
             ```
-        - `login`: POST request to `/api/v2/auth/login` wrapper with `verifyUser` controller
+        - `login`: POST request to `/api/v2/auth/login` wrap with `verifyUser` controller
             - Example body:
             ```json
               {
@@ -198,8 +200,8 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
           ```
   - **User**
       - `get User`: GET request to `/api/v2/user/codexam_123` here `codexam_123` is the username
-      - `update User`: PUT request to `/api/v2/updateuser?id=658ec47dcb30d4ea193d457a` here `658ec47dcb30d4ea193d457a` is the id
-          - Example body:
+      - `update User`: PUT request to `/api/v2/updateuser?id=658ec47dcb30d4ea193d457a` here `658ec47dcb30d4ea193d457a` is the id wrap with `authenticated` and `owner` middleware
+            - Example body:
           ```json
              {
                "username" : "codexam_123",

@@ -9,9 +9,9 @@ export default {
   db: process.env.MONGO_URL,
 
   //🔑 Secret keys - Use in jwtAccess(Stateless)
-  JWT_ACCESS_TOKEN: "secret" || process.env.JWT_SECRET,
+  JWT_ACCESS_TOKEN: "access_secret" || process.env.JWT_SECRET,
   //🔑 Secret keys - Use in jwtRefresh(Stateless)
-  JWT_SECRET_TOKEN: "secret" || process.env.JWT_SECRET,
+  JWT_REFRESH_TOKEN: "refresh_secret" || process.env.JWT_SECRET,
 };
 
 //⌛ Expiration times - Use in jwtAccess(Stateless) and jwtRefresh(Stateless)
