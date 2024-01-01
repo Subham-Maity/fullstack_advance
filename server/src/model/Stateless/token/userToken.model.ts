@@ -17,21 +17,35 @@ const UserTokenSchema: Schema<IUserToken> = new Schema({
   },
 });
 
+// ****************************************
+// 🏭 Creating the UserToken Model
+// ****************************************
 export const UserTokenModel = model<IUserToken>("UserToken", UserTokenSchema);
 
-//It will find the token in the database
+// ****************************************
+// ❗ UserToken Actions ❗
+// ****************************************
+
+// 🔍 Find the token in the database
+// ✅ (used in logoutHandler , verifyRefreshToken)
 export const UserToken = async (token: string) => {
   return UserTokenModel.findOne({ token });
 };
 
+// 🔍 Find a UserToken by ID
+// ✅ (used in saveToken)
 export const findUserTokenById = async (userId: string) => {
   return UserTokenModel.findOne({ userId });
 };
 
+// ❌ Delete a UserToken by ID
+// ✅ (used in saveToken , logoutHandler)
 export const deleteUserTokenById = async (userId: string) => {
   return UserTokenModel.deleteOne({ userId });
 };
 
+// ➕ Create a new UserToken
+// ✅ (used in saveToken)
 export const createUserToken = async (userId: string, token: string) => {
   return new UserTokenModel({ userId, token }).save();
 };

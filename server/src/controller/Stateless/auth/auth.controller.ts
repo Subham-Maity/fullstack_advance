@@ -1,7 +1,9 @@
 import * as express from "express";
 import catchAsyncError from "../../../middleware/error/catchAsyncError";
-import UserModel, {
+import {
   findUserByUsername,
+  saveUser,
+  updateUserPassword,
   userExistsByEmail,
   userExistsByUsername,
 } from "../../../model/Stateless/users/users.model";
@@ -62,17 +64,16 @@ export const register = catchAsyncError(
       }
       //this function is defined in the model file
       const hashedPassword = await bcryptHash(password, CUSTOM_SALT_ROUNDS);
-      const user = new UserModel({
+
+      const user = await saveUser({
         username,
         password: hashedPassword,
         profile: profile || "", //if a profile is not provided, it will be set to an empty string
         email,
       });
-
-      const result = await user.save();
       return res.status(201).send({
         message: "User created successfully",
-        result,
+        user,
       });
     } catch (error: any) {
       // Specific error handling for different cases
@@ -165,6 +166,8 @@ export const login = catchAsyncError(
 
 /** RESET PASSWORD */
 
+//First you need to generate an OTP and then verify it before resetting the password
+
 /** PUT: http://localhost:5050/api/v2/auth/resetPassword
  * @param : {
  * "username": "codexam_123",
@@ -173,17 +176,44 @@ export const login = catchAsyncError(
  */
 
 export const resetPassword = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
-    res.json({ message: "resetPassword" });
-  },
-);
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    try {
+      // Check if the resetSession flag is set to true in the app.locals object
+      if (!req.app.locals.resetSession) {
+        return next(new AppError("Session expired!", 440));
+      }
 
-/** SESSION CREATE */
+      // Extract the username and password from the request body and check if they are provided
+      const { username, password } = req.body;
+      // Find the user with the provided username in the database and check if the user exists
+      const user = await findUserByUsername(username);
 
-/** GET: http://localhost:5050/api/v2/auth/createResetSession */
+      // If no user is found, return an error message.
+      if (!user) {
+        return next(new AppError("User not found!", 404));
+      }
 
-export const createResetSession = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
-    res.json({ message: "createResetSession" });
+      // Hash the password before saving it to the database and update the user's password
+      const hashedPassword = await bcryptHash(password, CUSTOM_SALT_ROUNDS);
+
+      // Update the user's password in the database
+      await updateUserPassword(user.username, hashedPassword);
+
+      // Reset the resetSession flag to false
+      req.app.locals.resetSession = false; // Reset session
+
+      // Send the response to the client with a success message
+      return res.status(201).send({ msg: "Record Updated!" });
+    } catch (error) {
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send({ error: error.message });
+      } else {
+        return res.status(500).send({ error: "Internal Server Error" });
+      }
+    }
   },
 );

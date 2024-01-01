@@ -183,7 +183,20 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                "username" : "codexam_123",
                "password" : "Codexam@123"
                }
-            ```
+      - `reset password`: PUT request to `/api/v2/auth/resetPassword` wrap with `verifyUser` controller 
+          - But before that you have to generate OTP and verify it then you can reset the password
+          - `api/v2/auth/generateOTP?username=codexam_123`
+          - `api/v2/auth/verifyOTP?username=codexam_123&code=427638`
+          - Then you can reset the password
+          - Example body:
+      
+          ```json
+           {
+            "username" : "codexam_123",
+            "password" : "Codexam@123"
+            }
+          ```
+  
   - **Auth/Token**
       - `get refressToken`: POST request to `/api/v2/auth/token`
           - Example body:

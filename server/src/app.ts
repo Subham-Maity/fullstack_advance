@@ -110,7 +110,7 @@ app.use("/api/v1/auth", statelful.authentication);
 app.use("/api/v1", statelful.users);
 
 //Stateless routes
-//Authentication routes-Signup, Login
+//Authentication routes-Signup, Login, Reset Password
 app.use("/api/v2/auth", stateless.authentication);
 //Token routes - generateAccessToken, logout
 app.use("/api/v2/auth/token", stateless.token);
