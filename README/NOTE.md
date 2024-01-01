@@ -159,6 +159,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 - **Controller**: This includes 
    - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login),
    - `user` -  `getUser`(get user data without a password), `updateUser`(update user data)
+   - `OTP` - `generateOTP`(Generate OTP), `verifyOTP`(Verify the OTP)
 - **Routes**:
     - **Auth**
         - `register`: POST request to `/api/v2/auth/register`
@@ -210,4 +211,9 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
              }
             
           ```
+  - **Auth/OTP**
+      - `get OTP`: GET request to `/api/v2/auth/generateOTP?username=codexam_123` here `codexam_123` is the username you have to pass in the query parameter and wrap with `authenticated` middleware
+      - `verify OTP`: GET request to `http://localhost:5050/api/v2/auth/verifyOTP?username=codexam_123&code=427638` here `codexam_123` is the username and `427638` is the OTP you have to pass in the query parameter 
+        and wrap with `authenticated` middleware
           
+            

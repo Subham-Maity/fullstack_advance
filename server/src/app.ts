@@ -114,6 +114,8 @@ app.use("/api/v1", statelful.users);
 app.use("/api/v2/auth", stateless.authentication);
 //Token routes - generateAccessToken, logout
 app.use("/api/v2/auth/token", stateless.token);
+//OTP routes - generateOTP, verifyOTP
+app.use("/api/v2/auth", stateless.otp);
 //User routes - getAllUsers, updateUser, deleteUser
 app.use("/api/v2", stateless.users);
 //Mail routes - sendMail

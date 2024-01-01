@@ -13,9 +13,9 @@ const connectDB = async (): Promise<void> => {
     log.info(`MongoDB Connected: ` + `${con.connection.host}`);
   } catch (error) {
     if (error instanceof Error) {
-      console.log(`Error: ${error.message}`);
+      log.info(`Error: ${error.message}`);
     } else {
-      console.log(`An unknown error occurred`);
+      log.info(`An unknown error occurred`);
     }
     process.exit(1);
   }

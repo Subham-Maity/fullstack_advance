@@ -76,9 +76,9 @@ export const register = catchAsyncError(
       });
     } catch (error: any) {
       // Specific error handling for different cases
-      if (error.code === "SOME_SPECIFIC_ERROR_CODE") {
+      if (error.code === 11000) {
         // Handle a specific error case differently
-        return next(new AppError("Specific error occurred", 500));
+        return next(new AppError("Unable to register user", 500));
       } else {
         // General error handling
         return next(new AppError("Unable to register user", 500));
@@ -160,29 +160,6 @@ export const login = catchAsyncError(
     } catch (error) {
       return next(new AppError("Internal Server Error", 500));
     }
-  },
-);
-
-/** GENERATE OTP */
-/** GET: http://localhost:5050/api/v2/auth/generateOTP
- * @param : {
- * "username": "codexam_123",
- * "password": "Codexam@123"
- * }
- */
-
-export const generateOTP = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
-    res.json({ message: "generateOTP" });
-  },
-);
-
-/** Validate OTP */
-/** GET: http://localhost:5050/api/v2/auth/createResetSession */
-
-export const verifyOTP = catchAsyncError(
-  async (req: express.Request, res: express.Response) => {
-    res.json({ message: "validateOTP" });
   },
 );
 

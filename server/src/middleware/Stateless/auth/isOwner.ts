@@ -25,8 +25,7 @@ export const isOwner = async (
     }
 
     const currentUserId = decodedToken.userId;
-    console.log("currentUserId", currentUserId);
-    // console.log("userId", userId);
+
     if (!currentUserId || currentUserId !== userId) {
       return res.status(403).json({ error: "Unauthorized" });
     }
