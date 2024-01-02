@@ -12,9 +12,6 @@ export default {
   JWT_ACCESS_TOKEN: "access_secret" || process.env.JWT_SECRET,
   //🔑 Secret keys - Use in jwtRefresh(Stateless)
   JWT_REFRESH_TOKEN: "refresh_secret" || process.env.JWT_SECRET,
-  //📩 Nodemailer - Use in mailer(Stateless)
-  EMAIL: process.env.EMAIL || "laisha.dietrich@ethereal.email",
-  PASSWORD: process.env.PASSWORD || "mjH2Zf7PEpWrdVnuD6",
 };
 
 //⌛ Expiration times - Use in jwtAccess(Stateless) and jwtRefresh(Stateless)

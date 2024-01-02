@@ -1,9 +1,8 @@
 import * as express from "express";
 import * as nodemailer from "nodemailer";
 import Mailgen from "mailgen";
-import ENV from "../../../../config/default";
-import { MailRequest } from "../../../types/Stateless/mail/mail.i";
-
+import { MailRequest } from "../../../../types/Stateless/mail/mail.i";
+import { EMAIL, PASSWORD } from "../mailerConfig";
 //*****************MAILER*****************//
 // https://ethereal.email/create
 //https://nodemailer.com/#example
@@ -13,8 +12,8 @@ const nodeConfig = {
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: ENV.EMAIL, // generated ethereal user
-    pass: ENV.PASSWORD, // generated ethereal password
+    user: EMAIL,
+    pass: PASSWORD,
   },
 };
 

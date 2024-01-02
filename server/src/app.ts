@@ -67,6 +67,9 @@ morgan.token("id", function getId(req: any) {
   return req.id;
 });
 
+//json payload
+app.use(express.json());
+
 morgan.token("date", function (req, res, tz) {
   return moment()
     .tz(<string>tz)

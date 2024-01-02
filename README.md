@@ -71,4 +71,5 @@ with every line of code meticulously documented for easy understanding.
 - Generate Access Token using Refresh Token
 - Logout
 - Email: Register Mail, Send Mail (Nodemailer, Mailgen)
+- Email: Gmail Normal
 
