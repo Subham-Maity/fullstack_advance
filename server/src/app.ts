@@ -119,7 +119,7 @@ app.use("/api/v2/auth", stateless.otp);
 //User routes - getAllUsers, updateUser, deleteUser
 app.use("/api/v2", stateless.users);
 //Mail routes - sendMail
-app.use("/api/v2", stateless.mail);
+app.use("/api/v2/mail-v1", stateless.mail);
 
 // Default route for the API - This will be used to test if the API is live
 app.get("/", (req: Request, res: Response) => {

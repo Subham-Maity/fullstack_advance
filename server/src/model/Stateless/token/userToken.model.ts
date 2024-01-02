@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IUserToken } from "../../../types/Stateless/token/token";
+import { IUserToken } from "../../../types/Stateless/token/token.i";
 
 const UserTokenSchema: Schema<IUserToken> = new Schema({
   userId: {

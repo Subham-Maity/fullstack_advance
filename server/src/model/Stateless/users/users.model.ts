@@ -1,6 +1,6 @@
 // Create schema for User2
 import mongoose, { model, Schema } from "mongoose";
-import { IUser2 } from "../../../types/Stateless/user/user";
+import { IUser2 } from "../../../types/Stateless/user/user.i";
 
 const User2Schema: Schema<IUser2> = new Schema({
   username: {

@@ -14,7 +14,7 @@ auth
   .post("/register", register)
   .post("/authenticate", verifyUser, (res: express.Response) => res.end()) //Authenticate the user
   .post("/login", verifyUser, login) //first verify the user then log-in the user
-  .get("/createResetSession", createResetSession)
+  .get("/createResetSession", createResetSession) //Reset all the variables in the app.locals object
   .put("/resetPassword", verifyUser, resetPassword);
 
 export default auth;

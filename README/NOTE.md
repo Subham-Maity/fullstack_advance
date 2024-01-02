@@ -151,7 +151,10 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
-- **utils:** bcrypt—for hashing the password , token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) `jwtSign`(sign the token) , `jwtVerify`(verify the token)...  [more](./JWT_TOKEN.md) 
+- **utils:** 
+   - bcrypt—for hashing the password  
+   - token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) `jwtSign`(sign the token) , `jwtVerify`(verify the token)...  [more](./JWT_TOKEN.md)  
+   - mail - `sendMail` (send mail to the user)(nodemailer) normal mail and template mail 
 - **Middleware**: 
    - **Owner**: Ensures the user is the owner of the account.
    - **Authenticated**: Ensures the user is authenticated and the token is valid.
@@ -228,5 +231,16 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
       - `get OTP`: GET request to `/api/v2/auth/generateOTP?username=codexam_123` here `codexam_123` is the username you have to pass in the query parameter and wrap with `authenticated` middleware
       - `verify OTP`: GET request to `http://localhost:5050/api/v2/auth/verifyOTP?username=codexam_123&code=427638` here `codexam_123` is the username and `427638` is the OTP you have to pass in the query parameter 
         and wrap with `authenticated` middleware
+  - **MAIL/EMAIL**
+      - `send mail`: POST request to `/api/v2/mail-v1/registerMail`
+          - Example body:
+          ```json
+              {
+               "username" : "codexamA_123",
+               "userEmail" : "codexam@xam.com",
+               "text" : "New User Registered",
+               "subject" : "New User Registered"
+              }
+          ```  
           
             
