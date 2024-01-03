@@ -31,7 +31,18 @@ const Username = () => {
   });
   return (
     <div className="container mx-auto ">
-      <Toaster position="top-center" reverseOrder={false}></Toaster>
+      <Toaster
+        toastOptions={{
+          error: {
+            style: {
+              background: "#212b36",
+              color: "#fff",
+            },
+          },
+        }}
+        position="top-right"
+        reverseOrder={false}
+      ></Toaster>
 
       <div className="flex justify-center items-center h-screen">
         <div className={styles.glass}>
