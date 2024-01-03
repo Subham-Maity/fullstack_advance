@@ -1,6 +1,6 @@
 import axios from "@/hooks/axios";
 import { IUser2Fields } from "@/types/user/user.i";
-import { sendEmail } from "@/api/mail";
+import { sendEmail } from "@/api/mail/mail";
 
 /** Register user */
 async function register(credentials: IUser2Fields) {

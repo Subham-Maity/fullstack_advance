@@ -1,7 +1,7 @@
 import axios from "@/hooks/axios";
 import { IUser2Fields } from "@/types/user/user.i";
-import { sendEmail } from "@/api/mail";
-import { getUser } from "@/api/users/GetUser";
+import { sendEmail } from "@/api/mail/mail";
+import { getUser } from "@/api/users/GetUser/getUser";
 
 /** Generate OTP */
 async function generateOTP(username: IUser2Fields) {
