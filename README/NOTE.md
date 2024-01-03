@@ -178,8 +178,16 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Types (validation.ts)
 - **api** - Using Axios (Custom Hooks)
   - Authentication: For checking the user is authenticated or not
+  - Auth: 
+    - Login: Login the user
+    - Logout: Logout the user
+    - Register: Register the user
+    - Reset Password: Reset the password
+    - Token: Get the access token
+    - Verify OTP: Verify the OTP
   - User
     - Get User: Get the user data 
+    - 
 
 ##### `Server`:  
 - **User Type Defined**
