@@ -1,10 +1,14 @@
 import * as express from "express";
 import { Router } from "express";
 import { registerMail } from "../../../utils/Stateless/mailer/Email/mailer";
-import { registerGMail } from "../../../utils/Stateless/mailer/Gmail/registerMail";
+import { registerGMail } from "../../../utils/Stateless/mailer/Gmail-SMTP/registerMail";
+import MailController from "../../../utils/Stateless/mailer/Gmail-OAuth2/mailController";
 
 const mail: Router = express.Router();
 
-mail.post("/registerMail", registerMail).post("/registerGMail", registerGMail);
+mail
+  .post("/registerMail", registerMail)
+  .post("/registerGMail", registerGMail)
+  .post("/registerGMail0Auth", MailController.sendMail);
 
 export default mail;

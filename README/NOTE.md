@@ -155,7 +155,8 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
    - bcrypt—for hashing the password  
    - token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) `jwtSign`(sign the token) , `jwtVerify`(verify the token)...  [more](./JWT_TOKEN.md)  
    - mail - `sendMail` (send mail to the user)(nodemailer) normal mail and template mail 
-   - gmail - `sendGMail` (send mail to the user)(nodemailer) normal mail and template mail
+   - gmail-smtp - `sendGMail` (send mail to the user)(nodemailer) normal mail and template mail
+   - gmail0Auth - `sendGMail0Auth` (send mail to the user)(nodemailer) normal mail and template mail - Check all the steps in [0AuthSetps.md](./0AuthSetps.md)
 - **Middleware**: 
    - **Owner**: Ensures the user is the owner of the account.
    - **Authenticated**: Ensures the user is authenticated and the token is valid.
@@ -243,7 +244,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                "subject" : "New User Registered"
               }
           ```  
-  - **MAIL/GMAIL**
+  - **MAIL/GMAIL/SMTP**
    - `Go to https://myaccount.google.com/security`
    - `Enable 2-Step Verification`
    - `Create App Password https://myaccount.google.com/apppasswords`
@@ -258,4 +259,16 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                "subject" : "New User Registered"
               }
           ```          
-            
+  - **MAIL/GMAIL/0Auth**
+    Check all the steps in [0AuthSetps.md](./0AuthSetps.md)
+    - `send mail`: POST request to `/api/v2/mail-v1/registerGMail
+      - `send mail`: POST request to `/api/v2/mail-v1/registerGMail0Auth`
+          - Example body:
+          ```json
+              {
+               "username" : "codexamA_123",
+               "userEmail" : "codexam@xam.com",
+               "text" : "New User Registered",
+               "subject" : "New User Registered"
+              }
+          ```      

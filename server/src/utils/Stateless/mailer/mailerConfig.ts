@@ -57,3 +57,18 @@ export const body: EmailBody = {
     "Need help, or have questions? Just reply to this email, we'd love to help.",
   signature: "CodeXam Team",
 };
+
+// _______________________________________________________________________________________________________________________
+// _______________________________________________________________________________________________________________________
+
+//0Auth2.0
+export const CLIENT_ID: string =
+  "0000000000-xxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com";
+export const CLIENT_SECRET: string = "XXXXXXXXXXXXXXXXXXXXXXXXX";
+export const REDIRECT_URI: string =
+  "https://developers.google.com/oauthplayground";
+export const REFRESH_TOKEN: string =
+  "1//XYXYXYXYXYXYXYXYXYXYXYXYXYXYYXYXYXYXYXYYXYXYXYYXYXYXYYXYXYXYXYXYYXYX";
+export const ZeroAuth_Gmail_EMAIL: string = "codexam.personal@gmail.com";
+
+export const TEXTOFSENDINGEMAIL: string = "@CODEXAMOFFICIAL";

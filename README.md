@@ -70,6 +70,7 @@ with every line of code meticulously documented for easy understanding.
 - Session: Creation, Destroy
 - Generate Access Token using Refresh Token
 - Logout
-- Email: Register Mail, Send Mail (Nodemailer, Mailgen)
-- Email: Gmail Normal
+- Email: Normal Mail (Nodemailer , mailgen)
+- Email: Gmail Basic Auth (SMTP)
+- Email: Gmail Better (OAuth2)
 
