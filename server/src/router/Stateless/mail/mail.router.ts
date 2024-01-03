@@ -6,9 +6,8 @@ import MailController from "../../../utils/Stateless/mailer/Gmail-OAuth2/mailCon
 
 const mail: Router = express.Router();
 
-mail
-  .post("/registerMail", registerMail)
-  .post("/registerGMail", registerGMail)
-  .post("/registerGMail0Auth", MailController.sendMail);
+mail.post("/registerMail", registerMail).post("/registerGMail", registerGMail);
+//If you want to use 0Auth2.0 please uncomment this line and first setup all tokens and credentials in mailConfig.ts file
+// .post("/registerGMail0Auth", MailController.sendMail);
 
 export default mail;

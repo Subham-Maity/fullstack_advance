@@ -142,12 +142,40 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 
 ##### `Client`:
 - Components 
-  - Username(User name set) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts) 
-  - Password(Password set)—Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
-  - Recovery(OTP to reset password) 
-  - Reset(Reset Password) - Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
-  - Register (Register User) - Convert — converts the file to a Base64 string , Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
-  - Profile - Convert — converts the file to a Base64 string , Formik Validation,Toast(intialValues,validate), Error Handling(yup), Types(validation.ts)
+- **Username**
+    - Formik Validation
+    - Toast (initialValues, validate)
+    - Error Handling (Yup)
+    - Types (validation.ts)
+
+- **Password**
+    - Formik Validation
+    - Toast (initialValues, validate)
+    - Error Handling (Yup)
+    - Types (validation.ts)
+
+- **Recovery**
+    - OTP to reset password
+
+- **Reset**
+    - Formik Validation
+    - Toast (initialValues, validate)
+    - Error Handling (Yup)
+    - Types (validation.ts)
+
+- **Register (Register User)**
+    - Convert: converts the file to a Base64 string
+    - Formik Validation
+    - Toast (initialValues, validate)
+    - Error Handling (Yup)
+    - Types (validation.ts)
+
+- **Profile**
+    - Convert: converts the file to a Base64 string
+    - Formik Validation
+    - Toast (initialValues, validate)
+    - Error Handling (Yup)
+    - Types (validation.ts)
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
