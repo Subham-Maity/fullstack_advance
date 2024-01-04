@@ -10,17 +10,12 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import { registerValidate } from "@/validation/formik/validate";
-//Toaster
-import { Toaster } from "react-hot-toast";
-import {
-  INITIAL_FORM_STATE_PASSWORD,
-  INITIAL_FORM_STATE_REGISTER,
-  INITIAL_FORM_STATE_RESET_PASSWORD,
-} from "@/validation/formik/intialValues";
+import { registerValidate } from "@/validation/formik/validate/register";
+import { INITIAL_FORM_STATE_REGISTER } from "@/validation/formik/intialValues/register";
 import { Values } from "@/types/validation/validation";
+//Toaster
 import convertToBase64 from "@/convert";
-
+import { Toaster } from "react-hot-toast";
 const Register = () => {
   const router = useRouter();
   const [file, setFile] = React.useState<any>(null);

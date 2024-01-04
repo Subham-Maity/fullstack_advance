@@ -54,7 +54,7 @@ with every line of code meticulously documented for easy understanding.
 - Convert File to Base64
 - Clsx
 - Tailwind-merge
-
+- Redux
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token
 - Bcrypt: Password Hashing, Password Salting

@@ -10,15 +10,24 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import { usernameValidate } from "@/validation/formik/validate";
+import { usernameValidate } from "@/validation/formik/validate/username";
+import { INITIAL_FORM_STATE_USERNAME } from "@/validation/formik/intialValues/username";
+import { Values } from "@/types/validation/validation";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import { INITIAL_FORM_STATE_USERNAME } from "@/validation/formik/intialValues";
-import { Values } from "@/types/validation/validation";
+
+//Redux
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "@/store/redux/store";
+import { setUsername } from "@/features/slice/user/userSlice";
 
 const Username = () => {
   const router = useRouter();
-  // const setUsername = useAuthStore((state: any) => state.setUsername);
+  const dispatch = useDispatch<AppDispatch>();
+
+  //We can use this to get the username from the store and use it in the form
+  // const username = useAppSelector((state) => state.user.username);
+  // console.log(username, "username from store");
 
   const formik = useFormik({
     initialValues: INITIAL_FORM_STATE_USERNAME,
@@ -26,7 +35,12 @@ const Username = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values: Values) => {
-      console.log(values);
+      //if the username is valid, then we will set the username
+      // in the store and redirect to the password page
+      if (values.username) {
+        dispatch(setUsername(values.username));
+        router.push("jwt/password");
+      }
     },
   });
   return (

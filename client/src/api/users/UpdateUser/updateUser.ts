@@ -1,5 +1,5 @@
 import axios from "@/hooks/axios";
-import { IUser2Fields } from "@/types/user/user.i";
+import { IUser2Fields } from "@/types/api/user/user.i";
 
 /** update user profile function */
 export async function updateUser(response: IUser2Fields) {

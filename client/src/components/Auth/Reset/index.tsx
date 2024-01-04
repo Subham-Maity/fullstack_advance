@@ -9,11 +9,11 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import { resetPasswordValidate } from "@/validation/formik/validate";
+import { resetPasswordValidate } from "@/validation/formik/validate/resetPassword";
+import { Values } from "@/types/validation/validation";
+import { INITIAL_FORM_STATE_PASSWORD } from "@/validation/formik/intialValues/password";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import { INITIAL_FORM_STATE_PASSWORD } from "@/validation/formik/intialValues";
-import { Values } from "@/types/validation/validation";
 
 const Reset = () => {
   const router = useRouter();

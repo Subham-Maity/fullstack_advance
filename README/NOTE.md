@@ -147,6 +147,8 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Toast (initialValues, validate)
     - Error Handling (Yup)
     - Types (validation.ts)
+    - Redux (userSlice)- For storing the username
+    - Username Validation using API (Check if the username is already present in the database or not)
 
   - **Password**
     - Formik Validation
@@ -183,14 +185,15 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Register: Register the user
     - Reset Password: Reset the password
   - Mail: 
-    - Send Mail: Send mail to the user
+    - Send Mail: Send mail to the user according to the user action
   - OTP: 
     - Generate OTP: Generate OTP for the user
     - Verify OTP: Verify the OTP 
   - User
     - Get User: Get the user data 
     - Update User: Update the user data
-
+- **REDUX** - Using Redux Toolkit
+    - userSlice-For storing the username 
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
@@ -205,7 +208,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
    - **Authenticated**: Ensures the user is authenticated and the token is valid.
    - **Error Handler**: Handles the error.
 - **Controller**: This includes 
-   - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login),
+   - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login), checkUserExistence (check if the user exists in the database)
    - `user` -  `getUser`(get user data without a password), `updateUser`(update user data)
    - `OTP` - `generateOTP`(Generate OTP), `verifyOTP`(Verify the OTP)
 - **Routes**:
@@ -245,7 +248,21 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
             "password" : "Codexam@123"
             }
       ```
-  
+  - **Auth/VerifyUser**
+      - `POST request to /api/v2/auth/verifyUser` 
+      - Example body:
+      ```json
+             {
+               "username" : "codexam_123"
+             }
+      ```
+      - `logout`: DELETE request to `/api/v2/auth/token`
+      - Example body:
+      ```json
+             {
+               "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+             }
+      ```  
   - **Auth/Token**
       - `get refressToken`: POST request to `/api/v2/auth/token`
       - Example body:

@@ -11,14 +11,11 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import {
-  profileValidate,
-  registerValidate,
-} from "@/validation/formik/validate";
+import { profileValidate } from "@/validation/formik/validate/profile";
+import { Values } from "@/types/validation/validation";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import { INITIAL_FORM_STATE_REGISTER } from "@/validation/formik/intialValues";
-import { Values } from "@/types/validation/validation";
+
 import convertToBase64 from "@/convert";
 
 const Profile = () => {

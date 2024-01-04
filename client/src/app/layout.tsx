@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import LayoutWrapper from "@/wrapper/Layout";
+import React from "react";
+import { ReduxProvider } from "@/providers/redux/ReduxProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LayoutWrapper className="bg-[url('/background.svg')] bg-cover bg-no-repeat background-gradient">
-          {children}
-        </LayoutWrapper>
+        <ReduxProvider>
+          <LayoutWrapper className="bg-[url('/background.svg')] bg-cover bg-no-repeat background-gradient">
+            {children}
+          </LayoutWrapper>
+        </ReduxProvider>
       </body>
     </html>
   );

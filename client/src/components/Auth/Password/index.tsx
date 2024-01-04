@@ -10,14 +10,11 @@ import { useRouter } from "next/navigation";
 //Formik
 import { useFormik } from "formik";
 //Validation
-import { passwordValidate } from "@/validation/formik/validate";
+import { passwordValidate } from "@/validation/formik/validate/password";
+import { Values } from "@/types/validation/validation";
+import { INITIAL_FORM_STATE_RESET_PASSWORD } from "@/validation/formik/intialValues/resetPassword";
 //Toaster
 import { Toaster } from "react-hot-toast";
-import {
-  INITIAL_FORM_STATE_PASSWORD,
-  INITIAL_FORM_STATE_RESET_PASSWORD,
-} from "@/validation/formik/intialValues";
-import { Values } from "@/types/validation/validation";
 
 const Password = () => {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { IUser2Fields } from "@/types/user/user.i";
+import { IUser2Fields } from "@/types/api/user/user.i";
 import axios from "@/hooks/axios";
 import { getUser } from "@/api/users/GetUser/getUser";
 import { sendEmail } from "@/api/mail/mail";
