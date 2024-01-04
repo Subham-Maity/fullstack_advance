@@ -179,15 +179,17 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 - **api** - Using Axios (Custom Hooks)
   - Authentication: For checking the user is authenticated or not
   - Auth: 
-    - Login: Login the user
-    - Logout: Logout the user
+    - Login: Log in the user
     - Register: Register the user
     - Reset Password: Reset the password
-    - Token: Get the access token
-    - Verify OTP: Verify the OTP
+  - Mail: 
+    - Send Mail: Send mail to the user
+  - OTP: 
+    - Generate OTP: Generate OTP for the user
+    - Verify OTP: Verify the OTP 
   - User
     - Get User: Get the user data 
-    - 
+    - Update User: Update the user data
 
 ##### `Server`:  
 - **User Type Defined**
@@ -208,9 +210,9 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
    - `OTP` - `generateOTP`(Generate OTP), `verifyOTP`(Verify the OTP)
 - **Routes**:
     - **Auth**
-        - `register`: POST request to `/api/v2/auth/register`
-            - Example body:
-            ```json
+      - `register`: POST request to `/api/v2/auth/register`
+      - Example body:
+      ```json
                {
                  "username" : "codexam_123",
                  "password" : "Codexam@123",
@@ -221,95 +223,94 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                  "address" : "india",
                  "profile": ""
                 }
-            ```
-        - `login`: POST request to `/api/v2/auth/login` wrap with `verifyUser` controller
-            - Example body:
-            ```json
+      ```
+      - `login`: POST request to `/api/v2/auth/login` wrap with `verifyUser` controller
+      - Example body:
+      ```json
               {
                "username" : "codexam_123",
                "password" : "Codexam@123"
                }
+      ```
       - `reset password`: PUT request to `/api/v2/auth/resetPassword` wrap with `verifyUser` controller 
-          - But before that you have to generate OTP and verify it then you can reset the password
-          - `api/v2/auth/generateOTP?username=codexam_123`
-          - `api/v2/auth/verifyOTP?username=codexam_123&code=427638`
-          - Then you can reset the password
-          - Example body:
+      - But before that you have to generate OTP and verify it then you can reset the password
+      - `api/v2/auth/generateOTP?username=codexam_123`
+      - `api/v2/auth/verifyOTP?username=codexam_123&code=427638`
+      - Then you can reset the password
+      - Example body:
       
-          ```json
+      ```json
            {
             "username" : "codexam_123",
             "password" : "Codexam@123"
             }
-          ```
+      ```
   
   - **Auth/Token**
       - `get refressToken`: POST request to `/api/v2/auth/token`
-          - Example body:
-          ```json
+      - Example body:
+      ```json
              {
                "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
              }
-          ```
+      ```
       - `logout`: DELETE request to `/api/v2/auth/token`
-          - Example body:
-          ```json
+      - Example body:
+      ```json
              {
                "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
              }
-          ```
+      ```
   - **User**
       - `get User`: GET request to `/api/v2/user/codexam_123` here `codexam_123` is the username
       - `update User`: PUT request to `/api/v2/updateuser?id=658ec47dcb30d4ea193d457a` here `658ec47dcb30d4ea193d457a` is the id wrap with `authenticated` and `owner` middleware
-            - Example body:
-          ```json
+      - Example body:
+      ```json
              {
                "username" : "codexam_123",
                "password" : "Codexam@123",
                "email": "Subham@Codexam.com"
              }
             
-          ```
+      ```
   - **Auth/OTP**
-      - `get OTP`: GET request to `/api/v2/auth/generateOTP?username=codexam_123` here `codexam_123` is the username you have to pass in the query parameter and wrap with `authenticated` middleware
-      - `verify OTP`: GET request to `http://localhost:5050/api/v2/auth/verifyOTP?username=codexam_123&code=427638` here `codexam_123` is the username and `427638` is the OTP you have to pass in the query parameter 
+    - `get OTP`: GET request to `/api/v2/auth/generateOTP?username=codexam_123` here `codexam_123` is the username you have to pass in the query parameter and wrap with `authenticated` middleware
+    - `verify OTP`: GET request to `http://localhost:5050/api/v2/auth/verifyOTP?username=codexam_123&code=427638` here `codexam_123` is the username and `427638` is the OTP you have to pass in the query parameter 
         and wrap with `authenticated` middleware
   - **MAIL/EMAIL**
       - `send mail`: POST request to `/api/v2/mail-v1/registerMail`
-          - Example body:
-          ```json
+      - Example body:
+      ```json
               {
                "username" : "codexamA_123",
                "userEmail" : "codexam@xam.com",
                "text" : "New User Registered",
                "subject" : "New User Registered"
               }
-          ```  
+      ```  
   - **MAIL/GMAIL/SMTP**
    - `Go to https://myaccount.google.com/security`
    - `Enable 2-Step Verification`
    - `Create App Password https://myaccount.google.com/apppasswords`
-    - `send mail`: POST request to `/api/v2/mail-v1/registerGMail   
       - `send mail`: POST request to `/api/v2/mail-v1/registerGMail`
-          - Example body:
-          ```json
+      - Example body:
+      ```json
               {
                "username" : "codexamA_123",
                "userEmail" : "codexam@xam.com",
                "text" : "New User Registered",
                "subject" : "New User Registered"
               }
-          ```          
+      ```          
   - **MAIL/GMAIL/0Auth**
     Check all the steps in [0AuthSetps.md](./0AuthSetps.md)
-    - `send mail`: POST request to `/api/v2/mail-v1/registerGMail
       - `send mail`: POST request to `/api/v2/mail-v1/registerGMail0Auth`
-          - Example body:
-          ```json
+      - Example body:
+      ```json
               {
                "username" : "codexamA_123",
                "userEmail" : "codexam@xam.com",
                "text" : "New User Registered",
                "subject" : "New User Registered"
               }
-          ```      
+      ```      
