@@ -148,7 +148,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Error Handling (Yup)
     - Types (validation.ts)
     - Redux (userSlice)- For storing the username
-    - Username Validation using API (Check if the username is already present in the database or not)
+    - Username Validation using API (Check if the username is already present in the database or not only authorized/register users from the database are permitted to proceed to the next page)
 
   - **Password**
     - Formik Validation
@@ -166,14 +166,16 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Types (validation.ts)
 
   - **Register (Register User)**
-    - Convert: converts the file to a Base64 string
+    - Convert: convert the file to a Base64 string
     - Formik Validation
-    - Toast (initialValues, validate)
+    - Toast (initialValues, validate , User Existence)
     - Error Handling (Yup)
     - Types (validation.ts)
+    - Email Send 
+    - Register User using API
 
   - **Profile**
-    - Convert: converts the file to a Base64 string
+    - Convert: convert the file to a Base64 string
     - Formik Validation
     - Toast (initialValues, validate)
     - Error Handling (Yup)

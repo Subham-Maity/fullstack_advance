@@ -46,15 +46,18 @@ with every line of code meticulously documented for easy understanding.
 
 ### 3. [Implementing JWT-based Authentication with Access Tokens & Refresh Tokens (Stateless)](README/NOTE.md#3-jwt-based-authentication-with-access-tokens--refresh-tokens-stateless)
 #### Frontend - Next.js
-- Formik
-- Yup
-- Toast
+
 - Tailwind CSS
 - Axios
 - Convert File to Base64
 - Clsx
 - Tailwind-merge
-- Redux
+- Redux - Proper Setup (Redux Toolkit)
+- Toast
+- Validation 
+  - Form Validation (Yup & Formik) correct format of email, password, etc. 
+  - Only authorized/register users from the database are permitted to proceed to the next page.
+- Custom Hooks  
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token
 - Bcrypt: Password Hashing, Password Salting

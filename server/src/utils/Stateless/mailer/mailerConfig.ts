@@ -63,12 +63,17 @@ export const body: EmailBody = {
 
 //0Auth2.0
 export const CLIENT_ID: string =
+  process.env.CLIENT_ID ||
   "0000000000-xxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com";
-export const CLIENT_SECRET: string = "XXXXXXXXXXXXXXXXXXXXXXXXX";
+export const CLIENT_SECRET: string =
+  process.env.CLIENT_SECRET || "XXXXXXXXXXXXXXXXXXXXXXXXX";
 export const REDIRECT_URI: string =
   "https://developers.google.com/oauthplayground";
 export const REFRESH_TOKEN: string =
+  process.env.ZERO_AUTH_REFRESH_TOKEN ||
   "1//XYXYXYXYXYXYXYXYXYXYXYXYXYXYYXYXYXYXYXYYXYXYXYYXYXYXYYXYXYXYXYXYYXYX";
-export const ZeroAuth_Gmail_EMAIL: string = "codexam.personal@gmail.com";
+export const ZeroAuth_Gmail_EMAIL: string =
+  process.env.ZERO_AUTH_GMAIL_EMAIL || "";
 
-export const TEXTOFSENDINGEMAIL: string = "@CODEXAMOFFICIAL";
+export const TEXTOFSENDINGEMAIL: string =
+  process.env.TEXTOFSENDINGEMAIL || "@CODEXAMOFFICIAL";

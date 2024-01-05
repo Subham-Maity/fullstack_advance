@@ -2,11 +2,11 @@
 export type Values = {
   firstName?: string;
   lastName?: string;
-  email?: string;
+  email?: any;
   mobile?: string;
   address?: string;
-  username?: string;
-  password?: string;
+  username?: any;
+  password?: any;
   confirm_pwd?: string;
 };
 

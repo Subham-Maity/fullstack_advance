@@ -1,11 +1,11 @@
 // Define the fields for User2
 export interface IUser2Fields {
-  username?: any;
-  password?: any;
-  email?: any;
   firstName?: string;
   lastName?: string;
-  mobile?: number;
+  email?: any;
+  mobile?: string;
   address?: string;
-  profile?: string;
+  username?: any;
+  password?: any;
+  confirm_pwd?: string;
 }

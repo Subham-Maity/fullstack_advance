@@ -15,11 +15,11 @@ import { INITIAL_FORM_STATE_REGISTER } from "@/validation/formik/intialValues/re
 import { Values } from "@/types/validation/validation";
 //Toaster
 import convertToBase64 from "@/convert";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { registerUser } from "@/api/auth/Register/register";
 const Register = () => {
   const router = useRouter();
   const [file, setFile] = React.useState<any>(null);
-
   const formik = useFormik({
     initialValues: INITIAL_FORM_STATE_REGISTER,
     validate: registerValidate,
@@ -27,8 +27,16 @@ const Register = () => {
     validateOnChange: false,
     onSubmit: async (values: Values) => {
       values = Object.assign(values, { profile: file || "" });
+      let registerPromise = registerUser(values);
+      await toast.promise(registerPromise, {
+        loading: "Creating...",
+        success: <b>Register Successfully...!</b>,
+        error: <b>Could not Register.</b>,
+      });
 
-      console.log(values);
+      registerPromise.then(function () {
+        router.push("/");
+      });
     },
   });
 
