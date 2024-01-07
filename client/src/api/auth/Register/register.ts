@@ -1,6 +1,7 @@
 import axios from "@/hooks/axios";
 import { IUser2Fields } from "@/types/api/user/user.i";
 import { sendEmail } from "@/api/mail/mail";
+import { DeleteProfilePicOwner } from "@/api/users/DeleteProfilePicture/deleteProfilePic";
 
 /** Register user */
 async function register(credentials: IUser2Fields) {
@@ -30,6 +31,10 @@ export async function registerUser(credentials: IUser2Fields) {
     return msg;
   } catch (error) {
     console.error(`Error in registerUser: ${error}`);
+
+    // Call DeleteProfilePicOwner in case of an error
+    await DeleteProfilePicOwner(credentials.profile);
+
     throw error;
   }
 }

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import catchAsyncError from "../../error/catchAsyncError";
 import ENV from "../../../../config/default";
-import { verifyJWT } from "../../../utils/Stateless/token/jwtVerify";
+import { verifyJWT } from "../../../utils/Stateless/token/tokenSign&Verify/jwtVerify";
 import AppError from "../../error/appError";
 
 /** Auth middleware */

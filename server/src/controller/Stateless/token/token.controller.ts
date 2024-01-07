@@ -1,6 +1,6 @@
 import * as express from "express";
-import { verifyRefreshToken } from "../../../utils/Stateless/token/tokenVerify";
-import { generateAccessToken } from "../../../utils/Stateless/token/jwtAccess";
+import { verifyRefreshToken } from "../../../utils/Stateless/token/verifyRefreshToken/tokenVerify";
+import { generateAccessToken } from "../../../utils/Stateless/token/tokenGenerator/jwtAccess";
 import {
   deleteUserTokenById,
   UserToken,

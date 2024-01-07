@@ -27,6 +27,16 @@ import statelful from "./router/Stateful";
 //Stateless routes
 import stateless from "./router/Stateless";
 
+//Importing the multer
+import multer from "multer";
+import path from "path";
+
+import sharp from "sharp";
+import {
+  getObjectSignedUrl,
+  uploadFile,
+} from "./utils/Stateless/fileStorage/S3Bucket/S3Bucket";
+import crypto from "crypto";
 /*❗~~~~CONFIG~~~~❗*/
 // Loading environment variables from .env file
 dotenv.config();
@@ -123,6 +133,8 @@ app.use("/api/v2/auth", stateless.otp);
 app.use("/api/v2", stateless.users);
 //Mail routes - sendMail
 app.use("/api/v2/mail-v1", stateless.mail);
+//Media routes - s3
+app.use("/api/v2/storage-v1/s3", stateless.s3);
 
 // Default route for the API - This will be used to test if the API is live
 app.get("/", (req: Request, res: Response) => {

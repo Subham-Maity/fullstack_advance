@@ -21,11 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReduxProvider>
-          <LayoutWrapper className="bg-[url('/background.svg')] bg-cover bg-no-repeat background-gradient">
-            {children}
-          </LayoutWrapper>
-        </ReduxProvider>
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

@@ -18,7 +18,7 @@ import { Toaster } from "react-hot-toast";
 
 //Redux
 import { useDispatch } from "react-redux";
-import { AppDispatch, useAppSelector } from "@/store/redux/store";
+import { AppDispatch } from "@/store/redux/store";
 import { setUsername } from "@/features/slice/user/userSlice";
 
 const Username = () => {

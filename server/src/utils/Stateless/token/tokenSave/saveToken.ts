@@ -1,12 +1,11 @@
-import { generateAccessToken } from "./jwtAccess";
-import { generateRefreshToken } from "./jwtRefresh";
-
+import { generateAccessToken } from "../tokenGenerator/jwtAccess";
+import { generateRefreshToken } from "../tokenGenerator/jwtRefresh";
 import {
   createUserToken,
   deleteUserTokenById,
   findUserTokenById,
-} from "../../../model/Stateless/token/userToken.model";
-import { hashToken } from "./tokenEncrypt";
+} from "../../../../model/Stateless/token/userToken.model";
+import { hashToken } from "../encrypt/tokenEncrypt";
 
 export const saveToken = async (
   payload: Record<string, any>,

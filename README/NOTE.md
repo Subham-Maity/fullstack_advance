@@ -171,8 +171,14 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Toast (initialValues, validate , User Existence)
     - Error Handling (Yup)
     - Types (validation.ts)
-    - Email Send 
+    - Email Send API
     - Register User using API
+    - Delete Profile Picture
+    - Get a Profile Picture
+    - Hook - useMutation (react-query)
+    - Hook - useQuery (react-query)
+    - S3 Bucket (AWS) (READ HERE - [S3 Bucket](./S3WITH_REGISTER.md))
+  
 
   - **Profile**
     - Convert: convert the file to a Base64 string
@@ -194,8 +200,16 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
   - User
     - Get User: Get the user data 
     - Update User: Update the user data
+    - Delete Profile Picture: Delete the profile picture from the S3 bucket
+    - Get Profile Picture: Get the profile picture from the S3 bucket 
 - **REDUX** - Using Redux Toolkit
-    - userSlice-For storing the username 
+    - user-userSlice-For storing the username 
+    - user-profilePicOwnerSlice-For storing the profile picture owner 
+- **Hook**  
+    - axios—for making the API call
+    - fetch—useFetch (custom hook) for fetching user data
+    - useMutation—useMutation (react-query) for updating the user data 
+    - useQuery—useQuery (react-query) for fetching user data 
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
@@ -333,3 +347,34 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
                "subject" : "New User Registered"
               }
       ```      
+  - **S3 Bucket**
+    Check all the steps in [S3 Setup](./S3Steps.md) and also understand how I set up the S3 bucket in the frontend and backend [Here](./S3WITH_REGISTER.md)
+  
+    - `Get Owner Profile Pic`: POST request to `/api/v2/storage-v1/s3/get-owner-image`
+    - post with user's profile data
+    - Example body:
+      ```json
+       {
+         "requestedImageName":"4515e1be62e98"
+       }
+      ```    
+    - `Get Owner Profile Pic`: POST request to `/api/v2/storage-v1/s3/get-owner-image`
+    - post with user's profile data
+    - Example body:
+      ```json
+       {
+         "requestedImageName":"4515e1be62e98"
+       }
+      ``` 
+    - `Delete Owner Profile Pic`: POST request to `/api/v2/storage-v1/s3/remove-owner-image`
+    - post with user's profile data
+    - Example body:
+      ```json
+       {
+         "requestedImageName":"4515e1be62e98"
+       }
+      ```
+    - `Register User Profile Pic`: POST request to `/api/v2/storage-v1/s3/images`
+      -  post with image data in binary format
+    - `Get User Profile Pic`: GET request to `/api/v2/storage-v1/s3/images`
+      -  Give you last uploaded image key

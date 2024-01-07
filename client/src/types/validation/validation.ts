@@ -8,6 +8,7 @@ export type Values = {
   username?: any;
   password?: any;
   confirm_pwd?: string;
+  profile?: any;
 };
 
 export type Errors = {

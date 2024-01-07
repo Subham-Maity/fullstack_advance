@@ -8,4 +8,5 @@ export interface IUser2Fields {
   username?: any;
   password?: any;
   confirm_pwd?: string;
+  profile?: any;
 }

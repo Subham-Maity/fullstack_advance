@@ -15,7 +15,7 @@ import {
   REFRESH_TOKEN_EXPIRATION,
   REFRESH_TOKEN_EXPIRATION_HASH_SECRET,
 } from "../../../../config/default";
-import { saveToken } from "../../../utils/Stateless/token/saveToken";
+import { saveToken } from "../../../utils/Stateless/token/tokenSave/saveToken";
 import { CookieOptions } from "express";
 import AppError from "../../../middleware/error/appError";
 

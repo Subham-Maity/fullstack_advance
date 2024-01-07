@@ -52,12 +52,13 @@ with every line of code meticulously documented for easy understanding.
 - Convert File to Base64
 - Clsx
 - Tailwind-merge
-- Redux - Proper Setup (Redux Toolkit)
+- Redux—Proper Setup (Redux Toolkit)
 - Toast
 - Validation 
   - Form Validation (Yup & Formik) correct format of email, password, etc. 
   - Only authorized/register users from the database are permitted to proceed to the next page.
-- Custom Hooks  
+- Custom Hooks
+- Custom API
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token
 - Bcrypt: Password Hashing, Password Salting
@@ -76,4 +77,7 @@ with every line of code meticulously documented for easy understanding.
 - Email: Normal Mail (Nodemailer , mailgen)
 - Email: Gmail Basic Auth (SMTP)
 - Email: Gmail Better (OAuth2)
+- Sharp (Media Processing)
+- Multer (File Upload)
+- AWS S3 (File Upload)
 

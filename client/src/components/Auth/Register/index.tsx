@@ -17,17 +17,28 @@ import { Values } from "@/types/validation/validation";
 import convertToBase64 from "@/convert";
 import toast, { Toaster } from "react-hot-toast";
 import { registerUser } from "@/api/auth/Register/register";
+import useMutation from "@/hooks/useMutation/useMutation";
+import useQuery from "@/hooks/useQuery";
+import { Simulate } from "react-dom/test-utils";
+
+import { AppDispatch, useAppSelector } from "@/store/redux/store";
+import { fetchImageOwner } from "@/features/slice/user/profilePicOwnerSlice";
+import { useDispatch } from "react-redux";
+const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
+//Where to upload
+const URL = "/api/v2/storage-v1/s3/images";
 const Register = () => {
   const router = useRouter();
+  const [uploadTriggered, setUploadTriggered] = useState(false);
   const [file, setFile] = React.useState<any>(null);
-  const formik = useFormik({
-    initialValues: INITIAL_FORM_STATE_REGISTER,
-    validate: registerValidate,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values: Values) => {
-      values = Object.assign(values, { profile: file || "" });
+  const [imageUploadError, setImageUploadError] = useState(false);
+  const [refetch, setRefetch] = useState(0);
+  const onSubmit = async (values: Values) => {
+    try {
+      values = Object.assign(values, { profile: imageUrls?.imageName || "" });
+      console.log(values);
       let registerPromise = registerUser(values);
+
       await toast.promise(registerPromise, {
         loading: "Creating...",
         success: <b>Register Successfully...!</b>,
@@ -37,24 +48,67 @@ const Register = () => {
       registerPromise.then(function () {
         router.push("/");
       });
-    },
-  });
-
-  //Formik doest not support file input, so we need to create a handler for it
-  /**
-   this code allows a user to upload a file, converts the file to a Base64 string,
-   and stores the Base64 string in the state for further use in the application.
-   This can be useful in scenarios where you need to send the file to a server
-   as a string instead of a file, or when you want to display the uploaded file
-   (if it’s an image) directly from the Base64 string.
-   */
-  const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files === null) {
+    } catch (err) {
+      setError("Error registering user.");
+      setImageUploadError(true);
+      setFile(null); // Clear the file upon encountering an error
       return;
     }
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64 as string);
   };
+
+  const formik = useFormik({
+    initialValues: INITIAL_FORM_STATE_REGISTER,
+    validate: registerValidate,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit,
+  });
+
+  const { mutate: uploadImage } = useMutation({ url: URL });
+  const {
+    data: imageUrls = [],
+    isLoading: imagesLoading,
+    error: fetchError,
+  } = useQuery(URL, refetch);
+  const [error, setError] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (e.target.files === null) {
+        return;
+      }
+      const file = e.target.files[0];
+
+      if (!validFileTypes.includes(file.type)) {
+        setError("File must be in JPG/PNG format");
+        return;
+      }
+
+      const form = new FormData();
+      form.append("image", file);
+
+      await uploadImage(form);
+      const base64 = await convertToBase64(e.target.files[0]);
+      setFile(base64 as string);
+      setTimeout(() => {
+        setRefetch((s) => s + 1);
+        setUploadTriggered(true); // Set uploadTriggered to true after successful upload
+      }, 1000);
+    } catch (err) {
+      setError("File upload failed. Please try again.");
+      setImageUploadError(true);
+      setFile(null);
+      return;
+    }
+  };
+
+  useEffect(() => {
+    if (uploadTriggered && imageUrls && imageUrls.imageName) {
+      dispatch(fetchImageOwner(imageUrls.imageName));
+    }
+  }, [imageUrls, dispatch, uploadTriggered]);
+
+  // const imageUrl = useAppSelector((state) => state.picOwner.imageUrl);
 
   return (
     <div className="container mx-auto">
@@ -98,7 +152,9 @@ const Register = () => {
               </label>
 
               <input
-                onChange={onUpload}
+                // onChange={onUpload}
+                onChange={handleUpload}
+                required={true}
                 className={styles.customFileInput}
                 type="file"
                 id="profile"
@@ -125,7 +181,11 @@ const Register = () => {
                 type="text"
                 placeholder="Password*"
               />
-              <button className={styles.btn} type="submit">
+              <button
+                className={styles.btn}
+                disabled={!uploadTriggered}
+                type="submit"
+              >
                 Register
               </button>
             </div>

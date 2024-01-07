@@ -1,4 +1,4 @@
-import { verifyJWT } from "../../../utils/Stateless/token/jwtVerify";
+import { verifyJWT } from "../../../utils/Stateless/token/tokenSign&Verify/jwtVerify";
 import * as express from "express";
 import ENV from "../../../../config/default";
 import AppError from "../../error/appError";

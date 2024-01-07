@@ -1,11 +1,12 @@
 import React from "react";
 import Register from "@/components/Auth/Register";
+import LayoutWrapper from "@/wrapper/Layout";
 
 const Page = () => {
   return (
-    <div>
+    <LayoutWrapper className="bg-[url('/background.svg')] bg-cover bg-no-repeat background-gradient">
       <Register />
-    </div>
+    </LayoutWrapper>
   );
 };
 
