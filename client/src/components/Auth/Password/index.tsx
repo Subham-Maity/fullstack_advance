@@ -27,9 +27,10 @@ const Password = () => {
     `user/${username}`,
   );
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      password: "admin@123",
+      password: "",
     },
     validate: passwordValidate,
     validateOnBlur: false,
@@ -39,7 +40,7 @@ const Password = () => {
         username,
         password: values.password,
       });
-      toast.promise(loginPromise, {
+      await toast.promise(loginPromise, {
         loading: "Checking...",
         success: <b>Login Successfully...!</b>,
         error: <b>Password Not Match!</b>,
@@ -48,6 +49,7 @@ const Password = () => {
       loginPromise.then((res) => {
         let { token } = res.data;
         localStorage.setItem("token", token);
+        router.push("/jwt/profile");
       });
     },
   });
@@ -59,8 +61,6 @@ const Password = () => {
     }
   }, [dispatch, apiData?.profile]);
   const imageUrl = useAppSelector((state) => state.picOwner.imageUrl);
-  console.log(imageUrl + "imageurl");
-  console.log(apiData?.profile, "apiData?.username");
   if (isLoading) return <h1 className="text-2xl font-bold">isLoading</h1>;
   if (serverError)
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;

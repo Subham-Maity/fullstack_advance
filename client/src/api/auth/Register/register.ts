@@ -2,6 +2,7 @@ import axios from "@/hooks/axios";
 import { IUser2Fields } from "@/types/api/user/user.i";
 import { sendEmail } from "@/api/mail/mail";
 import { DeleteProfilePicOwner } from "@/api/users/DeleteProfilePicture/deleteProfilePic";
+import { clearDatabaseApi } from "@/api/users/ClearS3Db/clearS3Db";
 
 /** Register user */
 async function register(credentials: IUser2Fields) {
@@ -14,7 +15,7 @@ async function register(credentials: IUser2Fields) {
   }
 }
 
-/** Register user and send email if registration is successful */
+/** Register user and trigger database clearing if successful */
 export async function registerUser(credentials: IUser2Fields) {
   try {
     const { msg, status } = await register(credentials);
@@ -26,6 +27,9 @@ export async function registerUser(credentials: IUser2Fields) {
         msg,
         "Registration Confirmation",
       );
+
+      // Call the API function to trigger database clearing
+      await clearDatabaseApi();
     }
 
     return msg;

@@ -11,6 +11,7 @@ import {
 } from "../../../../utils/Stateless/multer/multer";
 import { resizeImage } from "../../../../utils/Stateless/mediaProcessing/sharp";
 import {
+  clearDatabase,
   deleteImageByName,
   deleteLastImageEntry,
   getLastImageEntry,
@@ -118,10 +119,23 @@ const deleteImage = async (req: Request, res: Response) => {
     res.status(500).send("Error deleting image");
   }
 };
+
+//It will be used to clear the database after registering the user (we will call it from the frontend)
+const clearDatabaseController = async (req: Request, res: Response) => {
+  try {
+    await clearDatabase();
+    res.status(200).send("Database cleared successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error clearing database");
+  }
+};
+
 export {
   uploadImage,
   uploadImageHandler,
   getLastImageSignedUrlController,
   getOwnerImageSignedUrlController,
   deleteImage,
+  clearDatabaseController,
 };

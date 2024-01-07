@@ -80,3 +80,13 @@ export const deleteImageByName = async (imageName: string) => {
     throw new Error("Error deleting image by name from DB");
   }
 };
+
+//Clear the database
+export const clearDatabase = async () => {
+  try {
+    return await S3PostImages.deleteMany({});
+  } catch (err) {
+    console.log(err);
+    throw new Error("Error clearing database");
+  }
+};

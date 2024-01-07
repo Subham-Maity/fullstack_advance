@@ -1,4 +1,4 @@
-![diagram](../images/diagramRgisterS3.png)
+![diagram](../images/diagramRgisterS3v2.png)
 
 ### File Upload and User Registration Process:
 
@@ -32,6 +32,6 @@
 12. **Retry Process:** Users must re-upload the image along with accurate data.
 13. **Image Re-upload:** Upon re-upload, the image is saved to S3 again, and its corresponding key is retrieved. The image URL is fetched using this key.
 14. **Validation Loop:** This process continues until correct data and image are provided.
-15. **Successful Registration:** If the user provides accurate data and image, the image remains in the S3 bucket. The image key and user data are saved to the database.
+15. **Successful Registration:** If the user provides accurate data and image, the image remains in the S3 bucket. The image key and user data are saved to the database and also call the delete function to delete the all previous keys from the s3 database.
 
 This process ensures that user images are securely stored and associated with their data while allowing for efficient error handling and retries during registration.
