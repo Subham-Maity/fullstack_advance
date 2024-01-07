@@ -108,7 +108,7 @@ const Register = () => {
     }
   }, [imageUrls, dispatch, uploadTriggered]);
 
-  // const imageUrl = useAppSelector((state) => state.picOwner.imageUrl);
+  const imageUrl = useAppSelector((state) => state.picOwner.imageUrl);
 
   return (
     <div className="container mx-auto">
@@ -140,13 +140,30 @@ const Register = () => {
           <form className="py-1" onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                {file && file ? (
-                  <img src={file} className={styles.profile_img} alt="avatar" />
+                {/*{file && file ? (*/}
+                {/*  <img src={file} className={styles.profile_img} alt="avatar" />*/}
+                {/*) : (*/}
+                {/*  <Image*/}
+                {/*    src={avatar}*/}
+                {/*    className={styles.profile_img}*/}
+                {/*    alt="avatar"*/}
+                {/*  />*/}
+                {/*)}*/}
+                {imageUrl && imageUrl ? (
+                  <Image
+                    src={imageUrl || avatar}
+                    className={styles.profile_img}
+                    alt="avatar"
+                    width={100}
+                    height={100}
+                  />
                 ) : (
                   <Image
                     src={avatar}
                     className={styles.profile_img}
                     alt="avatar"
+                    width={100}
+                    height={100}
                   />
                 )}
               </label>

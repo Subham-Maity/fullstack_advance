@@ -11,7 +11,7 @@ export async function usernameValidate(values: Values) {
   await FORM_VALIDATION_USERNAME.validate(values, { abortEarly: false }).catch(
     function (err) {
       err.inner.forEach((error: any) => {
-        errors[error.path] = toast.error(error.message);
+        errors[error.path] = toast.error(values.username + error.message);
       });
     },
   );

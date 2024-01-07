@@ -74,19 +74,18 @@ const getOwnerImageSignedUrlController = async (
 ) => {
   try {
     const { requestedImageName } = req.body;
-    const lastImage = await getLastImageEntry();
 
-    if (!lastImage) {
-      return res.status(404).send("No images found");
+    if (!requestedImageName) {
+      return res.status(400).send("No image name provided");
     }
 
-    if (requestedImageName === lastImage.imageName) {
-      const signedUrl = await getObjectSignedUrl(requestedImageName);
+    const signedUrl = await getObjectSignedUrl(requestedImageName);
+    if (signedUrl) {
       return res.json({ imageUrl: signedUrl });
     } else {
       return res
-        .status(400)
-        .send("Requested image does not match the last image");
+        .status(404)
+        .send("Requested image not found or error generating signed URL");
     }
   } catch (error) {
     console.error(error);
@@ -97,20 +96,23 @@ const getOwnerImageSignedUrlController = async (
 //delete the image controller
 const deleteImage = async (req: Request, res: Response) => {
   try {
-    const lastImage = await getLastImageEntry();
-    if (!lastImage) {
-      return res.status(404).send("No images found");
+    const { requestedImageName } = req.body;
+
+    if (!requestedImageName) {
+      return res.status(400).send("No image name provided");
     }
 
-    const { imageName } = lastImage; // Assuming you have a field named 'imageName'
+    // Delete the specified image
+    await deleteFile(requestedImageName);
 
-    await deleteFile(imageName);
+    // Delete the corresponding entry from the database
+    const deletedImage = await deleteImageByName(requestedImageName); // Assuming a function to delete by name exists
 
-    if (lastImage) {
-      await deleteLastImageEntry(); // Delete the image from the database
+    if (!deletedImage) {
+      return res.status(404).send("Image entry not found in the database");
     }
 
-    res.status(200).send("Image deleted successfully");
+    res.status(200).send("Image and its database entry deleted successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error deleting image");

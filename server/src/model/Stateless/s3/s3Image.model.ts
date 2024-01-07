@@ -60,7 +60,7 @@ export const getLastImageEntry = async () => {
   }
 };
 
-//delete last image entry
+//delete last image entry by id
 export const deleteLastImageEntry = async () => {
   try {
     return await S3PostImages.findOneAndDelete().sort({ created: -1 });

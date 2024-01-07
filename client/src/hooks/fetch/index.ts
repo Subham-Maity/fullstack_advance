@@ -5,7 +5,6 @@ import { getUsername } from "@/api/users/GetUsername/getUsername";
 import axios from "@/hooks/axios";
 
 // Setting the default base URL for axios
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
 // Define the shape of the data state
 interface DataState {
@@ -39,11 +38,11 @@ export default function useFetch(
 
         // Fetch data from the API
         const response = !query
-          ? await axios.get(`/api/user/${username}`)
-          : await axios.get(`/api/${query}`);
+          ? await axios.get(`/api/v2/user/${username}`)
+          : await axios.get(`/api/v2/${query}`);
 
         // If the status is 201, update the state with the received data
-        if (response.status === 201) {
+        if (response.status === 200) {
           setData((prev) => ({
             ...prev,
             isLoading: false,
