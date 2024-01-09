@@ -1,32 +1,31 @@
 import { IUser2Fields } from "@/types/api/user/user.i";
 import axios from "@/hooks/axios";
-import { getUser } from "@/api/users/GetUser/getUser";
 import { sendEmail } from "@/api/mail/mail";
 
 /** login function */
+
 export async function verifyPassword({ username, password }: IUser2Fields) {
   try {
     if (username) {
-      const response = await axios.post("/api/v2/auth/login", {
+      const { data } = await axios.post("/api/v2/auth/login", {
         username,
         password,
       });
 
-      if (response.status === 200) {
-        // Get user's email
-        let {
-          data: { email },
-        } = await getUser(username);
-
-        // Send login notification email
-        let text = `You have successfully logged in.`;
-        await sendEmail(username, email, text, "Login Notification");
+      // If login is successful, send an email
+      if (data.msg === "Login Successful...!") {
+        await sendEmail(
+          data.username,
+          data.email,
+          data.msg,
+          "Login Confirmation",
+        );
       }
 
-      return response.data;
+      return Promise.resolve({ data });
     }
   } catch (error) {
     console.error(`Error verifying password: ${error}`);
-    throw error;
+    return Promise.reject({ error: "Password doesn't Match...!" });
   }
 }

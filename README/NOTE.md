@@ -155,7 +155,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Toast (initialValues, validate)
     - Error Handling (Yup)
     - Types (validation.ts)
-
+    - V1(Async Thunk and AXIOS ) and V2 (RTK Query and js-cookie and AXIOS)—For storing the access token and refresh token (Both implementations are correct, but V2 is the best practice)
   - **Recovery**
     - OTP to reset password
 
@@ -378,3 +378,5 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
       -  post with image data in binary format
     - `Get User Profile Pic`: GET request to `/api/v2/storage-v1/s3/images`
       -  Give you last uploaded image key
+    - `Delete All Keys`: DELETE request to `/api/v2/storage-v1/s3/clear-database-s3`
+      -  Delete all the keys from the database

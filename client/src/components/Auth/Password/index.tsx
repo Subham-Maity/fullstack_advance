@@ -20,14 +20,20 @@ import useFetch from "@/hooks/fetch";
 import { verifyPassword } from "@/api/auth/Login/login";
 import { fetchImageOwner } from "@/features/slice/user/profilePicOwnerSlice";
 import { useDispatch } from "react-redux";
+import { useLoginMutation } from "@/features/slice/auth/v2/apiSlice";
+import { setAccessToken } from "@/features/slice/auth/v2/auth-v2Slice";
+import Cookies from "js-cookie";
 
 const Password = () => {
   const username = useAppSelector((state) => state.user.username);
+
   const [{ isLoading, apiData, serverError, status }] = useFetch(
     `user/${username}`,
   );
   const dispatch = useDispatch<AppDispatch>();
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const router = useRouter();
+  const [login] = useLoginMutation();
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -36,21 +42,25 @@ const Password = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      let loginPromise = verifyPassword({
-        username,
-        password: values.password,
-      });
-      await toast.promise(loginPromise, {
-        loading: "Checking...",
-        success: <b>Login Successfully...!</b>,
-        error: <b>Password Not Match!</b>,
-      });
+      try {
+        const { accessToken, refreshToken } = await login({
+          username, // Use the username from state
+          password: values.password,
+        }).unwrap();
 
-      loginPromise.then((res) => {
-        let { token } = res.data;
-        localStorage.setItem("token", token);
+        console.log(accessToken, refreshToken + "token");
+        dispatch(setAccessToken(accessToken));
+        Cookies.set("refreshToken", refreshToken, {
+          secure: true,
+          httpOnly: true,
+        });
         router.push("/jwt/profile");
-      });
+
+        toast.success(<b>Login Successfully...!</b>);
+      } catch (error) {
+        toast.error(<b>Password Not Match!</b>);
+        console.error(error + "error");
+      }
     },
   });
 

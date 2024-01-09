@@ -155,6 +155,7 @@ export const login = catchAsyncError(
         .json({
           msg: "Login Successful...!",
           username: user.username,
+          email: user.email,
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
         });

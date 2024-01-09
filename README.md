@@ -39,7 +39,7 @@ with every line of code meticulously documented for easy understanding.
 ### 2. [Implementing Cookie-based Authentication with Server Token (Stateful)](README/NOTE.md#2-cookie-based-proper-authentication-with-server-token-stateful)
 - User Registration and Login
 - User Profile: Get, Update, Delete
-- Authentication Checks: Is Authenticated? Is Owner?
+- Authentication Checks: Is Authenticated? Is the Owner?
 - Crypto: Password Hashing, Password Salting
 - Session Token: Cookie
 - API Versioning
@@ -59,11 +59,14 @@ with every line of code meticulously documented for easy understanding.
   - Only authorized/register users from the database are permitted to proceed to the next page.
 - Custom Hooks
 - Custom API
+- RTK Query & js-cookie: Best Practices for Access Token Storage and Refresh Token
+- AsyncThunk
+
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token
 - Bcrypt: Password Hashing, Password Salting
 - Secure Authentication Mechanism
-- Authentication Checks: Is Authenticated? Is Owner?
+- Authentication Checks: Is Authenticated? Is the Owner?
 - Crypto: Password Hashing, Password Salting
 - Local Storage (Variables)
 - Proper Error Handler
