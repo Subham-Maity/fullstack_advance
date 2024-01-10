@@ -72,7 +72,7 @@ export const updateUser = catchAsyncError(
     try {
       // Extract the userId from the authenticated request
 
-      const userId = req.query.id as string;
+      const userId = req.body.user?.userId as string;
       // const userId = req.body.user as string;
 
       // Check if the userId is present in the request body

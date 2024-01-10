@@ -186,6 +186,9 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Toast (initialValues, validate)
     - Error Handling (Yup)
     - Types (validation.ts)
+    - Refresh Token (Cookie) & Access Token (Redux Store)
+    - Use RTK Query (react-query) for put request (update user data)
+    - Use RTK Query (react-query) for get access token and refresh token
 - **api** - Using Axios (Custom Hooks)
   - Authentication: For checking the user is authenticated or not
   - Auth: 

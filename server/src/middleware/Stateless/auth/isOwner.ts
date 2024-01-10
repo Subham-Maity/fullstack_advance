@@ -18,7 +18,7 @@ export const isOwner = async (
       userId: string;
     };
 
-    const userId = req.query.id as string;
+    const userId = req.body.user?.userId as string;
 
     if (!userId) {
       return next(new AppError("User Not Found", 401));

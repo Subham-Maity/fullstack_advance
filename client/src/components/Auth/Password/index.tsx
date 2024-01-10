@@ -48,18 +48,16 @@ const Password = () => {
           password: values.password,
         }).unwrap();
 
-        console.log(accessToken, refreshToken + "token");
         dispatch(setAccessToken(accessToken));
         Cookies.set("refreshToken", refreshToken, {
           secure: true,
-          httpOnly: true,
+          // httpOnly: true,//This is for production only
         });
         router.push("/jwt/profile");
 
         toast.success(<b>Login Successfully...!</b>);
       } catch (error) {
         toast.error(<b>Password Not Match!</b>);
-        console.error(error + "error");
       }
     },
   });

@@ -61,6 +61,7 @@ with every line of code meticulously documented for easy understanding.
 - Custom API
 - RTK Query & js-cookie: Best Practices for Access Token Storage and Refresh Token
 - AsyncThunk
+- Refresh Token (Cookie) & Access Token (Redux Store)
 
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token

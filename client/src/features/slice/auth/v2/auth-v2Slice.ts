@@ -31,6 +31,21 @@ export const authSlice = createSlice({
       })
       .addMatcher(apiSlice.endpoints.login.matchRejected, (state) => {
         state.status = "failed";
+      })
+      .addMatcher(
+        apiSlice.endpoints.refreshToken.matchFulfilled,
+        (state, action) => {
+          state.accessToken = action.payload.accessToken;
+        },
+      )
+      .addMatcher(apiSlice.endpoints.updateUser.matchPending, (state) => {
+        state.status = "loading";
+      })
+      .addMatcher(apiSlice.endpoints.updateUser.matchFulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addMatcher(apiSlice.endpoints.updateUser.matchRejected, (state) => {
+        state.status = "failed";
       });
   },
 });
