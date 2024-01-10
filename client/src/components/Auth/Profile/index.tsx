@@ -21,14 +21,13 @@ import useFetch from "@/hooks/fetch";
 import { AppDispatch, useAppSelector } from "@/store/redux/store";
 import { fetchImageOwner } from "@/features/slice/user/profilePicOwnerSlice";
 import { useDispatch } from "react-redux";
-import { updateUser } from "@/api/users/UpdateUser/updateUser";
 import useQuery from "@/hooks/useQuery";
 import {
   useLoginMutation,
   useRefreshTokenMutation,
   useUpdateUserMutation,
 } from "@/features/slice/auth/v2/apiSlice";
-import { setAccessToken } from "@/features/slice/auth/v2/auth-v2Slice";
+import { logout, setAccessToken } from "@/features/slice/auth/v2/auth-v2Slice";
 import Cookies from "js-cookie";
 import useMutation from "@/hooks/useMutation/useMutation";
 
@@ -130,7 +129,13 @@ const Profile = () => {
       return;
     }
   };
+  const handleLogout = () => {
+    // Dispatch the logout action
+    dispatch(logout());
 
+    // Redirect the user to the login page (or any other desired route)
+    router.push("/jwt/username");
+  };
   if (isLoading) return <h1 className="text-2xl font-bold">isLoading</h1>;
   if (serverError)
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
@@ -240,7 +245,9 @@ const Profile = () => {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 come back later?{" "}
-                <button className="text-red-500">Logout</button>
+                <button className="text-red-500" onClick={handleLogout}>
+                  Logout
+                </button>
               </span>
             </div>
           </form>
