@@ -1,14 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
-import authSlice from "@/features/slice/auth/v1/authSlice";
 import userSlice from "@/features/slice/user/userSlice";
 import imageOwnerSlice from "@/features/slice/user/profilePicOwnerSlice";
 import authSlice2 from "@/features/slice/auth/v2/auth-v2Slice";
 import { apiSlice } from "@/features/slice/auth/v2/apiSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["accessToken"],
+};
+const persistedAuthReducer = persistReducer(authPersistConfig, authSlice2);
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
-    authV2: authSlice2,
+    auth: persistedAuthReducer,
     user: userSlice,
     picOwner: imageOwnerSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
@@ -17,6 +23,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
 });
+
+export const persistor = persistStore(store);
 
 export type AppDispatch = typeof store.dispatch;
 

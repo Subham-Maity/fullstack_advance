@@ -178,8 +178,6 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Hook - useMutation (react-query)
     - Hook - useQuery (react-query)
     - S3 Bucket (AWS) (READ HERE - [S3 Bucket](./S3WITH_REGISTER.md))
-  
-
   - **Profile**
     - Convert: convert the file to a Base64 string
     - Formik Validation
@@ -189,6 +187,8 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Refresh Token (Cookie) & Access Token (Redux Store)
     - Use RTK Query (react-query) for put request (update user data)
     - Use RTK Query (react-query) for get access token and refresh token
+    - Redux Persist (Redux Toolkit)—For storing the access token when the user refreshes the page it will not log out the user
+    - Username from token (JWT Decode) (Fetch Hook)
 - **api** - Using Axios (Custom Hooks)
   - Authentication: For checking the user is authenticated or not
   - Auth: 

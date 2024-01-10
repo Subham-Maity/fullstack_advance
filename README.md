@@ -62,6 +62,7 @@ with every line of code meticulously documented for easy understanding.
 - RTK Query & js-cookie: Best Practices for Access Token Storage and Refresh Token
 - AsyncThunk
 - Refresh Token (Cookie) & Access Token (Redux Store)
+- REDUX Persists for holding the state of the user even after the page refreshes.
 
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token

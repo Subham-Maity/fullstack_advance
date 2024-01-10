@@ -40,7 +40,10 @@ export async function getUsername() {
   const token = selectAccessToken(store.getState());
 
   if (!token) {
-    throw new Error("Cannot find Token");
+    console.error("Cannot find Token");
+    // If the token is not available, you may want to handle this case
+    // For example, you can redirect the user to the login page.
+    return null;
   }
 
   try {
