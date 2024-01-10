@@ -16,7 +16,7 @@ interface DataState {
 
 // Custom hook for fetching data
 export default function useFetch(
-  query: string | null,
+  query?: string,
 ): [DataState, React.Dispatch<React.SetStateAction<DataState>>] {
   // Initialize state
   const [getData, setData] = useState<DataState>({

@@ -140,32 +140,32 @@ const Register = () => {
           <form className="py-1" onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                {/*{file && file ? (*/}
-                {/*  <img src={file} className={styles.profile_img} alt="avatar" />*/}
-                {/*) : (*/}
-                {/*  <Image*/}
-                {/*    src={avatar}*/}
-                {/*    className={styles.profile_img}*/}
-                {/*    alt="avatar"*/}
-                {/*  />*/}
-                {/*)}*/}
-                {imageUrl && imageUrl ? (
-                  <Image
-                    src={imageUrl || avatar}
-                    className={styles.profile_img}
-                    alt="avatar"
-                    width={100}
-                    height={100}
-                  />
+                {file && file ? (
+                  <img src={file} className={styles.profile_img} alt="avatar" />
                 ) : (
                   <Image
                     src={avatar}
                     className={styles.profile_img}
                     alt="avatar"
-                    width={100}
-                    height={100}
                   />
                 )}
+                {/*{imageUrl && imageUrl ? (*/}
+                {/*  <Image*/}
+                {/*    src={imageUrl || avatar}*/}
+                {/*    className={styles.profile_img}*/}
+                {/*    alt="avatar"*/}
+                {/*    width={100}*/}
+                {/*    height={100}*/}
+                {/*  />*/}
+                {/*) : (*/}
+                {/*  <Image*/}
+                {/*    src={avatar}*/}
+                {/*    className={styles.profile_img}*/}
+                {/*    alt="avatar"*/}
+                {/*    width={100}*/}
+                {/*    height={100}*/}
+                {/*  />*/}
+                {/*)}*/}
               </label>
 
               <input

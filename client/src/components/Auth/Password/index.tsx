@@ -31,7 +31,6 @@ const Password = () => {
     `user/${username}`,
   );
   const dispatch = useDispatch<AppDispatch>();
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const router = useRouter();
   const [login] = useLoginMutation();
   const formik = useFormik({

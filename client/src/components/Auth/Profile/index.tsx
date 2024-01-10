@@ -30,24 +30,28 @@ import {
 } from "@/features/slice/auth/v2/apiSlice";
 import { setAccessToken } from "@/features/slice/auth/v2/auth-v2Slice";
 import Cookies from "js-cookie";
+import useMutation from "@/hooks/useMutation/useMutation";
 
 const Profile = () => {
   const router = useRouter();
   const [file, setFile] = React.useState<any>(null);
-  const username = useAppSelector((state) => state.user.username);
-  const [login] = useLoginMutation();
   const [refreshToken] = useRefreshTokenMutation();
   const [updateUser] = useUpdateUserMutation();
+  const [uploadTriggered, setUploadTriggered] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const [error, setError] = useState("");
+  const [{ isLoading, apiData, serverError, status }] = useFetch();
+  const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
+  const URL = "/api/v2/storage-v1/s3/images";
+  const { mutate: uploadImage } = useMutation({ url: URL });
+  const [imageUploadError, setImageUploadError] = useState(false);
   const [refetch, setRefetch] = useState(0);
-  const [{ isLoading, apiData, serverError, status }] = useFetch(
-    `user/${username}`,
-  );
   const {
     data: imageUrls = [],
     isLoading: imagesLoading,
     error: fetchError,
   } = useQuery(URL, refetch);
+  console.log(apiData?.profile + "apiData?.profile");
   const formik = useFormik({
     initialValues: {
       firstName: apiData?.firstName || "",
@@ -62,6 +66,8 @@ const Profile = () => {
     validateOnChange: false,
     onSubmit: async (values: Values) => {
       try {
+        values = Object.assign(values, { profile: imageUrls?.imageName || "" });
+        console.log(JSON.stringify(values) + "values");
         await updateUser(values).unwrap();
       } catch (error: any) {
         if (error.status === 401) {
@@ -70,7 +76,12 @@ const Profile = () => {
               Cookies.get("refreshToken"),
             ).unwrap(); // Refresh the access token
             dispatch(setAccessToken(result.accessToken)); // Update the access token in the Redux store
-            await updateUser(values).unwrap();
+            const updatePromise = await updateUser(values).unwrap();
+            await toast.promise(updatePromise, {
+              loading: "Updating...",
+              success: <b>Update Successfully...!</b>,
+              error: <b>Could not Update!</b>,
+            });
           } catch (refreshError) {
             console.error(refreshError);
             // Handle refresh token errors (e.g., redirect to login page)
@@ -83,23 +94,6 @@ const Profile = () => {
     },
   });
 
-  //Formik doest not support file input, so we need to create a handler for it
-  /**
-     this code allows a user to upload a file, converts the file to a Base64 string,
-     and stores the Base64 string in the state for further use in the application.
-     This can be useful in scenarios where you need to send the file to a server
-     as a string instead of a file, or when you want to display the uploaded file
-     (if it’s an image) directly from the Base64 string.
-     */
-  //
-  const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files === null) {
-      return;
-    }
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64 as string);
-  };
-
   //Get the image of the user
   useEffect(() => {
     if (apiData && apiData?.profile) {
@@ -107,6 +101,36 @@ const Profile = () => {
     }
   }, [dispatch, apiData?.profile]);
   const imageUrl = useAppSelector((state) => state.picOwner.imageUrl);
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (e.target.files === null) {
+        return;
+      }
+      const file = e.target.files[0];
+
+      if (!validFileTypes.includes(file.type)) {
+        setError("File must be in JPG/PNG format");
+        return;
+      }
+
+      const form = new FormData();
+      form.append("image", file);
+
+      await uploadImage(form);
+      const base64 = await convertToBase64(e.target.files[0]);
+      setFile(base64 as string);
+      setTimeout(() => {
+        setRefetch((s) => s + 1);
+        setUploadTriggered(true); // Set uploadTriggered to true after successful upload
+      }, 1000);
+    } catch (err) {
+      setError("File upload failed. Please try again.");
+      setImageUploadError(true);
+      setFile(null);
+      return;
+    }
+  };
+
   if (isLoading) return <h1 className="text-2xl font-bold">isLoading</h1>;
   if (serverError)
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
@@ -140,9 +164,11 @@ const Profile = () => {
           <form className="py-1" onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                {imageUrl && imageUrl ? (
+                {file ? (
+                  <img src={file} className={styles.profile_img} alt="avatar" />
+                ) : imageUrl ? (
                   <Image
-                    src={imageUrl || avatar}
+                    src={imageUrl}
                     className={styles.profile_img}
                     alt="avatar"
                     width={100}
@@ -160,8 +186,9 @@ const Profile = () => {
               </label>
 
               <input
+                // onChange={onUpload}
+                onChange={handleUpload}
                 className={styles.customFileInput}
-                onChange={onUpload}
                 type="file"
                 id="profile"
                 name="profile"
