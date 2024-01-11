@@ -63,6 +63,7 @@ with every line of code meticulously documented for easy understanding.
 - AsyncThunk
 - Refresh Token (Cookie) & Access Token (Redux Store)
 - REDUX Persists for holding the state of the user even after the page refreshes.
+- Protected Routes
 
 #### Backend - Node.js
 - JWT: Access Token, Refresh Token

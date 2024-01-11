@@ -189,6 +189,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - Use RTK Query (react-query) for get access token and refresh token
     - Redux Persist (Redux Toolkit)—For storing the access token when the user refreshes the page it will not log out the user
     - Username from token (JWT Decode) (Fetch Hook)
+
 - **api** - Using Axios (Custom Hooks)
   - Authentication: For checking the user is authenticated or not
   - Auth: 
@@ -213,6 +214,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - fetch—useFetch (custom hook) for fetching user data
     - useMutation—useMutation (react-query) for updating the user data 
     - useQuery—useQuery (react-query) for fetching user data 
+- **Middleware** - Protected Routes (User, Profile)
 ##### `Server`:  
 - **User Type Defined**
 - **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
