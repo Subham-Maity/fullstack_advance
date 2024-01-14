@@ -3,32 +3,53 @@ import React, { useEffect } from "react";
 import avatar from "../../../../public/profile.png";
 import styles from "./Recovery.module.css";
 //Image and Link
-import Link from "next/link";
-import Image from "next/image";
 //Router
 import { useRouter } from "next/navigation";
-//Formik
-import { useFormik } from "formik";
-//Validation
-import { usernameValidate } from "@/validation/formik/validate/username";
-import { INITIAL_FORM_STATE_USERNAME } from "@/validation/formik/intialValues/username";
-import { Values } from "@/types/validation/validation";
+
 //Toaster
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useAppSelector } from "@/store/redux/store";
+import { handleOTPGeneration } from "@/api/OTP/generateOTP/generateOTP";
+import { verifyOTP } from "@/api/OTP/verifyOTP/verifyOTP";
 
 const Username = () => {
   const router = useRouter();
-  // const setUsername = useAuthStore((state: any) => state.setUsername);
+  const username: any = useAppSelector((state) => state.user.username);
+  const [otp, setOtp] = React.useState("");
+  useEffect(() => {
+    handleOTPGeneration(username).then((OTP) => {
+      // console.log(OTP);
+      if (OTP) return toast.success("OTP has been send to your email!");
+      return toast.error("Problem while generating OTP!");
+    });
+  }, [username]);
+  async function onSubmit(e: any) {
+    e.preventDefault();
+    try {
+      let { status } = await verifyOTP({ username, code: otp });
+      if (status === 201) {
+        toast.success("Verify Successfully!");
+        router.push("/jwt/reset");
+      }
+    } catch (error) {
+      return toast.error("Wrong OTP! Check email again!");
+    }
+  }
+  // handler of resend OTP
+  function resendOTP() {
+    let sentPromise = handleOTPGeneration(username);
 
-  const formik = useFormik({
-    initialValues: INITIAL_FORM_STATE_USERNAME,
-    validate: usernameValidate,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values: Values) => {
-      console.log(values);
-    },
-  });
+    toast.promise(sentPromise, {
+      loading: "Sending...",
+      success: <b>OTP has been send to your email!</b>,
+      error: <b>Could not Send it!</b>,
+    });
+
+    sentPromise.then((OTP) => {
+      console.log(OTP);
+    });
+  }
+
   return (
     <div className="container mx-auto ">
       <Toaster
@@ -53,7 +74,7 @@ const Username = () => {
             </span>
           </div>
 
-          <form className="pt-20" onSubmit={formik.handleSubmit}>
+          <form className="pt-20" onSubmit={onSubmit}>
             <div className="textbox flex flex-col items-center gap-6">
               <div className="input text-center">
                 <span className="py-4 text-sm text-left text-gray-500">
@@ -63,6 +84,7 @@ const Username = () => {
                   className={styles.textbox}
                   type="text"
                   placeholder="OTP"
+                  onChange={(e) => setOtp(e.target.value)}
                 />
               </div>
 
@@ -74,7 +96,9 @@ const Username = () => {
           <div className="text-center py-4">
             <span className="text-gray-500">
               Can&apos;t get OTP?{" "}
-              <button className="text-red-500">Resend</button>
+              <button onClick={resendOTP} className="text-red-500">
+                Resend
+              </button>
             </span>
           </div>
         </div>

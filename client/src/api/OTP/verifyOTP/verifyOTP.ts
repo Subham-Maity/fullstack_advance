@@ -6,7 +6,7 @@ export async function verifyOTP({
   code,
 }: {
   username: string;
-  code: number;
+  code: any;
 }) {
   try {
     const { data, status } = await axios.get("/api/v2/auth/verifyOTP", {

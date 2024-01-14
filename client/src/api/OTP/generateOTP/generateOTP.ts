@@ -13,16 +13,14 @@ async function generateOTP(username: IUser2Fields) {
 }
 
 /** Generate OTP and send email if generation is successful */
-export async function handleOTPGeneration(username: IUser2Fields) {
+export async function handleOTPGeneration(username: any) {
   try {
     const { code, status } = await generateOTP(username);
 
     if (status === 201) {
-      let {
-        data: { email },
-      } = await getUser(username.username);
+      let data = await getUser(username);
       let text = `Your Password Recovery OTP is ${code}. Verify and recover your password.`;
-      await sendEmail(username.username, email, text, "Password Recovery OTP");
+      await sendEmail(data.username, data.email, text, "Password Recovery OTP");
     }
 
     return code;
