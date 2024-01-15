@@ -158,12 +158,16 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - V1(Async Thunk and AXIOS ) and V2 (RTK Query and js-cookie and AXIOS)—For storing the access token and refresh token (Both implementations are correct, but V2 is the best practice)
   - **Recovery**
     - OTP to reset password
+    - OTP verification
 
   - **Reset**
     - Formik Validation
     - Toast (initialValues, validate)
     - Error Handling (Yup)
     - Types (validation.ts)
+    - Reset Password using API
+    - Handle the error (API)
+    - Handle the ResetSession (API)
 
   - **Register (Register User)**
     - Convert: convert the file to a Base64 string
@@ -315,6 +319,8 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
     - `get OTP`: GET request to `/api/v2/auth/generateOTP?username=codexam_123` here `codexam_123` is the username you have to pass in the query parameter and wrap with `authenticated` middleware
     - `verify OTP`: GET request to `http://localhost:5050/api/v2/auth/verifyOTP?username=codexam_123&code=427638` here `codexam_123` is the username and `427638` is the OTP you have to pass in the query parameter 
         and wrap with `authenticated` middleware
+  - **Auth/createResetSession**
+    - `get Session Flag`: GET request to `/api/v2/auth/createResetSession` you will get flag `true` or `false` if the flag is `true` then you can reset the password
   - **MAIL/EMAIL**
       - `send mail`: POST request to `/api/v2/mail-v1/registerMail`
       - Example body:

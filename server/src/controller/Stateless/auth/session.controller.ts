@@ -12,7 +12,7 @@ export const createResetSession = catchAsyncError(
     try {
       // Set the resetSession flag to true in the app.locals object and send the response to the client
       if (req.app.locals.resetSession) {
-        return res.status(201).json({ resetSessionFlag: true });
+        return res.status(201).send({ flag: req.app.locals.resetSession });
       } else {
         return res.status(440).json({ error: "Session expired!" });
       }
