@@ -18,7 +18,7 @@ import { resetPassword } from "@/api/auth/ResetPassword/resetPassword";
 import { useAppSelector } from "@/store/redux/store";
 import useFetch from "@/hooks/fetch";
 
-const Reset = () => {
+const ResetPass = () => {
   const router = useRouter();
   const username: any = useAppSelector((state) => state.user.username);
   const [{ isLoading, apiData, status, serverError }] = useFetch(
@@ -49,7 +49,7 @@ const Reset = () => {
   if (isLoading) return <h1 className="text-2xl font-bold">isLoading</h1>;
   if (serverError)
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
-  if (status && status !== 201) return router.push("/jwt/password");
+  if (status && status !== 201) return <Link href="/jwt/password" />;
   return (
     <div className="container mx-auto">
       <Toaster
@@ -99,4 +99,4 @@ const Reset = () => {
   );
 };
 
-export default Reset;
+export default ResetPass;

@@ -1,11 +1,12 @@
 import React from "react";
-import Reset from "@/components/Auth/Reset";
+
 import LayoutWrapper from "@/wrapper/Layout";
+import ResetPass from "@/components/Auth/Reset";
 
 const Page = () => {
   return (
     <LayoutWrapper className="bg-[url('/background.svg')] bg-cover bg-no-repeat background-gradient">
-      <Reset />
+      <ResetPass />
     </LayoutWrapper>
   );
 };
