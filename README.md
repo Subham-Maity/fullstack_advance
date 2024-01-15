@@ -87,3 +87,5 @@ with every line of code meticulously documented for easy understanding.
 - Multer (File Upload)
 - AWS S3 (File Upload)
 
+
+### 4. [Implementing Role-based Two-Factor Authentication with NextAuth](README/NOTE.md#4-implementing-role-based-two-factor-authentication-with-nextauth)
