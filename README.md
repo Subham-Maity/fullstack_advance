@@ -94,3 +94,5 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 - Tailwind CSS
 - Shadcn/ui
 - dark mode/light mode
+- Parallel Routing (Intercepting Routes)
+- Modal
