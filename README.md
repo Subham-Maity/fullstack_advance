@@ -91,7 +91,6 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 
 
 ### 4. [Implementing Role-based Two-Factor Authentication with NextAuth](README/NOTE.md#4-implementing-role-based-two-factor-authentication-with-nextauth)
-- 
 - Tailwind CSS
 - Shadcn/ui
 - dark mode/light mode
