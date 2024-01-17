@@ -391,5 +391,89 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
       -  Give you last uploaded image key
     - `Delete All Keys`: DELETE request to `/api/v2/storage-v1/s3/clear-database-s3`
       -  Delete all the keys from the database
-      - 
+
 ### [**4. Implementing Role-based Two-Factor Authentication with NextAuth**]()
+
+
+### [**5. Implementing Search, Sort, Filter and Pagination**]()
+
+##### `Server`:
+
+- `GET /api/v1/games`
+
+This endpoint retrieves a list of video games based on specified query parameters.
+
+- Query Parameters:
+
+- **`page` (optional, default: 1):** The page number to retrieve.
+  - Example: `?page=2`
+
+- **`limit` (optional, default: 5):** The number of results to return per page.
+  - Example: `?limit=10`
+
+- **`search` (optional, default: ""):** The search query to filter results by name.
+  - Example: `?search=the`
+
+- **`genre` (optional, default: "All"):** The genre to filter results by. Can be a single genre or an array of genres.
+  - Example: `?genre=Action` or `?genre=Action,Drama`
+
+- **`sort` (optional, default: "rating"):** The field to sort results by. Prefix with `-` for descending order.
+  - Example: `?sort=rating` or `?sort=-rating` or `?sort=rating,-year`
+
+- Combining Query Parameters:
+
+In a single query, you can combine all the above parameters to get the desired results.
+- Example: `?search=game%202&genre=Action&sort=rating,-year`
+  - This will search for games with the name `game 2`, genre `Action`, and sort the results by `rating` in ascending order and `year` in descending order.
+
+- Response:
+
+The API responds with a JSON object containing the following properties:
+
+- **`error` (boolean):** Indicates whether an error occurred.
+
+- **`total` (number):** Total number of video games that match the specified criteria.
+
+- **`page` (number):** Current page number.
+
+- **`limit` (number):** Number of results per page.
+
+- **`genres` (array of strings):** Available genre options.
+
+- **`videoGames` (array of objects):** List of video games that match the query parameters.
+
+- Combined Query URL:
+
+```
+http://localhost:5050/api/v1/games?search=game%202&genre=Action,Drama&sort=rating,-year&page=2&limit=10
+```
+
+- Breakdown of Query Parameters:
+
+- **`search`:** Search for games with the name "game 2".
+- **`genre`:** Filter by genres "Action" and "Drama".
+- **`sort`:** Sort the results by `rating` in ascending order and `year` in descending order.
+- **`page`:** Retrieve page number 2.
+- **`limit`:** Return 10 results per page.
+
+- Example Request:
+
+```http
+GET http://localhost:5050/api/v1/games?search=game%202&genre=Action,Drama&sort=rating,-year&page=2&limit=10
+```
+
+- Example Response:
+
+```json
+{
+  "error": false,
+  "total": 25,
+  "page": 2,
+  "limit": 10,
+  "genres": ["Action", "Romance", "Fantasy", "Drama", "Crime", "Adventure", "Thriller", "Sci-fi", "Music", "Family"],
+  "videoGames": [
+    { "name": "Game 2", "genre": "Action", "rating": 8.5, "year": 2020 },
+    { "name": "Another Game", "genre": "Drama", "rating": 7.8, "year": 2019 }
+  ]
+}
+```

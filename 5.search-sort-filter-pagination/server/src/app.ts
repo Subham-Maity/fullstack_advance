@@ -21,6 +21,8 @@ import { v4 as uuidv4 } from "uuid";
 import globalErrorHandler from "./utils/errorHandler/globalErrorHandler";
 import { corsUrl } from "../config/default";
 
+//Import Routers
+import maingames from "./router";
 
 /*❗~~~~CONFIG~~~~❗*/
 // Loading environment variables from .env file
@@ -100,10 +102,9 @@ app.use(globalErrorHandler);
 
 /*❗~~~~ROUTES~~~~❗*/
 
-//Stateful routes
-//Example: http://localhost:5000/api/v1/auth
-// app.use("/api/v1/auth", statelful.authentication);
-
+//localhost:5050/api/v1/games
+//games
+app.use("/api/v1/", maingames.games);
 
 // Default route for the API - This will be used to test if the API is live
 app.get("/", (_: Request, res: Response) => {
