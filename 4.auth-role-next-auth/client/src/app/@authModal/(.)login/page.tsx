@@ -1,7 +1,7 @@
 import React from "react";
 
-import Form from "@/components/auth/login/Form";
-import Dialog from "@/components/modal/modal";
+import LoginForm from "@/components/auth/login/login-form";
+import Dialog from "@/components/ui/modal/modal";
 
 const Page = () => {
   //Route Name
@@ -19,8 +19,13 @@ const Page = () => {
   return (
     <div>
       {/*<Dialog title="Example Modal" onClose={onClose} onOk={onOk}>*/}
-      <Dialog onClose={onClose}>
-        <Form />
+      <Dialog
+        onClose={onClose}
+        bg={true}
+        buttonClass="mb-2 py-1 px-2 cursor-pointer rounded border-none w-8 h-8 font-bold bg-red-600 text-white"
+        bgClass="dark:bg-stone-800 bg-gray-400/25 p-4 rounded-xl"
+      >
+        <LoginForm />
       </Dialog>
     </div>
   );

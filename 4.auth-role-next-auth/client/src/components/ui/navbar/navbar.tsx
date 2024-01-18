@@ -12,9 +12,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navbar/shadcn-navigation-menu";
 import { NavigationMenu } from "@radix-ui/react-navigation-menu";
-import Switcher from "@/components/theme/ModeToggle/Mode";
-import { ShadcnButton } from "@/components/ui/button/ShadcnButton";
-import { Mail } from "lucide-react";
+import Switcher from "@/components/theme/mode-toggle/mode";
 import { useRouter } from "next/navigation";
 
 const components: { title: string; href: string; description: string }[] = [
