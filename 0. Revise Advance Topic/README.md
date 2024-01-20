@@ -1,7 +1,10 @@
 - 1:
-    - **call stack**
-    - **execution context**
-    - **hoisting**
+    - **execution context**✅
+    - **call stack**✅
+    - **hoisting**✅
+    - **Function work flow**
+    - **Windows and this**
+    - **Undefined and not defined**
     - **scope and lexical environment**
     - **function scope and lexical object**
     - **block scope and shadowing**
@@ -69,18 +72,24 @@ In the code component, it executes the code line by line.
 So we can say javascript is `synchronous and single-threaded language`.
 Means it can execute one command at a time and in a specific order.
 
------
+What happens when we run a javascript code?
+- When we run a javascript code, it creates a global execution context.
 
-
-
-
-
-
-
+This will happen in two phases:
+- Creation Phase
+- Execution Phase
 
 
 ----
 
+### Call Stack
+
+Call Stack, also known as Execution Context Stack/Program Stack/control stack/run-time stack/ machine stack
+
+`Call stack used to manage the execution context.` 
+whenever we run a javascript code, it creates a global execution context and pushes it to the call stack. 
+And when the execution context is finished, it pop it from the call stack.
+----
 ### Hoisting
 
 `Hoisting is JavaScript's default behavior of moving all declarations to the top of the current scope.`
