@@ -98,13 +98,8 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 - Modal
 
 
-### 5. [Implementing Search, Sort, Filter and Pagination](README/NOTE.md#5-implementing-search-sort-filter-and-pagination)
-#### Backend - Node.js
-- Basic Search
-- Basic Sort
-- Basic Filter
-- Basic Pagination
-  Certainly! Here's the combined syntax and example for a URL that includes search, filter, sort, and pagination:
+
+
 
 
 

@@ -52,7 +52,8 @@
     - **sorting array and compare function**
     - **query selector and DOM manipulation**
     - **regular expression and string methods**
-
+- 8:
+    - **Extra**
 
 ----
 
@@ -87,6 +88,7 @@ This will happen in two phases:
 Call Stack, also known as Execution Context Stack/Program Stack/control stack/run-time stack/ machine stack
 
 `Call stack used to manage the execution context.` 
+
 whenever we run a javascript code, it creates a global execution context and pushes it to the call stack. 
 And when the execution context is finished, it pop it from the call stack.
 ----
@@ -119,7 +121,30 @@ var sum = (a, b) => {
 
 - It behave like another variable declaration. So, it gives undefined.
 
+____
 
+### Extra
+
+#### Object Creation Techniques
+
+1. `abc[price] = asc`: This is used when you already have an object (`abc` in this case) and you want to add a new property (`price`) to it or modify the value of an existing property. The `=` is the assignment operator.
+
+```javascript
+let abc = {}; // An empty object
+let price = 'price';
+let asc = 'asc';
+abc[price] = asc; // Now, abc is {price: 'asc'}
+```
+
+2. `{[price]: asc}`: This is used when you're creating a new object and you want to set its properties dynamically. The `:` is used in object literal syntax to separate property names from their values.
+
+```javascript
+let price = 'price';
+let asc = 'asc';
+let abc = {[price]: asc}; // Now, abc is {price: 'asc'}
+```
+
+In both cases, you end up with an object `abc` that has a property `price` with a value of `'asc'`. The difference is in when and how you use each syntax. The first is used for modifying existing objects, and the second is used for creating new objects with dynamic properties.
 
 
 
