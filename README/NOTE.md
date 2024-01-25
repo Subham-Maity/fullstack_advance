@@ -394,86 +394,330 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 
 ### [**4. Implementing Role-based Two-Factor Authentication with NextAuth**]()
 
+Sure, here's a more structured and detailed version of your content:
 
-### [**5. Implementing Search, Sort, Filter and Pagination**]()
 
-##### `Server`:
+### 5. Redis
 
-- `GET /api/v1/games`
+#### Introduction:
+Redis is an open-source, in-memory key-value data store. It is versatile and can be used as a database, cache, and message broker. Redis supports various data structures such as Strings, Hashes, Lists, Sets, and more. It provides high availability via Redis Sentinel and automatic partitioning across multiple Redis nodes with Redis Cluster.
 
-This endpoint retrieves a list of video games based on specified query parameters.
+#### Installation:
 
-- Query Parameters:
+1. Download Docker Desktop from the official [Docker website](https://www.docker.com/products/docker-desktop).
+2. Install Docker Desktop and open it.
+3. Open the terminal and run the following command to start the Redis server and Redis Commander:
 
-- **`page` (optional, default: 1):** The page number to retrieve.
-  - Example: `?page=2`
-
-- **`limit` (optional, default: 5):** The number of results to return per page.
-  - Example: `?limit=10`
-
-- **`search` (optional, default: ""):** The search query to filter results by name.
-  - Example: `?search=the`
-
-- **`genre` (optional, default: "All"):** The genre to filter results by. Can be a single genre or an array of genres.
-  - Example: `?genre=Action` or `?genre=Action,Drama`
-
-- **`sort` (optional, default: "rating"):** The field to sort results by. Prefix with `-` for descending order.
-  - Example: `?sort=rating` or `?sort=-rating` or `?sort=rating,-year`
-
-- Combining Query Parameters:
-
-In a single query, you can combine all the above parameters to get the desired results.
-- Example: `?search=game%202&genre=Action&sort=rating,-year`
-  - This will search for games with the name `game 2`, genre `Action`, and sort the results by `rating` in ascending order and `year` in descending order.
-
-- Response:
-
-The API responds with a JSON object containing the following properties:
-
-- **`error` (boolean):** Indicates whether an error occurred.
-
-- **`total` (number):** Total number of video games that match the specified criteria.
-
-- **`page` (number):** Current page number.
-
-- **`limit` (number):** Number of results per page.
-
-- **`genres` (array of strings):** Available genre options.
-
-- **`videoGames` (array of objects):** List of video games that match the query parameters.
-
-- Combined Query URL:
-
-```
-http://localhost:5050/api/v1/games?search=game%202&genre=Action,Drama&sort=rating,-year&page=2&limit=10
+```bash
+docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
 ```
 
-- Breakdown of Query Parameters:
+This command will run the Redis server on port 6379 and Redis Commander on port 8001.
 
-- **`search`:** Search for games with the name "game 2".
-- **`genre`:** Filter by genres "Action" and "Drama".
-- **`sort`:** Sort the results by `rating` in ascending order and `year` in descending order.
-- **`page`:** Retrieve page number 2.
-- **`limit`:** Return 10 results per page.
+4. Open a web browser and navigate to `localhost:8001` to view the Redis Commander.
+5. Go back to the terminal and run `docker ps` to check if the Redis server is running. If it's not, run `docker start redis-stack`.
 
-- Example Request:
+Now, you can use the Redis server in your project.
 
-```http
-GET http://localhost:5050/api/v1/games?search=game%202&genre=Action,Drama&sort=rating,-year&page=2&limit=10
+#### Redis CLI Commands:
+
+1. Run `docker ps` in the terminal to check the running container and copy the container id.
+2. Use `docker exec -it <container_id> bash` to open the bash terminal of the container. For example: `docker exec -it 7b7e bash`.
+3. Type `redis-cli` to open the Redis CLI terminal.
+4. Type `ping` to check if the Redis server is running. If you get `PONG`, then the server is running.
+
+#### 1.String Data Structure:
+1. Type `set name "subham"` to set a key-value pair in the Redis server.
+2. Type `get name` to retrieve the value of the key from the Redis server.
+
+Note: If you open your Redis stack in the browser, you will see the key and value set. You can also update the value from there. Just click on the key and update the value on the right side.
+Best way to do this is 
+```bash
+set user:1 "subham"
+
+set user:2 "codexam"
+
+set user:3 "xamcodexam"
+
+set msg:1 "hello"
+
+set msg:2 "hi"
+
+set msg:3 "hey"
+```
+If you group on the redis-stack you will see the data like this
+```bash
+user
+    1: "subham"
+    2: "codexam"
+    3: "xamcodexam"
+
+msg
+    1: "hello"
+    2: "hi"
+    3: "hey"
+```
+3. setnx - set if not exists(nx)
+```bash
+set user:1 "subham" nx
+```
+if you don't use nx, then it will overwrite the value
+```bash
+set user:1 "codexam"
 ```
 
-- Example Response:
+4.MSET - set multiple values
 
-```json
-{
-  "error": false,
-  "total": 25,
-  "page": 2,
-  "limit": 10,
-  "genres": ["Action", "Romance", "Fantasy", "Drama", "Crime", "Adventure", "Thriller", "Sci-fi", "Music", "Family"],
-  "videoGames": [
-    { "name": "Game 2", "genre": "Action", "rating": 8.5, "year": 2020 },
-    { "name": "Another Game", "genre": "Drama", "rating": 7.8, "year": 2019 }
-  ]
-}
+```bash
+mset user:1 "subham" user:2 "codexam" msg:1 "hello" msg:2 "hi"
 ```
+
+5.MGET - get multiple values
+
+```bash
+mget user:1 user:2 msg:1 msg:2
+
+1) "subham"
+2) "codexam"
+3) "hello"
+4) "hi"
+```
+6. INCR - increment the value by 1
+
+```bash
+set user:1 10
+
+incr user:1
+
+(integer) 11
+```
+
+7. INCRBY - increment the value by 5
+
+```bash
+set user:1 10
+
+incrby user:1 5
+
+(integer) 15
+```
+Note: By default a single Redis string can be a maximum of 512MB in size.
+
+8.GETRANGE - get the value from the range(SUBSTRING)
+
+```bash
+set user:1 "subham"
+
+getrange user:1 0 3
+
+"subh"
+```
+9. SETRANGE - set the value from the range(SUBSTRING)
+
+```bash
+set user:1 "subham"
+
+setrange user:1 0 "codexam"
+
+(integer) 7
+
+get user:1
+
+"codexam"
+```
+
+10. GETRANGE - get the value from the range(SUBSTRING)
+
+```bash
+set user:1 "subham"
+
+getrange user:1 0 3
+
+"subh"
+```
+
+11. STRLEN - get the length of the value
+
+```bash
+set user:1 "subham"
+
+strlen user:1
+
+(integer) 6
+```
+
+12. APPEND - append the value
+
+```bash
+set user:1 "subham"
+
+append user:1 " codexam"
+
+(integer) 14
+
+get user:1
+
+"subham codexam"
+```
+
+13. SETEX—set the value with expiration time (in seconds)
+
+
+```bash
+setex user:1 10 "subham"
+
+(integer) 1
+
+get user:1
+
+"subham"
+
+get user:1
+
+(nil)
+```
+
+14. SETNX—set the value if the key doesn't exist
+
+```bash
+setnx user:1 "subham"
+
+(integer) 1
+
+get user:1
+
+"subham"
+
+setnx user:1 "codexam"
+
+(integer) 0
+
+get user:1
+
+"subham"
+```
+
+15. MSETNX—set multiple values if the key doesn't exist
+
+```bash
+
+msetnx user:1 "subham" user:2 "codexam" msg:1 "hello" msg:2 "hi"
+
+
+(integer) 1
+
+get user:1
+
+"subham"
+
+get user:2
+
+"codexam"
+
+get msg:1
+
+"hello"
+
+get msg:2
+
+"hi"
+```
+
+16. SETRANGE—set the value from the range(SUBSTRING)
+
+```bash
+
+set user:1 "subham"
+
+setrange user:1 0 "codexam"
+
+(integer) 7
+
+get user:1
+
+"codexam"
+```
+
+17. GETRANGE—get the value from the range(SUBSTRING)
+
+```bash
+
+set user:1 "subham"
+
+getrange user:1 0 3
+
+"subh"
+```
+
+
+18. STRLEN—get the length of the value
+
+```bash
+
+set user:1 "subham"
+
+strlen user:1
+
+(integer) 6
+```
+
+19. **DECR**: This command decreases the value of a key by 1. If the key does not exist, it is set to -1.
+
+```bash
+set user:1 10
+
+decr user:1
+
+(integer) 9
+```
+
+20. **DECRBY**: This command decreases the value of a key by the given number. If the key does not exist, it is set to negative the given number.
+
+```bash
+set user:1 10
+
+decrby user:1 5
+
+(integer) 5
+```
+
+21. **GETSET**: This command sets the value of a key and returns its old value.
+
+```bash
+set user:1 "subham"
+
+getset user:1 "codexam"
+
+"subham"
+```
+
+22. **MGET**: This command gets the values of all the given keys.
+
+```bash
+mget user:1 user:2
+
+1) "codexam"
+2) "subham"
+```
+
+23. **PSETEX**: This command sets the value and expiration in milliseconds of a key.
+
+```bash
+psetex user:1 10000 "subham"
+
+(integer) 1
+
+get user:1
+
+"subham"
+
+get user:1
+
+(nil)
+```
+
+
+
+
+
+
