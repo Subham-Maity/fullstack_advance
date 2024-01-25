@@ -397,7 +397,7 @@ You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`rout
 Sure, here's a more structured and detailed version of your content:
 
 
-### 5. Redis
+### [**5. Redis**]()
 
 #### Introduction:
 Redis is an open-source, in-memory key-value data store. It is versatile and can be used as a database, cache, and message broker. Redis supports various data structures such as Strings, Hashes, Lists, Sets, and more. It provides high availability via Redis Sentinel and automatic partitioning across multiple Redis nodes with Redis Cluster.
@@ -427,11 +427,42 @@ Now, you can use the Redis server in your project.
 4. Type `ping` to check if the Redis server is running. If you get `PONG`, then the server is running.
 
 #### 1.String Data Structure:
-1. Type `set name "subham"` to set a key-value pair in the Redis server.
-2. Type `get name` to retrieve the value of the key from the Redis server.
+
+##### Cli Commands
+- [**String Data Structure**](#1string-data-structure)
+  - [**1.1. set name**](#11-set-name)
+  - [**1.2. get name**](#12-get-name)
+  - [**1.3. setnx**](#13-setnx-)
+  - [**1.4. MSET**](#14-mset-)
+  - [**1.5. MGET**](#15-mget-)
+  - [**1.6. INCR**](#16--incr-)
+  - [**1.7. INCRBY**](#17--incrby-)
+  - [**1.8. GETRANGE**](#18-getrange-)
+  - [**1.9. SETRANGE**](#19--setrange-)
+  - [**1.10. GETRANGE**](#110--getrange-)
+  - [**1.11. STRLEN**](#111--strlen-)
+  - [**1.12. APPEND**](#112--append--)
+  - [**1.13. SETEX**](#113--setex)
+  - [**1.14. SETNX**](#114--setnx)
+  - [**1.15. MSETNX**](#115--msetnx)
+  - [**1.16. SETRANGE**](#116--setrange)
+  - [**1.17. GETRANGE**](#117--getrange)
+  - [**1.18. STRLEN**](#118--strlen)
+  - [**1.19. DECR**](#119-decr-)
+  - [**1.20. DECRBY**](#120-decrby-)
+  - [**1.21. GETSET**](#121-getset-)
+  - [**1.22. MGET**](#122-mget-)
+  - [**1.23. PSETEX**](#123-psetex-)
+
+
+##### 1.1. set name
+Type `set name "subham"` to set a key-value pair in the Redis server.
+##### 1.2. get name
+
+Type `get name` to retrieve the value of the key from the Redis server.
 
 Note: If you open your Redis stack in the browser, you will see the key and value set. You can also update the value from there. Just click on the key and update the value on the right side.
-Best way to do this is 
+The Best way to do this is 
 ```bash
 set user:1 "subham"
 
@@ -457,7 +488,8 @@ msg
     2: "hi"
     3: "hey"
 ```
-3. setnx - set if not exists(nx)
+##### 1.3 setnx 
+set if not exists(nx)
 ```bash
 set user:1 "subham" nx
 ```
@@ -466,13 +498,15 @@ if you don't use nx, then it will overwrite the value
 set user:1 "codexam"
 ```
 
-4.MSET - set multiple values
+##### 1.4 MSET 
+set multiple values
 
 ```bash
 mset user:1 "subham" user:2 "codexam" msg:1 "hello" msg:2 "hi"
 ```
 
-5.MGET - get multiple values
+##### 1.5 MGET  
+get multiple values
 
 ```bash
 mget user:1 user:2 msg:1 msg:2
@@ -482,7 +516,8 @@ mget user:1 user:2 msg:1 msg:2
 3) "hello"
 4) "hi"
 ```
-6. INCR - increment the value by 1
+##### 1.6  INCR 
+increment the value by 1
 
 ```bash
 set user:1 10
@@ -492,7 +527,8 @@ incr user:1
 (integer) 11
 ```
 
-7. INCRBY - increment the value by 5
+##### 1.7  INCRBY 
+increment the value by 5
 
 ```bash
 set user:1 10
@@ -503,7 +539,8 @@ incrby user:1 5
 ```
 Note: By default a single Redis string can be a maximum of 512MB in size.
 
-8.GETRANGE - get the value from the range(SUBSTRING)
+##### 1.8 GETRANGE 
+get the value from the range(SUBSTRING)
 
 ```bash
 set user:1 "subham"
@@ -512,7 +549,8 @@ getrange user:1 0 3
 
 "subh"
 ```
-9. SETRANGE - set the value from the range(SUBSTRING)
+##### 1.9  SETRANGE 
+set the value from the range(SUBSTRING)
 
 ```bash
 set user:1 "subham"
@@ -526,7 +564,8 @@ get user:1
 "codexam"
 ```
 
-10. GETRANGE - get the value from the range(SUBSTRING)
+##### 1.10  GETRANGE 
+get the value from the range(SUBSTRING)
 
 ```bash
 set user:1 "subham"
@@ -536,7 +575,8 @@ getrange user:1 0 3
 "subh"
 ```
 
-11. STRLEN - get the length of the value
+##### 1.11  STRLEN 
+get the length of the value
 
 ```bash
 set user:1 "subham"
@@ -546,7 +586,8 @@ strlen user:1
 (integer) 6
 ```
 
-12. APPEND - append the value
+##### 1.12  APPEND -
+append the value
 
 ```bash
 set user:1 "subham"
@@ -560,7 +601,8 @@ get user:1
 "subham codexam"
 ```
 
-13. SETEX—set the value with expiration time (in seconds)
+##### 1.13  SETEX
+set the value with expiration time (in seconds)
 
 
 ```bash
@@ -577,7 +619,8 @@ get user:1
 (nil)
 ```
 
-14. SETNX—set the value if the key doesn't exist
+##### 1.14  SETNX
+set the value if the key doesn't exist
 
 ```bash
 setnx user:1 "subham"
@@ -597,7 +640,8 @@ get user:1
 "subham"
 ```
 
-15. MSETNX—set multiple values if the key doesn't exist
+##### 1.15  MSETNX
+set multiple values if the key doesn't exist
 
 ```bash
 
@@ -623,7 +667,8 @@ get msg:2
 "hi"
 ```
 
-16. SETRANGE—set the value from the range(SUBSTRING)
+##### 1.16  SETRANGE
+set the value from the range(SUBSTRING)
 
 ```bash
 
@@ -638,7 +683,8 @@ get user:1
 "codexam"
 ```
 
-17. GETRANGE—get the value from the range(SUBSTRING)
+##### 1.17  GETRANGE
+get the value from the range(SUBSTRING)
 
 ```bash
 
@@ -650,7 +696,8 @@ getrange user:1 0 3
 ```
 
 
-18. STRLEN—get the length of the value
+##### 1.18  STRLEN
+get the length of the value
 
 ```bash
 
@@ -661,7 +708,8 @@ strlen user:1
 (integer) 6
 ```
 
-19. **DECR**: This command decreases the value of a key by 1. If the key does not exist, it is set to -1.
+##### 1.19  **DECR**: 
+This command decreases the value of a key by 1. If the key does not exist, it is set to -1.
 
 ```bash
 set user:1 10
@@ -671,7 +719,8 @@ decr user:1
 (integer) 9
 ```
 
-20. **DECRBY**: This command decreases the value of a key by the given number. If the key does not exist, it is set to negative the given number.
+##### 1.20  **DECRBY**: 
+This command decreases the value of a key by the given number. If the key does not exist, it is set to negative the given number.
 
 ```bash
 set user:1 10
@@ -681,7 +730,8 @@ decrby user:1 5
 (integer) 5
 ```
 
-21. **GETSET**: This command sets the value of a key and returns its old value.
+##### 1.21 **GETSET**: 
+This command sets the value of a key and returns its old value.
 
 ```bash
 set user:1 "subham"
@@ -691,7 +741,8 @@ getset user:1 "codexam"
 "subham"
 ```
 
-22. **MGET**: This command gets the values of all the given keys.
+##### 1.22 **MGET**: 
+This command gets the values of all the given keys.
 
 ```bash
 mget user:1 user:2
@@ -700,7 +751,8 @@ mget user:1 user:2
 2) "subham"
 ```
 
-23. **PSETEX**: This command sets the value and expiration in milliseconds of a key.
+##### 1.23 **PSETEX**: 
+This command sets the value and expiration in milliseconds of a key.
 
 ```bash
 psetex user:1 10000 "subham"
@@ -716,6 +768,29 @@ get user:1
 (nil)
 ```
 
+
+##### Nodejs Setup
+
+1. open the 5.redis folder and run the following command
+```bash
+npm run string
+```
+2. open the server/src/client.ts setup the redis client
+```bash
+import Redis from "ioredis";
+
+const client = new Redis({
+    host: 'localhost', // replace with your host, if not localhost
+    port: 6379  // replace with your port, if not 6379
+});
+
+export default client;
+```
+3. open the 5.redis folder and you will get the following files
+
+- string.ts
+
+Here you will get all the commands for string data structure in redis
 
 
 

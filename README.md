@@ -99,8 +99,36 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 - Zod(Schema Validation)
 
 
-
-
+### 5. [REDIS](README/NOTE.md#5-redis)
+- What is Redis?
+- How to set up Redis with docker? (redis-stack and redis-client)
+- CLI commands for Redis
+- Redis with Node.js
+- Chapters
+  - String Operations (cli and node.js)
+    - "set name"
+    - "get name"
+    - "setnx"
+    - "MSET"
+    - "MGET"
+    - "INCR"
+    - "INCRBY"
+    - "GETRANGE"
+    - "SETRANGE"
+    - "GETRANGE"
+    - "STRLEN"
+    - "APPEND"
+    - "SETEX"
+    - "SETNX"
+    - "MSETNX"
+    - "SETRANGE"
+    - "GETRANGE"
+    - "STRLEN"
+    - "DECR"
+    - "DECRBY"
+    - "GETSET"
+    - "MGET"
+    - "PSETEX"
 
 
 
