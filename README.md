@@ -126,9 +126,22 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
     - "STRLEN"
     - "DECR"
     - "DECRBY"
-    - "GETSET"
-    - "MGET"
     - "PSETEX"
-
+  - "List Operations" (cli and node.js)
+    - "LPUSH"(Stack & Queue Concept)
+    - "RPUSH"(Stack & Queue Concept)
+    - "LPOP"
+    - "RPOP"
+    - "LLEN"
+    - "LRANGE"
+    - "LINDEX"
+    - "LINSERT"
+    - "LSET"
+    - "LTRIM"
+    - "LREM"
+    - "RPOPLPUSH"
+    - "BLPOP"
+    - "BRPOP"
+    - "BRPOPLPUSH"
 
 

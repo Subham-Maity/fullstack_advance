@@ -15,7 +15,8 @@
     "prod": "concurrently \"npm run build\" \"npm run start\"",
     "compile": "npx tsc",
     "deploy": "nodemon src/server.ts",
-    "string": "nodemon --exec ts-node ../string.ts"
+    "string": "nodemon --exec ts-node ../string.ts",
+    "list": "nodemon --exec ts-node ../list.ts"
   },
   "keywords": [],
   "dependencies": {

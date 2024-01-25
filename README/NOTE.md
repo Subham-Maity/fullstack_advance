@@ -425,39 +425,61 @@ Now, you can use the Redis server in your project.
 2. Use `docker exec -it <container_id> bash` to open the bash terminal of the container. For example: `docker exec -it 7b7e bash`.
 3. Type `redis-cli` to open the Redis CLI terminal.
 4. Type `ping` to check if the Redis server is running. If you get `PONG`, then the server is running.
+#### Nodejs Setup
 
-#### 1.String Data Structure:
+1. open the 5.redis folder and run the following command
+```bash
+npm run string
+npm run list
+```
+2. open the server/src/client.ts setup the redis client
+```bash
+import Redis from "ioredis";
+
+const client = new Redis({
+    host: 'localhost', // replace with your host, if not localhost
+    port: 6379  // replace with your port, if not 6379
+});
+
+export default client;
+```
+3. open the 5.redis folder and you will get the following files
+
+- string.ts
+- list.ts
+
+Here you will get all the commands for string data structure in redis
+
+#### String Data Structure:
 
 ##### Cli Commands
 - [**String Data Structure**](#1string-data-structure)
-  - [**1.1. set name**](#11-set-name)
-  - [**1.2. get name**](#12-get-name)
-  - [**1.3. setnx**](#13-setnx-)
-  - [**1.4. MSET**](#14-mset-)
-  - [**1.5. MGET**](#15-mget-)
-  - [**1.6. INCR**](#16--incr-)
-  - [**1.7. INCRBY**](#17--incrby-)
-  - [**1.8. GETRANGE**](#18-getrange-)
-  - [**1.9. SETRANGE**](#19--setrange-)
-  - [**1.10. GETRANGE**](#110--getrange-)
-  - [**1.11. STRLEN**](#111--strlen-)
-  - [**1.12. APPEND**](#112--append--)
-  - [**1.13. SETEX**](#113--setex)
-  - [**1.14. SETNX**](#114--setnx)
-  - [**1.15. MSETNX**](#115--msetnx)
-  - [**1.16. SETRANGE**](#116--setrange)
-  - [**1.17. GETRANGE**](#117--getrange)
-  - [**1.18. STRLEN**](#118--strlen)
-  - [**1.19. DECR**](#119-decr-)
-  - [**1.20. DECRBY**](#120-decrby-)
-  - [**1.21. GETSET**](#121-getset-)
-  - [**1.22. MGET**](#122-mget-)
-  - [**1.23. PSETEX**](#123-psetex-)
+  - [**1.1. set name**](#11set-name)
+  - [**1.2. get name**](#12get-name)
+  - [**1.3. setnx**](#13setnx)
+  - [**1.4. MSET**](#14mset)
+  - [**1.5. MGET**](#15mget)
+  - [**1.6. INCR**](#16incr)
+  - [**1.7. INCRBY**](#17incrby)
+  - [**1.8. GETRANGE**](#18getrange)
+  - [**1.9. SETRANGE**](#19setrange)
+  - [**1.10. GETRANGE**](#110getrange)
+  - [**1.11. STRLEN**](#111strlen)
+  - [**1.12. APPEND**](#112append)
+  - [**1.13. SETEX**](#113setex)
+  - [**1.14. SETNX**](#114setnx)
+  - [**1.15. MSETNX**](#115msetnx)
+  - [**1.16. SETRANGE**](#116setrange)
+  - [**1.17. GETRANGE**](#117getrange)
+  - [**1.18. STRLEN**](#118strlen)
+  - [**1.19. DECR**](#119decr)
+  - [**1.20. DECRBY**](#120decrby)
+  - [**1.23. PSETEX**](#121psetex)
 
 
-##### 1.1. set name
+##### 1.1.set name
 Type `set name "subham"` to set a key-value pair in the Redis server.
-##### 1.2. get name
+##### 1.2.get name
 
 Type `get name` to retrieve the value of the key from the Redis server.
 
@@ -488,7 +510,7 @@ msg
     2: "hi"
     3: "hey"
 ```
-##### 1.3 setnx 
+##### 1.3.setnx
 set if not exists(nx)
 ```bash
 set user:1 "subham" nx
@@ -498,14 +520,14 @@ if you don't use nx, then it will overwrite the value
 set user:1 "codexam"
 ```
 
-##### 1.4 MSET 
+##### 1.4.MSET
 set multiple values
 
 ```bash
 mset user:1 "subham" user:2 "codexam" msg:1 "hello" msg:2 "hi"
 ```
 
-##### 1.5 MGET  
+##### 1.5.MGET
 get multiple values
 
 ```bash
@@ -516,7 +538,7 @@ mget user:1 user:2 msg:1 msg:2
 3) "hello"
 4) "hi"
 ```
-##### 1.6  INCR 
+##### 1.6.INCR
 increment the value by 1
 
 ```bash
@@ -527,7 +549,7 @@ incr user:1
 (integer) 11
 ```
 
-##### 1.7  INCRBY 
+##### 1.7.INCRBY
 increment the value by 5
 
 ```bash
@@ -539,7 +561,7 @@ incrby user:1 5
 ```
 Note: By default a single Redis string can be a maximum of 512MB in size.
 
-##### 1.8 GETRANGE 
+##### 1.8.GETRANGE
 get the value from the range(SUBSTRING)
 
 ```bash
@@ -549,7 +571,7 @@ getrange user:1 0 3
 
 "subh"
 ```
-##### 1.9  SETRANGE 
+##### 1.9.SETRANGE
 set the value from the range(SUBSTRING)
 
 ```bash
@@ -564,7 +586,7 @@ get user:1
 "codexam"
 ```
 
-##### 1.10  GETRANGE 
+##### 1.10.GETRANGE
 get the value from the range(SUBSTRING)
 
 ```bash
@@ -575,7 +597,7 @@ getrange user:1 0 3
 "subh"
 ```
 
-##### 1.11  STRLEN 
+##### 1.11.STRLEN
 get the length of the value
 
 ```bash
@@ -586,7 +608,7 @@ strlen user:1
 (integer) 6
 ```
 
-##### 1.12  APPEND -
+##### 1.12.APPEND
 append the value
 
 ```bash
@@ -601,7 +623,7 @@ get user:1
 "subham codexam"
 ```
 
-##### 1.13  SETEX
+##### 1.13.SETEX
 set the value with expiration time (in seconds)
 
 
@@ -619,7 +641,7 @@ get user:1
 (nil)
 ```
 
-##### 1.14  SETNX
+##### 1.14.SETNX
 set the value if the key doesn't exist
 
 ```bash
@@ -640,7 +662,7 @@ get user:1
 "subham"
 ```
 
-##### 1.15  MSETNX
+##### 1.15.MSETNX
 set multiple values if the key doesn't exist
 
 ```bash
@@ -667,7 +689,7 @@ get msg:2
 "hi"
 ```
 
-##### 1.16  SETRANGE
+##### 1.16.SETRANGE
 set the value from the range(SUBSTRING)
 
 ```bash
@@ -683,7 +705,7 @@ get user:1
 "codexam"
 ```
 
-##### 1.17  GETRANGE
+##### 1.17.GETRANGE
 get the value from the range(SUBSTRING)
 
 ```bash
@@ -696,7 +718,7 @@ getrange user:1 0 3
 ```
 
 
-##### 1.18  STRLEN
+##### 1.18.STRLEN
 get the length of the value
 
 ```bash
@@ -708,7 +730,7 @@ strlen user:1
 (integer) 6
 ```
 
-##### 1.19  **DECR**: 
+##### 1.19.DECR
 This command decreases the value of a key by 1. If the key does not exist, it is set to -1.
 
 ```bash
@@ -719,7 +741,7 @@ decr user:1
 (integer) 9
 ```
 
-##### 1.20  **DECRBY**: 
+##### 1.20.DECRBY
 This command decreases the value of a key by the given number. If the key does not exist, it is set to negative the given number.
 
 ```bash
@@ -730,28 +752,8 @@ decrby user:1 5
 (integer) 5
 ```
 
-##### 1.21 **GETSET**: 
-This command sets the value of a key and returns its old value.
 
-```bash
-set user:1 "subham"
-
-getset user:1 "codexam"
-
-"subham"
-```
-
-##### 1.22 **MGET**: 
-This command gets the values of all the given keys.
-
-```bash
-mget user:1 user:2
-
-1) "codexam"
-2) "subham"
-```
-
-##### 1.23 **PSETEX**: 
+##### 1.21.PSETEX
 This command sets the value and expiration in milliseconds of a key.
 
 ```bash
@@ -767,30 +769,404 @@ get user:1
 
 (nil)
 ```
+#### List Data Structure:
+
+A **list data structure** is a collection of elements in the order they are inserted. It is similar to an array in other programming languages. The list data structure is often used to implement other data structures like queues and stacks.
+
+##### List Operations
+
+Here are some operations performed on a list:
+
+| Operation | Element |
+|-----------|---------|
+| Push      | 1       |
+| Push      | 2       |
+| Push      | 3       |
+| Pop       | 3       |
+| Pop       | 2       |
+| Pop       | 1       |
 
 
-##### Nodejs Setup
+##### Cli Commands
+- [**List Data Structure**](#list-data-structure)
+  - [**2.1. LPUSH**](#21lpush)
+  - [**2.2. RPUSH**](#22rpush)
+  - [**2.3. LPOP**](#23lpop)
+  - [**2.4. RPOP**](#24rpop)
+  - [**2.5. LLEN**](#25llen)
+  - [**2.6. LRANGE**](#26lrange)
+  - [**2.7. LINDEX**](#27lindex)
+  - [**2.8. LSET**](#28lset)
+  - [**2.9. LINSERT**](#29linsert)
+  - [**2.10. LSET**](#210lset)
+  - [**2.11. LTRIM**](#211ltrim)
+  - [**2.12. LREM**](#212lrem)
+  - [**2.13. RPOPLPUSH**](#213rpoplpush)
+  - [**2.14. BRPOP**](#214brpop)
+  - [**2.15. BLPOP**](#215blpop)
+  - [**2.16.BRPOPLPUSH**](#216brpoplpush)
 
-1. open the 5.redis folder and run the following command
+  
+
+##### 2.1.LPUSH
+This command inserts the specified value at the head of the list.
+
 ```bash
-npm run string
+lpush user:1 "subham"
+lpush user:1 "codexam"
 ```
-2. open the server/src/client.ts setup the redis client
+
+Visualize the list in the Redis Commander.
+Last In First Out (LIFO) (similar to stack)
+
+| Index | Element |
+|-------|---------|
+| 0     | codexam |
+| 1     | subham  |
+
+##### 2.2.RPUSH
+
+This command inserts the specified value at the tail of the list.
+
 ```bash
-import Redis from "ioredis";
-
-const client = new Redis({
-    host: 'localhost', // replace with your host, if not localhost
-    port: 6379  // replace with your port, if not 6379
-});
-
-export default client;
+rpush user:1 "subham"
+rpush user:1 "codexam"
 ```
-3. open the 5.redis folder and you will get the following files
 
-- string.ts
+Visualize the list in the Redis Commander.
 
-Here you will get all the commands for string data structure in redis
+| Index | Element |
+|-------|---------|
+| 0     | subham  |
+| 1     | codexam |
+
+
+
+---
+###### Note
+
+*Redis can be used to implement a **stack** data structure, which follows a Last In, First Out (LIFO) principle. You can use the `lpush` command to insert elements at the head of the list, and the `lpop` command to remove elements from the head of the list.*
+
+###### Here's an example of how you can use Redis commands to implement a stack:
+
+```bash
+lpush user:1 "subham"
+lpush user:1 "codexam"
+
+lpop user:1  # Output: "codexam"
+lpop user:1  # Output: "subham"
+```
+
+###### Visualization in Redis Commander
+
+- After `lpush` operations:
+
+| Index | Element |
+|-------|---------|
+| 0     | codexam |
+| 1     | subham  |
+
+- After first `lpop` operation:
+
+| Index | Element |
+|-------|---------|
+| 0     | subham  |
+
+- After second `lpop` operation:
+
+| Index | Element |
+|-------|---------|
+|       |         |
+
+*As you can see, the last element pushed to the stack is the first one to be popped, which is characteristic of a stack.*
+
+---
+
+##### 2.3.LPOP
+
+This command removes and returns the first element of the list.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lpop user:1
+
+"codexam"
+```
+
+##### 2.4.RPOP
+
+This command removes and returns the last element of the list.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+rpop user:1
+
+"subham"
+```
+
+##### 2.5.LLEN
+
+This command returns the length of the list.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+llen user:1 
+
+(integer) 2
+```
+
+##### 2.6.LRANGE
+
+This command returns the specified range of elements from the list.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lrange user:1 0 1
+
+1) "codexam"
+
+2) "subham"
+```
+
+##### 2.7.LINDEX
+
+This command returns the element at the specified index.
+
+```bash 
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lindex user:1 0
+
+"codexam"
+```
+
+##### 2.8.LSET
+
+This command sets the value at the specified index.
+
+```bash
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lset user:1 0 "xamcodexam"
+
+"OK"
+
+lrange user:1 0 1
+
+1) "xamcodexam"
+
+2) "subham"
+```
+
+##### 2.9.LINSERT
+
+This command inserts the specified value before or after the specified pivot value.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+linsert user:1 before "subham" "xamcodexam"
+
+(integer) 3
+
+lrange user:1 0 1
+
+1) "codexam"
+
+2) "xamcodexam"
+
+3) "subham"
+```
+
+##### 2.10.LSET
+
+This command sets the value at the specified index.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lset user:1 0 "xamcodexam"
+
+"OK"
+
+lrange user:1 0 1
+
+1) "xamcodexam"
+
+2) "subham"
+```
+
+##### 2.11.LTRIM
+
+This command trims the list to the specified range.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+ltrim user:1 0 1
+
+"OK"
+
+lrange user:1 0 1
+
+1) "codexam"
+
+2) "subham"
+```
+
+##### 2.12.LREM
+
+This command removes the specified number of occurrences of the specified value from the list.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+lrem user:1 2 "subham"
+
+(integer) 2
+
+lrange user:1 0 1
+
+1) "codexam"
+
+2) "codexam"
+```
+
+##### 2.13.RPOPLPUSH
+
+This command removes the last element from the source list and pushes it to the destination list.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+rpoplpush user:1 user:2
+
+"subham"
+
+lrange user:1 0 1
+
+1) "codexam"
+
+lrange user:2 0 1
+
+1) "subham"
+```
+
+
+##### 2.14.BRPOP
+
+This command is similar to `rpop`, but it blocks the connection until an element is available or the timeout is reached.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+brpop user:1 10
+
+1) "user:1"
+
+2) "codexam"
+```
+
+It will block the connection for 10 seconds and then return the element. If no element is available, it will return `nil`.
+
+
+##### 2.15.BLPOP
+
+This command is similar to `lpop`, but it blocks the connection until an element is available or the timeout is reached.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+blpop user:1 10
+
+1) "user:1"
+
+2) "codexam"
+```
+
+It will block the connection for 10 seconds and then return the element. If no element is available, it will return `nil`.
+
+
+##### 2.16.BRPOPLPUSH
+
+This command is similar to `rpoplpush`, but it blocks the connection until an element is available or the timeout is reached.
+
+```bash
+
+lpush user:1 "subham"
+
+lpush user:1 "codexam"
+
+brpoplpush user:1 user:2 10
+
+"subham"
+```
+
+It will block the connection for 10 seconds and then return the element. If no element is available, it will return `nil`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

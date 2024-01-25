@@ -21,6 +21,8 @@ async function init() {
     await client.set('user:1', '10');
     await client.incrby('user:1', 5);
     console.log('INCRBY user:1 ->', await client.get('user:1'));
+
+
     // Output: INCRBY user: 1 -> 15
 
     // DECR operation
@@ -47,6 +49,7 @@ async function init() {
     // PSETEX operation
     await client.psetex('user:1', 10000, 'subham');
     console.log('PSETEX user:1 ->', await client.get('user:1'));
+
     // Output: PSETEX user:1 -> subham
 
     // SETNX operation
@@ -78,6 +81,10 @@ async function init() {
     await client.append('user:1', ' codexam');
     console.log('APPEND user:1 ->', await client.get('user:1'));
     // Output: APPEND user:1 -> subham codexam
+
+    // Timer to delete the key after 10 seconds
+    await client.expire('user:1', 10);
+    console.log('EXPIRE user:1 ->', await client.get('user:1'));
 }
 
 init().then(r => console.log("done"));
