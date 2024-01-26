@@ -106,42 +106,60 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 - Redis with Node.js
 - Chapters
   - String Operations (cli and node.js)
-    - "set name"
-    - "get name"
-    - "setnx"
-    - "MSET"
-    - "MGET"
-    - "INCR"
-    - "INCRBY"
-    - "GETRANGE"
-    - "SETRANGE"
-    - "GETRANGE"
-    - "STRLEN"
-    - "APPEND"
-    - "SETEX"
-    - "SETNX"
-    - "MSETNX"
-    - "SETRANGE"
-    - "GETRANGE"
-    - "STRLEN"
-    - "DECR"
-    - "DECRBY"
-    - "PSETEX"
-  - "List Operations" (cli and node.js)
-    - "LPUSH"(Stack & Queue Concept)
-    - "RPUSH"(Stack & Queue Concept)
-    - "LPOP"
-    - "RPOP"
-    - "LLEN"
-    - "LRANGE"
-    - "LINDEX"
-    - "LINSERT"
-    - "LSET"
-    - "LTRIM"
-    - "LREM"
-    - "RPOPLPUSH"
-    - "BLPOP"
-    - "BRPOP"
-    - "BRPOPLPUSH"
+    - `set name`
+    - `get name`
+    - `setnx`
+    - `MSET`
+    - `MGET`
+    - `INCR`
+    - `INCRBY`
+    - `GETRANGE`
+    - `SETRANGE`
+    - `GETRANGE`
+    - `STRLEN`
+    - `APPEND`
+    - `SETEX`
+    - `SETNX`
+    - `MSETNX`
+    - `SETRANGE`
+    - `GETRANGE`
+    - `STRLEN`
+    - `DECR`
+    - `DECRBY`
+    - `PSETEX`
+  - `List Operations` (cli and node.js)
+    - `LPUSH`(Stack & Queue Concept)
+    - `RPUSH`(Stack & Queue Concept)
+    - `LPOP`
+    - `RPOP`
+    - `LLEN`
+    - `LRANGE`
+    - `LINDEX`
+    - `LINSERT`
+    - `LSET`
+    - `LTRIM`
+    - `LREM`
+    - `RPOPLPUSH`
+    - `BLPOP`
+    - `BRPOP`
+    - `BRPOPLPUSH`
+  - `Set Operations` (cli and node.js)
+    - `SADD`
+    - `SREM`
+    - `SISMEMBER`
+    - `SMEMBERS`
+    - `SPOP`
+    - `SRANDMEMBER`
+    - `SMOVE`
+    - `SCARD`
+    - `SINTER`
+    - `SUNION`
+    - `SDIFF`
+    - `SDIFF`
+    - `SINTERSTORE`
+    - `SUNIONSTORE`
+    - `SDIFFSTORE`
+    - `SSCAN`
+  
 
 

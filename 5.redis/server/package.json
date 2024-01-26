@@ -16,7 +16,8 @@
     "compile": "npx tsc",
     "deploy": "nodemon src/server.ts",
     "string": "nodemon --exec ts-node ../string.ts",
-    "list": "nodemon --exec ts-node ../list.ts"
+    "list": "nodemon --exec ts-node ../list.ts",
+    "set": "nodemon --exec ts-node ../set.ts"
   },
   "keywords": [],
   "dependencies": {
