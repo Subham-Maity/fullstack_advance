@@ -432,6 +432,7 @@ Now, you can use the Redis server in your project.
 npm run string
 npm run list
 npm run set
+npm run hash
 ```
 2. open the server/src/client.ts setup the redis client
 ```bash
@@ -449,7 +450,7 @@ export default client;
 - string.ts
 - list.ts
 - set.ts
-
+- hash.ts
 Here you will get all the commands for string data structure in redis
 
 #### String Data Structure:
@@ -1466,7 +1467,284 @@ sscan user:1 0 match "sub*"
 2) 1) "subham"
 ```
 
+##### Hash Data Structure:
 
+A **hash data structure** is a collection of key-value pairs. It is similar to a hash table in other programming languages. The hash data structure is often used to implement other data structures like queues and stacks.
+
+
+##### Cli Commands
+
+- [**Hash Data Structure**](#hash-data-structure)
+  - [**4.1. HSET**](#41hset)
+  - [**4.2. HGET**](#42hget)
+  - [**4.3. HGETALL**](#43hgetall)
+  - [**4.4. HDEL**](#44hdel)
+  - [**4.5. HEXISTS**](#45hexists)
+  - [**4.6. HKEYS**](#46hkeys)
+  - [**4.7. HVALS**](#47hvals)
+  - [**4.8. HLEN**](#48hlen)
+  - [**4.9. HINCRBY**](#49hincrby)
+  - [**4.10. HINCRBYFLOAT**](#410hincrbyfloat)
+  - [**4.11. HMSET**](#411hmset)
+  - [**4.12. HMGET**](#412hmget)
+  - [**4.13. HSETNX**](#413hsetnx)
+  - [**4.14. HSTRLEN**](#414hstrlen)
+  - [**4.15. HSCAN**](#415hscan)
+
+##### 4.1.HSET
+
+This command sets the specified field in the hash to the specified value.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 email "subham@gmail.com"
+
+```
+
+Visualize the hash in the Redis Commander.
+
+| Field | Value   |
+|-------|---------|
+| name  | subham  |
+| email | codexam |
+
+##### 4.2.HGET
+
+This command returns the value of the specified field in the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 email "
+
+hget user:1 name
+
+"subham"
+```
+
+##### 4.3.HGETALL
+
+This command returns all the fields and values of the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 email "subham@gmail.com"
+
+hgetall user:1
+
+1) "name"
+
+2) "subham"
+
+3) "email"
+
+4) "subham@gmail.com"
+```
+
+##### 4.4.HDEL
+
+This command deletes the specified field from the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 email "subham@gmail.com"
+
+hdel user:1 email
+
+(integer) 1
+
+hgetall user:1
+
+1) "name"
+
+2) "subham"
+```
+
+##### 4.5.HEXISTS
+
+This command checks if the specified field exists in the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 role "admin"
+
+hexists user:1 role
+
+(integer) 1
+```
+
+##### 4.6.HKEYS
+
+This command returns all the fields of the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 role "admin"
+
+hkeys user:1
+
+1) "name"
+
+2) "role"
+```
+
+##### 4.7.HVALS
+
+This command returns all the values of the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 role "admin"
+
+hvals user:1
+
+1) "subham"
+
+2) "admin"
+```
+
+##### 4.8.HLEN
+
+This command returns the number of fields in the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 role "admin"
+
+hlen user:1
+
+(integer) 2
+```
+
+##### 4.9.HINCRBY
+
+This command increments the specified field by the specified value.
+
+```bash
+
+hset user:1 age 20
+
+hincrby user:1 age 5
+
+(integer) 25
+```
+
+##### 4.10.HINCRBYFLOAT
+
+This command increments the specified field by the specified value.
+
+```bash
+
+hset user:1 age 20
+
+hincrbyfloat user:1 age 5.5
+
+"25.5"
+```
+
+##### 4.11.HMSET
+
+This command sets the specified fields to their respective values in the hash.
+
+```bash
+
+hmset user:1 name "subham" role "admin"
+
+hgetall user:1
+
+1) "name"
+
+2) "subham"
+
+3) "role"
+
+4) "admin"
+```
+
+##### 4.12.HMGET
+
+This command returns the values of the specified fields in the hash.
+
+```bash
+
+hmset user:1 name "subham" role "admin"
+
+hmget user:1 name role
+
+1) "subham"
+
+2) "admin"
+```
+
+##### 4.13.HSETNX
+
+This command sets the specified field to the specified value if the field does not exist in the hash.
+
+```bash
+
+hsetnx user:1 name "subham"
+
+hsetnx user:1 name "codexam"
+
+(integer) 0
+
+```
+
+##### 4.14.HSTRLEN
+
+This command returns the length of the value of the specified field in the hash.
+
+```bash
+
+hset user:1 name "subham"
+
+hstrlen user:1 name
+
+(integer) 6
+```
+
+##### 4.15.HSCAN
+
+This command scans the hash for fields matching the specified pattern.
+
+```bash
+
+hset user:1 name "subham"
+
+hset user:1 role "admin"
+
+hscan user:1 0 match "na*"
+
+1) "0"
+
+2) 1) "name"
+
+   2) "subham"
+```
+
+
+
+
+
+
+
+
+  
 
 
 

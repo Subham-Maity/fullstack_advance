@@ -17,7 +17,8 @@
     "deploy": "nodemon src/server.ts",
     "string": "nodemon --exec ts-node ../string.ts",
     "list": "nodemon --exec ts-node ../list.ts",
-    "set": "nodemon --exec ts-node ../set.ts"
+    "set": "nodemon --exec ts-node ../set.ts",
+    "hash": "nodemon --exec ts-node ../hash.ts"
   },
   "keywords": [],
   "dependencies": {

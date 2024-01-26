@@ -161,5 +161,22 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
     - `SDIFFSTORE`
     - `SSCAN`
   
+  - `Hash Operations` (cli and node.js)
+     - `HSET`
+     - `HGET`
+     - `HGETALL`
+     - `HDEL`
+     - `HEXISTS`
+     - `HKEYS`
+     - `HVALS`
+     - `HLEN`
+     - `HINCRBY`
+     - `HINCRBYFLOAT`
+     - `HMSET`
+     - `HMGET`
+     - `HSETNX`
+     - `HSTRLEN`
+     - `HSCAN`
+  
 
 

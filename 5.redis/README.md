@@ -6,3 +6,7 @@ Example:
 - string - `npm run string`
 
 - list - `npm run list`
+
+- set - `npm run set`
+
+- hash - `npm run hash`
