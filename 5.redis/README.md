@@ -12,3 +12,5 @@ Example:
 - hash - `npm run hash`
 
 - sorted set - `npm run sortedset`
+
+- stream - `npm run stream`

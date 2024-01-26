@@ -19,7 +19,8 @@
     "list": "nodemon --exec ts-node ../list.ts",
     "set": "nodemon --exec ts-node ../set.ts",
     "hash": "nodemon --exec ts-node ../hash.ts",
-    "sortedset": "nodemon --exec ts-node ../sorted-set.ts"
+    "sortedset": "nodemon --exec ts-node ../sorted-set.ts",
+    "stream": "nodemon --exec ts-node ../stream.ts"
   },
   "keywords": [],
   "dependencies": {
