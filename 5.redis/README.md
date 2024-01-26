@@ -16,3 +16,5 @@ Example:
 - stream - `npm run stream`
 
 - bitmap - `npm run bitmap`
+
+- geo - `npm run geo`

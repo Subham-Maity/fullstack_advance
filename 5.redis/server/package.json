@@ -21,7 +21,8 @@
     "hash": "nodemon --exec ts-node ../hash.ts",
     "sortedset": "nodemon --exec ts-node ../sorted-set.ts",
     "stream": "nodemon --exec ts-node ../stream.ts",
-    "bitmap": "nodemon --exec ts-node ../bitmaps.ts"
+    "bitmap": "nodemon --exec ts-node ../bitmaps.ts",
+    "geo": "nodemon --exec ts-node ../geo.ts"
   },
   "keywords": [],
   "dependencies": {
