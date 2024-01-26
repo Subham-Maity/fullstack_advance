@@ -18,3 +18,5 @@ Example:
 - bitmap - `npm run bitmap`
 
 - geo - `npm run geo`
+
+- pubsub - `npm run pubsub`

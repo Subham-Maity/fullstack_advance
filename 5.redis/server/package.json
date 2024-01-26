@@ -22,7 +22,8 @@
     "sortedset": "nodemon --exec ts-node ../sorted-set.ts",
     "stream": "nodemon --exec ts-node ../stream.ts",
     "bitmap": "nodemon --exec ts-node ../bitmaps.ts",
-    "geo": "nodemon --exec ts-node ../geo.ts"
+    "geo": "nodemon --exec ts-node ../geo.ts",
+    "pubsub": "nodemon --exec ts-node ../pubsub.ts"
   },
   "keywords": [],
   "dependencies": {

@@ -103,132 +103,21 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 - CLI commands for Redis
 - Redis with Node.js
 - Data Types
-  - String Operations (cli and node.js)
-    - `set name`
-    - `get name`
-    - `setnx`
-    - `MSET`
-    - `MGET`
-    - `INCR`
-    - `INCRBY`
-    - `GETRANGE`
-    - `SETRANGE`
-    - `GETRANGE`
-    - `STRLEN`
-    - `APPEND`
-    - `SETEX`
-    - `SETNX`
-    - `MSETNX`
-    - `SETRANGE`
-    - `GETRANGE`
-    - `STRLEN`
-    - `DECR`
-    - `DECRBY`
-    - `PSETEX`
-  - `List Operations` (cli and node.js)
-    - `LPUSH`(Stack & Queue Concept)
-    - `RPUSH`(Stack & Queue Concept)
-    - `LPOP`
-    - `RPOP`
-    - `LLEN`
-    - `LRANGE`
-    - `LINDEX`
-    - `LINSERT`
-    - `LSET`
-    - `LTRIM`
-    - `LREM`
-    - `RPOPLPUSH`
-    - `BLPOP`
-    - `BRPOP`
-    - `BRPOPLPUSH`
-  - `Set Operations` (cli and node.js)
-    - `SADD`
-    - `SREM`
-    - `SISMEMBER`
-    - `SMEMBERS`
-    - `SPOP`
-    - `SRANDMEMBER`
-    - `SMOVE`
-    - `SCARD`
-    - `SINTER`
-    - `SUNION`
-    - `SDIFF`
-    - `SDIFF`
-    - `SINTERSTORE`
-    - `SUNIONSTORE`
-    - `SDIFFSTORE`
-    - `SSCAN`
-  - `Hash Operations` (cli and node.js)
-     - `HSET`
-     - `HGET`
-     - `HGETALL`
-     - `HDEL`
-     - `HEXISTS`
-     - `HKEYS`
-     - `HVALS`
-     - `HLEN`
-     - `HINCRBY`
-     - `HINCRBYFLOAT`
-     - `HMSET`
-     - `HMGET`
-     - `HSETNX`
-     - `HSTRLEN`
-     - `HSCAN`
-  - `Sorted Set Operations` (cli and node.js) 
-     - `ZADD`
-     - `ZREM`
-     - `ZSCORE`
-     - `ZRANGE`
-     - `ZREVRANGE`
-     - `ZRANGEBYSCORE`
-     - `ZREVRANGEBYSCORE`
-     - `ZCARD`
-     - `ZCOUNT`
-     - `ZINCRBY`
-     - `ZLEXCOUNT`
-     - `ZRANGEBYLEX`
-     - `ZREVRANGEBYLEX`
-     - `ZREMRANGEBYLEX`
-     - `ZREMRANGEBYRANK`
-     - `ZREMRANGEBYSCORE`
-     - `ZUNIONSTORE`
-     - `ZINTERSTORE`
-     - `ZSCAN`
-     - `ZPOPMIN`
-     - `ZPOPMAX`
-     - `BZPOPMIN`
-     - `BZPOPMAX`
-     - `ZRANK`
-  - `REDIS STREAMS OPERATIONS`
-     - `XADD`
-     - `XLEN`
-     - `XRANGE`
-     - `XREVRANGE`
-     - `XREAD`
-     - `XREADGROUP`
-     - `XGROUP`
-     - `XACK`
-     - `XCLAIM`
-     - `XDEL`
-     - `XTRIM`
-     - `XINFO`
-     - `XSETID`
-     - `XREWRITE`
-  - `Bitmaps Operations`
-     - `SETBIT`
-     - `GETBIT`
-     - `BITCOUNT`
-     - `BITOP`
-     - `BITPOS`
-     - `BITFIELD`
-     - `BITOP`
-  - `Geospatial Operations`
-     - `GEOADD`
-     - `GEOPOS`
-     - `GEODIST`
-     - `GEORADIUS`
-     - `GEORADIUSBYMEMBER`
-     - `GEOHASH`
-     - `GEOSEARCH`
-     - `GEOSEARCHSTORE`
+  - **String Operations (cli and node.js)** →
+    `set name`, `get name`, `setnx`, `MSET`, `MGET`, `INCR`, `INCRBY`, `GETRANGE`, `SETRANGE`, `GETRANGE`, `STRLEN`, `APPEND`, `SETEX`, `SETNX`, `MSETNX`, `SETRANGE`, `GETRANGE`, `STRLEN`, `DECR`, `DECRBY`, `PSETEX`
+  - **List Operations (cli and node.js)**  →
+    `LPUSH` (Stack & Queue Concept), `RPUSH` (Stack & Queue Concept), `LPOP`, `RPOP`, `LLEN`, `LRANGE`, `LINDEX`, `LINSERT`, `LSET`, `LTRIM`, `LREM`, `RPOPLPUSH`, `BLPOP`, `BRPOP`, `BRPOPLPUSH`
+  - **Set Operations (cli and node.js)** →
+    `SADD`, `SREM`, `SISMEMBER`, `SMEMBERS`, `SPOP`, `SRANDMEMBER`, `SMOVE`, `SCARD`, `SINTER`, `SUNION`, `SDIFF`, `SDIFF`, `SINTERSTORE`, `SUNIONSTORE`, `SDIFFSTORE`, `SSCAN`
+  - **Hash Operations (cli and node.js)**  →
+    `HSET`, `HGET`, `HGETALL`, `HDEL`, `HEXISTS`, `HKEYS`, `HVALS`, `HLEN`, `HINCRBY`, `HINCRBYFLOAT`, `HMSET`, `HMGET`, `HSETNX`, `HSTRLEN`, `HSCAN` 
+  - **Sorted Set Operations (cli and node.js)**  →
+     `ZADD`, `ZREM`, `ZSCORE`, `ZRANGE`, `ZREVRANGE`, `ZRANGEBYSCORE`, `ZREVRANGEBYSCORE`, `ZCARD`, `ZCOUNT`, `ZINCRBY`, `ZLEXCOUNT`, `ZRANGEBYLEX`, `ZREVRANGEBYLEX`, `ZREMRANGEBYLEX`, `ZREMRANGEBYRANK`, `ZREMRANGEBYSCORE`, `ZUNIONSTORE`, `ZINTERSTORE`, `ZSCAN`, `ZPOPMIN`, `ZPOPMAX`, `BZPOPMIN`, `BZPOPMAX`, `ZRANK`
+     
+  - **REDIS STREAMS OPERATIONS (cli and node.js)**  →
+    `XADD`, `XLEN`, `XRANGE`, `XREVRANGE`, `XREAD`, `XREADGROUP`, `XGROUP`, `XACK`, `XCLAIM`, `XDEL`, `XTRIM`, `XINFO`, `XSETID`, `XREWRITE`
+  - **Bitmaps Operations (cli and node.js)**  →
+    `GEOADD`, `GEOPOS`, `GEODIST`, `GEORADIUS`, `GEORADIUSBYMEMBER`, `GEOHASH`, `GEOSEARCH`, `GEOSEARCHSTORE`
+     
 - Redis Pub/Sub
+  

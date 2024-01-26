@@ -438,6 +438,7 @@ npm run sortedset
 npm run stream
 npm run bitmap
 npm run geo
+npm run pubsub
 ```
 2. open the server/src/client.ts setup the redis client
 ```bash
@@ -451,7 +452,6 @@ const client = new Redis({
 export default client;
 ```
 3. open the 5.redis folder and you will get the following files
-
 - string.ts
 - list.ts
 - set.ts
@@ -460,10 +460,9 @@ export default client;
 - stream.ts
 - bitmap.ts
 - geo.ts
-Here you will get all the commands for string data structure in redis
+- pubsub.ts
 
-
-### Timecomplexity, Limitations , Use cases
+### Time complexity, Limitations, Use cases
 - Time Complexity
   - Hashes: O(1) for each key-value pair, O(N) for N key-value pairs.
   - Lists: O(1) for each push/pop operation, O(N) for N items in the list.
@@ -471,6 +470,8 @@ Here you will get all the commands for string data structure in redis
   - Sorted Sets: O(1) for each add/remove operation, O(log(N)+M) for N items in the sorted set and M elements returned.
   - Streams: O(1) for each item added to the stream, O(N) for N items in the stream.
   - Bitmaps: O(1) for each set bit, O(N) for N bits set.
+  - Geo: O(log(N)) for each item added to the sorted set, where N is the number of elements in the sorted set.
+  - Pub/Sub: O(N+M) for N channels and M subscribers.
 - Limitations
   - Hashes: The maximum number of fields is (2^32 - 1)4294967295, more than 4 billion of fields per hash).
   - Lists: The maximum number of elements is (2^32 - 1)4294967295, more than 4 billion of elements per list).
@@ -479,6 +480,7 @@ Here you will get all the commands for string data structure in redis
   - Streams: The maximum number of entries is (2^64 - 1)18446744073709551615, more than 18 quintillion of entries per stream).
   - Bitmaps: The maximum number of bits is (2^32 - 1)4294967295, more than 4 billion of bits per bitmap).
   - geo: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per geo set).
+  - Pub/Sub: The maximum number of channels is 2^32 - 1)4294967295, more than 4 billion of channels per Redis instance).
 - Use cases
   - Redis hash—Use hashes when you have a large number of fields to store. For example, you can use hashes to store user information, such as name, email, address, and more.
   - Redis list—Use lists when you want to store a list of items. For example, you can use lists to store a list of products, a list of users, and more.
@@ -487,6 +489,7 @@ Here you will get all the commands for string data structure in redis
   - Redis stream—Use streams when you want to store a list of items in a chronological order. For example, you can use streams to store a list of events, a list of messages, and more.
   - Bitmap — Use bitmaps when you want to store a list of items in a chronological order. For example, you can use bitmaps to store a list of events, a list of messages, and more.
   - Geo — Use geo when you want to store a list of items in a chronological order. For example, you can use geo to store a list of events, a list of messages, longitudes, latitudes, and more.
+  - Pub/Sub — Use pub/sub when you want to store a list of items in a chronological order. For example, you can use pub/sub to store a list of events, a list of messages, and more.
 
 
 ### Data Types
@@ -3145,6 +3148,160 @@ READ HERE: https://redis.io/docs/data-types/timeseries/
 ### Pub/Sub 
 
 Redis Pub/Sub implements the messaging system where the senders (publishers) sends the messages while the receivers (subscribers) receive them. The link between the publishers and subscribers is called channel.
+
+- Step 1: Open two terminals.
+
+- Open redis-cli in the first terminal and also in the second terminal. (steps are the given below)
+  - docker ps (to get the container id)
+  - if not running then run the container using docker start container_id or `docker start redis-stack` and then `docker exec -it redis-stack redis-cli` or `docker exec -it container_id bash` and then `redis-cli` to open redis-cli.
+
+- Now write the following command in the first terminal to subscribe to the channel.
+
+```bash
+SUBSCRIBE notifications
+```
+
+- Now write the following command in the second terminal to publish a message to the channel.
+
+```bash
+PUBLISH notifications "Hello, World!"
+```
+
+- You will see the following output in the first terminal.
+
+```bash
+Reading messages... (press Ctrl-C to quit)
+
+1) "subscribe"
+2) "notification"
+3) (integer) 1
+1) "message"
+2) "notification"
+3) "subham"
+
+Reading messages... (press Ctrl-C to quit)
+```
+
+It is beneficial when you want to scale your socket.io application. You can use redis pub/sub to communicate between multiple socket.io servers.
+
+Some Usecases of Redis Pub/Sub
+
+- Chat application
+- Real-time analytics
+- Real-time notifications
+- Distributed locks
+- Distributed cache invalidation
+- Distributed session management
+- Distributed job queue
+- Distributed event-driven programming
+- Distributed publish/subscribe system
+- Distributed system monitoring
+- Distributed system coordination
+- Distributed system configuration
+
+#### Cli Commands
+
+- [**Pub/Sub**](#pubsub)
+    - [**9.1. SUBSCRIBE**](#91subscribe)
+    - [**9.2. UNSUBSCRIBE**](#92unsubscribe)
+    - [**9.3. PUBLISH**](#93publish)
+    - [**9.4. PUBSUB**](#94pubsub)
+
+
+##### 9.1.SUBSCRIBE
+
+This command subscribes to the specified channels.
+
+```bash
+
+SUBSCRIBE notifications
+
+Reading messages... (press Ctrl-C to quit)
+
+1) "subscribe"
+
+2) "notifications"
+
+3) (integer) 1
+```
+
+##### 9.2.UNSUBSCRIBE
+
+This command unsubscribes from the specified channels.
+
+```bash
+
+SUBSCRIBE notifications
+
+Reading messages... (press Ctrl-C to quit)
+
+1) "subscribe"
+
+2) "notifications"
+
+3) (integer) 1
+
+UNSUBSCRIBE notifications
+
+Reading messages... (press Ctrl-C to quit)
+
+1) "unsubscribe"
+
+2) "notifications"
+
+3) (integer) 0
+```
+
+##### 9.3.PUBLISH
+
+This command publishes the specified message to the specified channel.
+
+```bash
+
+SUBSCRIBE notifications
+
+Reading messages... (press Ctrl-C to quit)
+
+1) "subscribe"
+
+2) "notifications"
+
+3) (integer) 1
+
+PUBLISH notifications "Hello, World!"
+
+(integer) 1
+
+1) "message"
+
+2) "notifications"
+
+3) "Hello, World!"
+```
+
+##### 9.4.PUBSUB
+
+This command returns information about the channels.
+
+```bash
+
+SUBSCRIBE notifications
+
+Reading messages... (press Ctrl-C to quit)
+
+1) "subscribe"
+
+2) "notifications"
+
+3) (integer) 1
+
+PUBSUB CHANNELS
+
+1) "notifications"
+```
+
+
+
     
     
 
