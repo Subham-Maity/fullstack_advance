@@ -399,10 +399,10 @@ Sure, here's a more structured and detailed version of your content:
 
 ### [**5. Redis**]()
 
-#### Introduction:
+### Introduction:
 Redis is an open-source, in-memory key-value data store. It is versatile and can be used as a database, cache, and message broker. Redis supports various data structures such as Strings, Hashes, Lists, Sets, and more. It provides high availability via Redis Sentinel and automatic partitioning across multiple Redis nodes with Redis Cluster.
 
-#### Installation:
+### Installation:
 
 1. Download Docker Desktop from the official [Docker website](https://www.docker.com/products/docker-desktop).
 2. Install Docker Desktop and open it.
@@ -419,14 +419,14 @@ This command will run the Redis server on port 6379 and Redis Commander on port 
 
 Now, you can use the Redis server in your project.
 
-#### Redis CLI Commands:
+### Redis CLI Commands:
 
 1. Run `docker ps` in the terminal to check the running container and copy the container id.
 2. Use `docker exec -it <container_id> bash` to open the bash terminal of the container. For example: `docker exec -it 7b7e bash`.
 3. Type `redis-cli` to open the Redis CLI terminal.
 4. Type `ping` to check if the Redis server is running. If you get `PONG`, then the server is running.
 
-#### Nodejs Setup
+### Nodejs Setup
 
 1. open the 5.redis folder and run the following command
 ```bash
@@ -463,7 +463,7 @@ export default client;
 Here you will get all the commands for string data structure in redis
 
 
-#### Timecomplexity, Limitations , Use cases
+### Timecomplexity, Limitations , Use cases
 - Time Complexity
   - Hashes: O(1) for each key-value pair, O(N) for N key-value pairs.
   - Lists: O(1) for each push/pop operation, O(N) for N items in the list.
@@ -487,6 +487,9 @@ Here you will get all the commands for string data structure in redis
   - Redis stream—Use streams when you want to store a list of items in a chronological order. For example, you can use streams to store a list of events, a list of messages, and more.
   - Bitmap — Use bitmaps when you want to store a list of items in a chronological order. For example, you can use bitmaps to store a list of events, a list of messages, and more.
   - Geo — Use geo when you want to store a list of items in a chronological order. For example, you can use geo to store a list of events, a list of messages, longitudes, latitudes, and more.
+
+
+### Data Types
 
 #### String Data Structure:
 
@@ -3127,7 +3130,21 @@ geosearchstore user:2 frommember "subham" count 2
 (integer) 2
 ```
 
+#### Probabilistic Data Structures 
 
+You can use **probabilistic data structures** to store elements with a probability of false positives. It is similar to a set in other programming languages. Probabilistic data structures are often used to implement other data structures like bloom filters.
+
+READ HERE: https://redis.io/docs/data-types/probabilistic/t-digest/
+
+#### Time Series Data Structures
+
+A **time series data structure** is a collection of elements with a timestamp. It is similar to a map in other programming languages. Time series data structures are often used to implement other data structures like time series.
+
+READ HERE: https://redis.io/docs/data-types/timeseries/
+
+### Pub/Sub 
+
+Redis Pub/Sub implements the messaging system where the senders (publishers) sends the messages while the receivers (subscribers) receive them. The link between the publishers and subscribers is called channel.
     
     
 

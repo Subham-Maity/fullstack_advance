@@ -1,24 +1,22 @@
 # ⫸ Introduction
 
-This project offers a deep dive into advanced Node.js and TypeScript,
+This project offers a deep dive into advanced Node.js, TypeScript and Frontend with Next.js,
+Tailwind CSS, Redux Toolkit, RTK Query, and Validation, and so on.
 focusing on scalability and clean, production-ready code.
-It also serves as a boilerplate for future projects,
+It also serves as a boilerplate for your future projects,
 with every line of code meticulously documented for easy understanding.
 
-## ⫸ Levels
+## ⫸ Notes on the Project
 
 -  ### [✅READ HERE](README/NOTE.md)
 
 ---
 
-## ⫸ Installation
 
-- ### [✅READ HERE](README/START.md)
+## ⫸ You will learn the following things in this project 
 
----
-
-
-## ⫸ Steps
+Before starting the project, you should have a basic understanding of the following:
+`0.1` & `0.2` are not part of the project, but they are essential for the project. 
 
 ### 1. [Setting Up the Project Boilerplate](README/NOTE.md#1-perfect-boilerplate-for-starting-the-project)
 - Error Handling
@@ -104,7 +102,7 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
 - How to set up Redis with docker? (redis-stack and redis-client)
 - CLI commands for Redis
 - Redis with Node.js
-- Chapters
+- Data Types
   - String Operations (cli and node.js)
     - `set name`
     - `get name`
@@ -233,3 +231,4 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
      - `GEOHASH`
      - `GEOSEARCH`
      - `GEOSEARCHSTORE`
+- Redis Pub/Sub

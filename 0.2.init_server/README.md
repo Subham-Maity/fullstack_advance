@@ -1,1 +1,0 @@
-####  Please first add a mongodb url to the .env file
