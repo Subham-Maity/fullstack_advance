@@ -419,6 +419,20 @@ This command will run the Redis server on port 6379 and Redis Commander on port 
 
 Now, you can use the Redis server in your project.
 
+
+#### Timecomplexity & Limitations
+
+- Time Complexity 
+  - Hashes: O(1) for each key-value pair, O(N) for N key-value pairs.
+  - Lists: O(1) for each push/pop operation, O(N) for N items in the list.
+  - Sets: O(1) for each add/remove operation, O(N) for N items in the set.
+  - Sorted Sets: O(1) for each add/remove operation, O(log(N)+M) for N items in the sorted set and M elements returned.
+- Limitations
+  - Hashes: The maximum number of fields is (2^32 - 1)4294967295, more than 4 billion of fields per hash).
+  - Lists: The maximum number of elements is (2^32 - 1)4294967295, more than 4 billion of elements per list).
+  - Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per set).
+  - Sorted Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per sorted set).
+
 #### Redis CLI Commands:
 
 1. Run `docker ps` in the terminal to check the running container and copy the container id.
@@ -433,6 +447,7 @@ npm run string
 npm run list
 npm run set
 npm run hash
+npm run sortedset
 ```
 2. open the server/src/client.ts setup the redis client
 ```bash
@@ -451,6 +466,7 @@ export default client;
 - list.ts
 - set.ts
 - hash.ts
+- sortedset.ts
 Here you will get all the commands for string data structure in redis
 
 #### String Data Structure:
@@ -1736,6 +1752,475 @@ hscan user:1 0 match "na*"
 
    2) "subham"
 ```
+
+#### Sorted Set Operations with Redis
+
+A **sorted set data structure** is a collection of unique elements sorted by a score. It is similar to a sorted list in other programming languages. Priority queues are often implemented using a sorted set data structure. 
+
+##### Sorted Set Operations
+
+Here are some operations performed on a sorted set: 
+
+| Operation | Element | Score |
+|-----------|---------|-------|
+| Add       | 1       | 1     |
+| Add       | 2       | 2     |
+| Add       | 3       | 3     |
+| Remove    | 3       | 3     |
+| Remove    | 2       | 2     |
+| Remove    | 1       | 1     |
+
+##### Cli Commands
+
+- [**Sorted Set Data Structure**](#sorted-set-data-structure)
+    - [**5.1. ZADD**](#51zadd)
+    - [**5.2. ZREM**](#52zrem)
+    - [**5.3. ZSCORE**](#53zscore)
+    - [**5.4. ZRANGE**](#54zrange)
+    - [**5.5. ZREVRANGE**](#55zrevrange)
+    - [**5.6. ZRANGEBYSCORE**](#56zrangebyscore)
+    - [**5.7. ZREVRANGEBYSCORE**](#57zrevrangebyscore)
+    - [**5.8. ZCARD**](#58zcard)
+    - [**5.9. ZCOUNT**](#59zcount)
+    - [**5.10. ZINCRBY**](#510zincrby)
+    - [**5.11. ZLEXCOUNT**](#511zlexcount)
+    - [**5.12. ZRANGEBYLEX**](#512zrangebylex)
+    - [**5.13. ZREVRANGEBYLEX**](#513zrevrangebylex)
+    - [**5.14. ZREMRANGEBYLEX**](#514zremrangebylex)
+    - [**5.15. ZREMRANGEBYRANK**](#515zremrangebyrank)
+    - [**5.16. ZREMRANGEBYSCORE**](#516zremrangebyscore)
+    - [**5.17. ZUNIONSTORE**](#517zunionstore)
+    - [**5.18. ZINTERSTORE**](#518zinterstore)
+    - [**5.19. ZSCAN**](#519zscan)
+
+
+##### 5.1.ZADD
+
+This command adds the specified member to the sorted set with the specified score.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zrange user:1 0 -1 withscores
+
+1) "subham"
+
+2) "1"
+
+3) "codexam"
+
+4) "2"
+
+5) "xamcodexam"
+
+6) "3"
+```
+
+
+Visualize the sorted set in the Redis Commander.
+
+| Index | Element    | Score |
+|-------|------------|-------|
+| 0     | subham     | 1     |
+| 1     | codexam    | 2     |
+| 2     | xamcodexam | 3     |
+
+
+##### 5.2.ZREM
+
+This command removes the specified member from the sorted set.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zrem user:1 "subham"
+
+zrange user:1 0 -1 withscores
+
+1) "codexam"
+
+2) "2"
+
+3) "xamcodexam"
+
+4) "3"
+```
+
+##### 5.3.ZSCORE
+
+
+This command returns the score of the specified member in the sorted set.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zscore user:1 "subham"
+
+"1"
+```
+
+##### 5.4.ZRANGE
+
+This command returns the specified range of elements from the sorted set.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zrange user:1 0 -1 withscores
+
+1) "subham"
+
+2) "1"
+
+3) "codexam"
+
+4) "2"
+
+5) "xamcodexam"
+
+6) "3"
+```
+
+##### 5.5.ZREVRANGE
+
+This command returns the specified range of elements from the sorted set in reverse order.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zrevrange user:1 0 -1 withscores
+
+1) "xamcodexam"
+
+2) "3"
+
+3) "codexam"
+
+4) "2"
+
+5) "subham"
+
+6) "1"
+```
+
+##### 5.6.ZRANGEBYSCORE
+
+This command returns the specified range of elements from the sorted set by score.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+
+zadd user:1 3 "xamcodexam"
+
+zrangebyscore user:1 1 2 withscores
+
+1) "subham"
+
+2) "1"
+
+3) "codexam"
+
+4) "2"
+```
+
+##### 5.7.ZREVRANGEBYSCORE
+
+This command returns the specified range of elements from the sorted set by score in reverse order.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+
+zadd user:1 3 "xamcodexam"
+
+zrevrangebyscore user:1 2 1 withscores
+
+1) "codexam"
+
+2) "2"
+
+3) "subham"
+
+4) "1"
+```
+
+##### 5.8.ZCARD
+
+This command returns the number of elements in the sorted set.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+
+zadd user:1 3 "xamcodexam"
+
+zcard user:1
+
+(integer) 3
+```
+
+##### 5.9.ZCOUNT
+
+This command returns the number of elements in the sorted set with a score between the specified minimum and maximum.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zcount user:1 1 2
+
+(integer) 2
+```
+
+##### 5.10.ZINCRBY
+
+This command increments the score of the specified member in the sorted set by the specified value.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zincrby user:1 2 "subham"
+
+
+zrange user:1 0 -1 withscores
+
+1) "subham"
+
+2) "3"
+```
+
+##### 5.11.ZLEXCOUNT
+
+This command returns the number of elements in the sorted set between the specified minimum and maximum.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zlexcount user:1 - +
+
+(integer) 3
+```
+
+##### 5.12.ZRANGEBYLEX
+
+This command returns the specified range of elements from the sorted set by lexicographical order.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+zrangebylex user:1 - +
+
+1) "codexam"
+
+2) "subham"
+
+3) "xamcodexam"
+```
+
+##### 5.13.ZREVRANGEBYLEX
+
+This command returns the specified range of elements from the sorted set by lexicographical order in reverse order.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+
+zrevrangebylex user:1 + -
+
+1) "xamcodexam"
+
+2) "subham"
+
+3) "codexam"
+```
+
+##### 5.14.ZREMRANGEBYLEX
+
+This command removes the specified range of elements from the sorted set by lexicographical order.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:1 3 "xamcodexam"
+
+
+zremrangebylex user:1 - +
+
+(integer) 3
+```
+
+##### 5.15.ZREMRANGEBYRANK
+
+This command removes the specified range of elements from the sorted set by index.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+
+zadd user:1 3 "xamcodexam"
+
+zremrangebyrank user:1 0 1
+
+(integer) 2
+```
+
+##### 5.16.ZREMRANGEBYSCORE
+
+This command removes the specified range of elements from the sorted set by score.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+
+zadd user:1 3 "xamcodexam"
+
+zremrangebyscore user:1 1 2
+
+(integer) 2
+```
+
+##### 5.17.ZUNIONSTORE
+
+This command stores the union of all the sorted sets specified.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:2 3 "xamcodexam"
+
+zunionstore user:3 2 user:1 user:2
+
+(integer) 3
+
+zrange user:3 0 -1 withscores
+
+1) "subham"
+
+2) "1"
+
+3) "codexam"
+
+4) "2"
+
+5) "xamcodexam"
+
+6) "3"
+```
+
+##### 5.18.ZINTERSTORE
+
+This command stores the intersection of all the sorted sets specified.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:2 3 "xamcodexam"
+
+zinterstore user:3 2 user:1 user:2
+
+(integer) 1
+
+zrange user:3 0 -1 withscores
+
+1) "xamcodexam"
+
+2) "3"
+```
+
+##### 5.19.ZSCAN
+
+This command scans the sorted set for members matching the specified pattern.
+
+```bash
+
+zadd user:1 1 "subham"
+
+zadd user:1 2 "codexam"
+
+zadd user:2 3 "xamcodexam"
+
+zscan user:1 0 match "sub*"
+
+1) "0"
+
+2) 1) "subham"
+
+   2) "1"
+```
+
+
+
+
 
 
 

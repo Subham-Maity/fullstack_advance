@@ -10,3 +10,5 @@ Example:
 - set - `npm run set`
 
 - hash - `npm run hash`
+
+- sorted set - `npm run sortedset`

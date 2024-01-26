@@ -1,7 +1,6 @@
 import client from './server/src/client';
 
 async function init() {
-    // ... Previous code ...
 
     // 4.1 HSET
     await client.hset('user:1', 'name', 'subham');

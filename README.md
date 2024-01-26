@@ -177,6 +177,25 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
      - `HSETNX`
      - `HSTRLEN`
      - `HSCAN`
-  
+  - `Sorted Set Operations` (cli and node.js) 
+     - `ZADD`
+     - `ZREM`
+     - `ZSCORE`
+     - `ZRANGE`
+     - `ZREVRANGE`
+     - `ZRANGEBYSCORE`
+     - `ZREVRANGEBYSCORE`
+     - `ZCARD`
+     - `ZCOUNT`
+     - `ZINCRBY`
+     - `ZLEXCOUNT`
+     - `ZRANGEBYLEX`
+     - `ZREVRANGEBYLEX`
+     - `ZREMRANGEBYLEX`
+     - `ZREMRANGEBYRANK`
+     - `ZREMRANGEBYSCORE`
+     - `ZUNIONSTORE`
+     - `ZINTERSTORE`
+     - `ZSCAN`
 
 
