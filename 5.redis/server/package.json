@@ -20,7 +20,8 @@
     "set": "nodemon --exec ts-node ../set.ts",
     "hash": "nodemon --exec ts-node ../hash.ts",
     "sortedset": "nodemon --exec ts-node ../sorted-set.ts",
-    "stream": "nodemon --exec ts-node ../stream.ts"
+    "stream": "nodemon --exec ts-node ../stream.ts",
+    "bitmap": "nodemon --exec ts-node ../bitmaps.ts"
   },
   "keywords": [],
   "dependencies": {

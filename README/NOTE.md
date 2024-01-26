@@ -436,6 +436,7 @@ npm run set
 npm run hash
 npm run sortedset
 npm run stream
+npm run bitmap
 ```
 2. open the server/src/client.ts setup the redis client
 ```bash
@@ -456,6 +457,7 @@ export default client;
 - hash.ts
 - sortedset.ts
 - stream.ts
+- bitmap.ts
 Here you will get all the commands for string data structure in redis
 
 
@@ -466,18 +468,21 @@ Here you will get all the commands for string data structure in redis
   - Sets: O(1) for each add/remove operation, O(N) for N items in the set.
   - Sorted Sets: O(1) for each add/remove operation, O(log(N)+M) for N items in the sorted set and M elements returned.
   - Streams: O(1) for each item added to the stream, O(N) for N items in the stream.
+  - Bitmaps: O(1) for each set bit, O(N) for N bits set.
 - Limitations
   - Hashes: The maximum number of fields is (2^32 - 1)4294967295, more than 4 billion of fields per hash).
   - Lists: The maximum number of elements is (2^32 - 1)4294967295, more than 4 billion of elements per list).
   - Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per set).
   - Sorted Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per sorted set).
   - Streams: The maximum number of entries is (2^64 - 1)18446744073709551615, more than 18 quintillion of entries per stream).
+  - Bitmaps: The maximum number of bits is (2^32 - 1)4294967295, more than 4 billion of bits per bitmap).
 - Use cases
   - Redis hash—Use hashes when you have a large number of fields to store. For example, you can use hashes to store user information, such as name, email, address, and more.
   - Redis list—Use lists when you want to store a list of items. For example, you can use lists to store a list of products, a list of users, and more.
   - Redis set—Use sets when you want to store a unique list of items. For example, you can use sets to store a list of tags, a list of followers, and more.
   - Redis sorted set—Use sorted sets when you want to store a list of items in a sorted order. For example, you can use sorted sets to store a list of products sorted by price, a list of users sorted by age, and more.
   - Redis stream—Use streams when you want to store a list of items in a chronological order. For example, you can use streams to store a list of events, a list of messages, and more.
+  - Bitmap — Use bitmaps when you want to store a list of items in a chronological order. For example, you can use bitmaps to store a list of events, a list of messages, longitudes, latitudes, and more.
 
 #### String Data Structure:
 
@@ -2805,6 +2810,135 @@ xrewrite user:1
 
 (integer) 1
 ```
+
+#### Redis Bitmaps
+
+A **bitmap data structure** is a collection of bits. It is similar to an array in other programming languages. Bitmaps are often used to implement other data structures like sets and bloom filters.
+
+##### Cli Commands
+
+- [**Redis Bitmaps**](#redis-bitmaps)
+    - [**7.1. SETBIT**](#71setbit)
+    - [**7.2. GETBIT**](#72getbit)
+    - [**7.3. BITCOUNT**](#73bitcount)
+    - [**7.4. BITOP**](#74bitop)
+    - [**7.5. BITPOS**](#75bitpos)
+    - [**7.6. BITFIELD**](#76bitfield)
+
+
+##### 7.1.SETBIT
+
+This command sets the bit at the specified index in the bitmap to either 1 or 0.
+
+```bash
+
+SETBIT pings:2024-01-01-00:00 123 1
+
+(integer) 0
+
+SETBIT pings:2024-01-01-00:00 456 1
+
+(integer) 0
+```
+
+##### 7.2.GETBIT
+
+This command returns the value of the bit at the specified index in the bitmap.
+
+```bash
+
+SETBIT pings:2024-01-01-00:00 123 1
+
+(integer) 0
+
+
+GETBIT pings:2024-01-01-00:00 123
+
+(integer) 1
+```
+
+##### 7.3.BITCOUNT
+
+This command returns the number of bits set to 1 in the bitmap.
+
+```bash
+
+SETBIT pings:2024-01-01-00:00 123 1
+
+(integer) 0
+
+
+SETBIT pings:2024-01-01-00:00 456 1
+
+(integer) 0
+
+  
+BITCOUNT pings:2024-01-01-00:00
+
+(integer) 2
+```
+
+##### 7.4.BITOP
+
+This command performs a bitwise operation between the bitmaps and stores the result in the destination bitmap.
+
+```bash
+
+SETBIT pings:2024-01-01-00:00 123 1
+
+(integer) 0
+
+
+SETBIT pings:2024-01-01-00:00 456 1
+
+(integer) 0
+
+
+BITOP AND pings:2024-01-01-00:00 pings:2024-01-01-00:00 pings:2024-01-01-00:00
+
+(integer) 2
+```
+
+##### 7.5.BITPOS
+
+This command returns the index of the first bit set to 1 or 0 in the bitmap.
+
+```bash
+
+SETBIT pings:2024-01-01-00:00 123 1
+
+(integer) 0
+
+
+BITPOS pings:2024-01-01-00:00 1
+
+(integer) 123
+```
+
+##### 7.6.BITFIELD
+
+This command performs a bitwise operation between the bitmaps and stores the result in the destination bitmap.
+
+```bash
+
+BITFIELD pings:2024-01-01-00:00 INCRBY i5 100 1 GET u4 0
+
+1) (integer) 0
+
+2) (integer) 0
+
+3) (integer) 0
+
+4) (integer) 0
+.....
+```
+
+
+
+
+
+
+
 
 
  

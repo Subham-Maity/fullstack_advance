@@ -14,3 +14,5 @@ Example:
 - sorted set - `npm run sortedset`
 
 - stream - `npm run stream`
+
+- bitmap - `npm run bitmap`

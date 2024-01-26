@@ -216,3 +216,11 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
      - `XINFO`
      - `XSETID`
      - `XREWRITE`
+  - `Bitmaps Operations`
+     - `SETBIT`
+     - `GETBIT`
+     - `BITCOUNT`
+     - `BITOP`
+     - `BITPOS`
+     - `BITFIELD`
+     - `BITOP`
