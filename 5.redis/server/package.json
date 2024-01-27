@@ -30,6 +30,7 @@
     "@aws-sdk/client-s3": "^3.485.0",
     "@aws-sdk/s3-request-presigner": "^3.485.0",
     "aws-sdk": "^2.1531.0",
+    "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "compression": "^1.7.4",
     "concurrently": "^7.4.0",

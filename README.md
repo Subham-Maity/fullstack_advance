@@ -120,4 +120,4 @@ https://github.com/Subham-Maity/CodeXamAsset/assets/97989643/a7a17b45-1db4-4cd2-
     `GEOADD`, `GEOPOS`, `GEODIST`, `GEORADIUS`, `GEORADIUSBYMEMBER`, `GEOHASH`, `GEOSEARCH`, `GEOSEARCHSTORE`
      
 - Redis Pub/Sub
-  
+- Scale A Node.js Application with Redis  

@@ -2,6 +2,7 @@ make sure you put env variable in .env file and add MONGO_URL
 
 ##### START: `npm run <data structure>`
 Example: 
+- scale a server with redis: `npm run dev`
 
 - string - `npm run string`
 

@@ -1,408 +1,8 @@
-## Introduction
 
-If you’re familiar with Node.js basics, start by running the code. As you explore and read the comments, you’ll gradually understand how it works.
-
-- Click on the header it will redirect to the respective codebase, download the code and run it.
-___________
-
-### [**1. Perfect Boilerplate For Starting The Project**](https://github.com/Subham-Maity/auth_advance/tree/2850177ad4eafe1679648ee9bf7140e7b6a1de5b)
-
-  ⁙⫸ This boilerplate is perfect for starting a project without any `schema`, `controller`, `routes`, or `authentication`.
-
-
-#### **Getting Started**:
-
-1. **Setup**: Rename the `.env.example` to `.env` and replace the `MONGO_URL=""` with your own MongoDB URL.
-2. **Installation**: Run `npm install` or `yarn install` to install the necessary dependencies.
-3. **Running the Project**: Use `npm run dev` or `yarn dev` to start the project.
-
-#### **Additional Information**:
-
-  - If any dependency is missing, install it manually.
-  - If any dependency needs to be updated, update it manually or use `npm outdated` or `yarn outdated` to check the outdated dependencies. Then use `npm update` or `yarn update` to update the dependencies.
-  - You can change the port number in the `.env` file as per your requirements.
-
-___________
-
-
-### [**2. Cookie-based Proper Authentication with Server Token (Stateful)**](https://github.com/Subham-Maity/rest_advance/tree/98c41fb3375e4f0aa9a7f04e0d807582ca2aa54e)
-
-
-⁙⫸ With Authentication + User Operations
-#### **Understanding the Flow**:
-- Receive an email and password from the user.
-- Hash the password for security.
-- Save the email and hashed password in the database.
-- When the user logs in with their email and password, verify the credentials.
-- If the credentials are valid, generate a session token.
-- Send the session token to the client.
-- The client stores the token and sends it back in the header for subsequent requests.
-- For each request, verify the session token.
-- If the token is valid, process the request and send the data to the client.
-
-#### **Contents**:
-
-- **User Schema (Mongoose)**: Includes `email`, `username`, and `authentication` (which consists of `password`, `salt`,
-  and `sessionToken`).
-- **User Type Defined**
-- **Middleware**: This includes two types:
-    - **Owner**: Ensures the user is the owner of the account.
-    - **Authenticated**: Ensures the user is authenticated.
-    - **Error Handler**: Handles the error.
-- **Utils**: This includes crypto for salt and hash password and generate session token.
-- **Controller**: This includes `auth` (with `register` and `login` methods) and `User` (
-  with `getAllUser`, `updateUserById`, and `deleteUserById` methods).
-
-#### **Routes**:
-
-- **Auth**
-    - `register`: POST request to `/api/v1/auth/register`
-        - Example body:
-      ```json
-      {
-        "email": "subham@gmail.com",
-        "password": "Subham@123#86!GitHub_DeVeLoPeR",
-        "username": "Subham"
-      }
-      ```
-    - `login`: POST request to `/api/v1/auth/login`
-        - Example body:
-      ```json
-      {
-        "email": "subham@gmail.com",
-        "password": "Subham@123#86!GitHub_DeVeLoPeR",
-        "username": "Subham"
-      }
-      ```
-- **User**
-    - `getAllUser`: GET request to `/api/v1/users`. This is wrapped with
-      the `authentication` middleware, so you need to log in first to get the data.
-    - `updateUserById`: PATCH request to `/api/v1/users/{id}`. This is wrapped with
-      the `authentication` and `owner` middleware, so you need to log in first to update the data.
-        - Example body:
-      ```json
-      {
-        "username": "XAM"
-      }
-      ```
-    - `deleteUserById`: DELETE request to `/api/v1/users/{id}`. This is wrapped with
-      the `authentication` and `owner` middleware, so you need to log in first to delete the data.
-
-
-___________
-
-
-### [**3. JWT-based Authentication with Access Tokens & Refresh Tokens (Stateless)**](https://github.com/Subham-Maity/fullstack_advance/tree/b103a3011692cbfa9620e8fa7e5b9f9af06292f9)
-
-### **○** Frontend: [**Next.js**](https://nextjs.org/)
-### **○** Backend: [**Express.js**](https://expressjs.com/)
-
-
-#### **Introduction**:
-- **Access Token**: A short-lived token that is used to access protected resources on behalf of the user.
-- **Refresh Token**: A long-lived token that is used to refresh the access token when it expires.
-- **JWT** - JWT is a string that has three parts separated by dots. Each part is a base64url encoded string of the header, payload, and signature.
-  - JWT - `HEADER`.`PAYLOAD`.`SIGNATURE`
-     
-    - `HEADER` - "alg": "HS256", "typ": "JWT"
-    - `PAYLOAD` - sessionID: "1234567890", "email": "subham@gmail.com", "username": "Subham"(Don't store sensitive data like password)
-    - encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64')
-    - `SIGNATURE` - crypto.createHmac('sha256', secret).update(encodedHeader + '.' + encodedPayload).digest('base64')
-#### **Understanding the Flow**:
-
-⁙⫸ With Authentication + User Operations
-
-#### **Understanding the Flow**:
-![JWT](../images/JWT.png)
-- User logs in with their credentials (username, password, etc.).
-- Server verifies the credentials. If they're valid, the server generates an Access Token and a Refresh Token.
-- The Access Token is a short-lived token (usually about 15 minutes to 1 hour) that carries the user information necessary to access a resource.
-- The Refresh Token is a long-lived token (usually about 2 weeks to 6 months) that's used to request new Access Tokens.
-- The Server sends both tokens to the client.
-- Client stores the tokens. The Access Token is used for making authenticated requests.
-- When the Access Token expires, the client uses the Refresh Token to request a new Access Token.
-- Server verifies the Refresh Token and issues a new Access Token (and possibly a new Refresh Token).
-- If the Refresh Token is expired or invalid, the user will need to authenticate again to get a new pair of tokens.
-
-#### **TOKEN Mechanism**:
--  ##### [✅READ HERE](./JWT_TOKEN.md)
-
-#### **Instructions**:
-
-You will get two folders[`Stateful` , `Stateless`] in `model`,`middleware`,`routes`,`utils` and `controller` folder. 
-- **Stateful**: This is the cookie-based authentication with server token.
-- **Stateless**: This is the JWT-based authentication with access token and refresh token.
-
-*purpose* : To understand the difference between stateful and stateless authentication.
-
-#### **Contents**:
-
-- `Client`: This includes our frontend code using Next.js 14
-- `Server`: Here you will get all the server-side code.
-
-##### `Client`:
-- Components 
-  - **Username**
-    - Formik Validation
-    - Toast (initialValues, validate)
-    - Error Handling (Yup)
-    - Types (validation.ts)
-    - Redux (userSlice)- For storing the username
-    - Username Validation using API (Check if the username is already present in the database or not only authorized/register users from the database are permitted to proceed to the next page)
-
-  - **Password**
-    - Formik Validation
-    - Toast (initialValues, validate)
-    - Error Handling (Yup)
-    - Types (validation.ts)
-    - V1(Async Thunk and AXIOS ) and V2 (RTK Query and js-cookie and AXIOS)—For storing the access token and refresh token (Both implementations are correct, but V2 is the best practice)
-  - **Recovery**
-    - OTP to reset password
-    - OTP verification
-
-  - **Reset**
-    - Formik Validation
-    - Toast (initialValues, validate)
-    - Error Handling (Yup)
-    - Types (validation.ts)
-    - Reset Password using API
-    - Handle the error (API)
-    - Handle the ResetSession (API)
-
-  - **Register (Register User)**
-    - Convert: convert the file to a Base64 string
-    - Formik Validation
-    - Toast (initialValues, validate , User Existence)
-    - Error Handling (Yup)
-    - Types (validation.ts)
-    - Email Send API
-    - Register User using API
-    - Delete Profile Picture
-    - Get a Profile Picture
-    - Hook - useMutation (react-query)
-    - Hook - useQuery (react-query)
-    - S3 Bucket (AWS) (READ HERE - [S3 Bucket](./S3WITH_REGISTER.md))
-  - **Profile**
-    - Convert: convert the file to a Base64 string
-    - Formik Validation
-    - Toast (initialValues, validate)
-    - Error Handling (Yup)
-    - Types (validation.ts)
-    - Refresh Token (Cookie) & Access Token (Redux Store)
-    - Use RTK Query (react-query) for put request (update user data)
-    - Use RTK Query (react-query) for get access token and refresh token
-    - Redux Persist (Redux Toolkit)—For storing the access token when the user refreshes the page it will not log out the user
-    - Username from token (JWT Decode) (Fetch Hook)
-
-- **api** - Using Axios (Custom Hooks)
-  - Authentication: For checking the user is authenticated or not
-  - Auth: 
-    - Login: Log in the user
-    - Register: Register the user
-    - Reset Password: Reset the password
-  - Mail: 
-    - Send Mail: Send mail to the user according to the user action
-  - OTP: 
-    - Generate OTP: Generate OTP for the user
-    - Verify OTP: Verify the OTP 
-  - User
-    - Get User: Get the user data 
-    - Update User: Update the user data
-    - Delete Profile Picture: Delete the profile picture from the S3 bucket
-    - Get Profile Picture: Get the profile picture from the S3 bucket 
-- **REDUX** - Using Redux Toolkit
-    - user-userSlice-For storing the username 
-    - user-profilePicOwnerSlice-For storing the profile picture owner 
-- **Hook**  
-    - axios—for making the API call
-    - fetch—useFetch (custom hook) for fetching user data
-    - useMutation—useMutation (react-query) for updating the user data 
-    - useQuery—useQuery (react-query) for fetching user data 
-- **Middleware** - Protected Routes (User, Profile)
-##### `Server`:  
-- **User Type Defined**
-- **User Schema (Mongoose):** Includes `username`, `password`, `email`, `firstName`, `lastName`, `mobile`, `address`, `profile`.
-- **utils:** 
-   - bcrypt—for hashing the password  
-   - token - `jwtAccess` (create access token), `jwtRefresh` (create refresh token), `tokenEncrypt` (encrypt the token), `tokenDecrypt` (crupto for encrypt and decrypt the refresh token) , `tokenVerify` (verify the token) , `saveToken` (save the Refresh Token in the database) `jwtSign`(sign the token) , `jwtVerify`(verify the token)...  [more](./JWT_TOKEN.md)  
-   - mail - `sendMail` (send mail to the user)(nodemailer) normal mail and template mail 
-   - gmail-smtp - `sendGMail` (send mail to the user)(nodemailer) normal mail and template mail
-   - gmail0Auth - `sendGMail0Auth` (send mail to the user)(nodemailer) normal mail and template mail - Check all the steps in [0AuthSetps.md](./0AuthSetps.md)
-- **Middleware**: 
-   - **Owner**: Ensures the user is the owner of the account.
-   - **Authenticated**: Ensures the user is authenticated and the token is valid.
-   - **Error Handler**: Handles the error.
-- **Controller**: This includes 
-   - `auth` - `register`(register a user), `login`(log in a user), `generateAccessTokenHandler`(Refresh Token Generate), `logoutHandler`(Clear token),`verifyUser`(verify if the user exists in the database before login), checkUserExistence (check if the user exists in the database)
-   - `user` -  `getUser`(get user data without a password), `updateUser`(update user data)
-   - `OTP` - `generateOTP`(Generate OTP), `verifyOTP`(Verify the OTP)
-- **Routes**:
-    - **Auth**
-      - `register`: POST request to `/api/v2/auth/register`
-      - Example body:
-      ```json
-               {
-                 "username" : "codexam_123",
-                 "password" : "Codexam@123",
-                 "email": "subham@codexam.com",
-                 "firstName" : "Subham",
-                 "lastName": "Maity",
-                 "mobile": "1234567890",
-                 "address" : "india",
-                 "profile": ""
-                }
-      ```
-      - `login`: POST request to `/api/v2/auth/login` wrap with `verifyUser` controller
-      - Example body:
-      ```json
-              {
-               "username" : "codexam_123",
-               "password" : "Codexam@123"
-               }
-      ```
-      - `reset password`: PUT request to `/api/v2/auth/resetPassword` wrap with `verifyUser` controller 
-      - But before that you have to generate OTP and verify it then you can reset the password
-      - `api/v2/auth/generateOTP?username=codexam_123`
-      - `api/v2/auth/verifyOTP?username=codexam_123&code=427638`
-      - Then you can reset the password
-      - Example body:
-      
-      ```json
-           {
-            "username" : "codexam_123",
-            "password" : "Codexam@123"
-            }
-      ```
-  - **Auth/VerifyUser**
-      - `POST request to /api/v2/auth/verifyUser` 
-      - Example body:
-      ```json
-             {
-               "username" : "codexam_123"
-             }
-      ```
-      - `logout`: DELETE request to `/api/v2/auth/token`
-      - Example body:
-      ```json
-             {
-               "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-             }
-      ```  
-  - **Auth/Token**
-      - `get refressToken`: POST request to `/api/v2/auth/token`
-      - Example body:
-      ```json
-             {
-               "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-             }
-      ```
-      - `logout`: DELETE request to `/api/v2/auth/token`
-      - Example body:
-      ```json
-             {
-               "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-             }
-      ```
-  - **User**
-      - `get User`: GET request to `/api/v2/user/codexam_123` here `codexam_123` is the username
-      - `update User`: PUT request to `/api/v2/updateuser?id=658ec47dcb30d4ea193d457a` here `658ec47dcb30d4ea193d457a` is the id wrap with `authenticated` and `owner` middleware
-      - Example body:
-      ```json
-             {
-               "username" : "codexam_123",
-               "password" : "Codexam@123",
-               "email": "Subham@Codexam.com"
-             }
-            
-      ```
-  - **Auth/OTP**
-    - `get OTP`: GET request to `/api/v2/auth/generateOTP?username=codexam_123` here `codexam_123` is the username you have to pass in the query parameter and wrap with `authenticated` middleware
-    - `verify OTP`: GET request to `http://localhost:5050/api/v2/auth/verifyOTP?username=codexam_123&code=427638` here `codexam_123` is the username and `427638` is the OTP you have to pass in the query parameter 
-        and wrap with `authenticated` middleware
-  - **Auth/createResetSession**
-    - `get Session Flag`: GET request to `/api/v2/auth/createResetSession` you will get flag `true` or `false` if the flag is `true` then you can reset the password
-  - **MAIL/EMAIL**
-      - `send mail`: POST request to `/api/v2/mail-v1/registerMail`
-      - Example body:
-      ```json
-              {
-               "username" : "codexamA_123",
-               "userEmail" : "codexam@xam.com",
-               "text" : "New User Registered",
-               "subject" : "New User Registered"
-              }
-      ```  
-  - **MAIL/GMAIL/SMTP**
-   - `Go to https://myaccount.google.com/security`
-   - `Enable 2-Step Verification`
-   - `Create App Password https://myaccount.google.com/apppasswords`
-      - `send mail`: POST request to `/api/v2/mail-v1/registerGMail`
-      - Example body:
-      ```json
-              {
-               "username" : "codexamA_123",
-               "userEmail" : "codexam@xam.com",
-               "text" : "New User Registered",
-               "subject" : "New User Registered"
-              }
-      ```          
-  - **MAIL/GMAIL/0Auth**
-    Check all the steps in [0AuthSetps.md](./0AuthSetps.md)
-      - `send mail`: POST request to `/api/v2/mail-v1/registerGMail0Auth`
-      - Example body:
-      ```json
-              {
-               "username" : "codexamA_123",
-               "userEmail" : "codexam@xam.com",
-               "text" : "New User Registered",
-               "subject" : "New User Registered"
-              }
-      ```      
-  - **S3 Bucket**
-    Check all the steps in [S3 Setup](./S3Steps.md) and also understand how I set up the S3 bucket in the frontend and backend [Here](./S3WITH_REGISTER.md)
-  
-    - `Get Owner Profile Pic`: POST request to `/api/v2/storage-v1/s3/get-owner-image`
-    - post with user's profile data
-    - Example body:
-      ```json
-       {
-         "requestedImageName":"4515e1be62e98"
-       }
-      ```    
-    - `Get Owner Profile Pic`: POST request to `/api/v2/storage-v1/s3/get-owner-image`
-    - post with user's profile data
-    - Example body:
-      ```json
-       {
-         "requestedImageName":"4515e1be62e98"
-       }
-      ``` 
-    - `Delete Owner Profile Pic`: POST request to `/api/v2/storage-v1/s3/remove-owner-image`
-    - post with user's profile data
-    - Example body:
-      ```json
-       {
-         "requestedImageName":"4515e1be62e98"
-       }
-      ```
-    - `Register User Profile Pic`: POST request to `/api/v2/storage-v1/s3/images`
-      -  post with image data in binary format
-    - `Get User Profile Pic`: GET request to `/api/v2/storage-v1/s3/images`
-      -  Give you last uploaded image key
-    - `Delete All Keys`: DELETE request to `/api/v2/storage-v1/s3/clear-database-s3`
-      -  Delete all the keys from the database
-
-### [**4. Implementing Role-based Two-Factor Authentication with NextAuth**]()
-
-Sure, here's a more structured and detailed version of your content:
-
-
-### [**5. Redis**]()
-
-### Introduction:
+## Introduction:
 Redis is an open-source, in-memory key-value data store. It is versatile and can be used as a database, cache, and message broker. Redis supports various data structures such as Strings, Hashes, Lists, Sets, and more. It provides high availability via Redis Sentinel and automatic partitioning across multiple Redis nodes with Redis Cluster.
 
-### Installation:
+## Installation:
 
 1. Download Docker Desktop from the official [Docker website](https://www.docker.com/products/docker-desktop).
 2. Install Docker Desktop and open it.
@@ -419,14 +19,14 @@ This command will run the Redis server on port 6379 and Redis Commander on port 
 
 Now, you can use the Redis server in your project.
 
-### Redis CLI Commands:
+## Redis CLI Commands:
 
 1. Run `docker ps` in the terminal to check the running container and copy the container id.
 2. Use `docker exec -it <container_id> bash` to open the bash terminal of the container. For example: `docker exec -it 7b7e bash`.
 3. Type `redis-cli` to open the Redis CLI terminal.
 4. Type `ping` to check if the Redis server is running. If you get `PONG`, then the server is running.
 
-### Nodejs Setup
+## Nodejs Setup
 
 1. open the 5.redis folder and run the following command
 ```bash
@@ -465,73 +65,73 @@ export default client;
 - src/client.ts
 - src/todos.ts
 
-### Time complexity, Limitations, Use cases
+## Time complexity, Limitations, Use cases
 - Time Complexity
-  - Hashes: O(1) for each key-value pair, O(N) for N key-value pairs.
-  - Lists: O(1) for each push/pop operation, O(N) for N items in the list.
-  - Sets: O(1) for each add/remove operation, O(N) for N items in the set.
-  - Sorted Sets: O(1) for each add/remove operation, O(log(N)+M) for N items in the sorted set and M elements returned.
-  - Streams: O(1) for each item added to the stream, O(N) for N items in the stream.
-  - Bitmaps: O(1) for each set bit, O(N) for N bits set.
-  - Geo: O(log(N)) for each item added to the sorted set, where N is the number of elements in the sorted set.
-  - Pub/Sub: O(N+M) for N channels and M subscribers.
+    - Hashes: O(1) for each key-value pair, O(N) for N key-value pairs.
+    - Lists: O(1) for each push/pop operation, O(N) for N items in the list.
+    - Sets: O(1) for each add/remove operation, O(N) for N items in the set.
+    - Sorted Sets: O(1) for each add/remove operation, O(log(N)+M) for N items in the sorted set and M elements returned.
+    - Streams: O(1) for each item added to the stream, O(N) for N items in the stream.
+    - Bitmaps: O(1) for each set bit, O(N) for N bits set.
+    - Geo: O(log(N)) for each item added to the sorted set, where N is the number of elements in the sorted set.
+    - Pub/Sub: O(N+M) for N channels and M subscribers.
 - Limitations
-  - Hashes: The maximum number of fields is (2^32 - 1)4294967295, more than 4 billion of fields per hash).
-  - Lists: The maximum number of elements is (2^32 - 1)4294967295, more than 4 billion of elements per list).
-  - Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per set).
-  - Sorted Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per sorted set).
-  - Streams: The maximum number of entries is (2^64 - 1)18446744073709551615, more than 18 quintillion of entries per stream).
-  - Bitmaps: The maximum number of bits is (2^32 - 1)4294967295, more than 4 billion of bits per bitmap).
-  - geo: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per geo set).
-  - Pub/Sub: The maximum number of channels is 2^32 - 1)4294967295, more than 4 billion of channels per Redis instance).
+    - Hashes: The maximum number of fields is (2^32 - 1)4294967295, more than 4 billion of fields per hash).
+    - Lists: The maximum number of elements is (2^32 - 1)4294967295, more than 4 billion of elements per list).
+    - Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per set).
+    - Sorted Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per sorted set).
+    - Streams: The maximum number of entries is (2^64 - 1)18446744073709551615, more than 18 quintillion of entries per stream).
+    - Bitmaps: The maximum number of bits is (2^32 - 1)4294967295, more than 4 billion of bits per bitmap).
+    - geo: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per geo set).
+    - Pub/Sub: The maximum number of channels is 2^32 - 1)4294967295, more than 4 billion of channels per Redis instance).
 - Use cases
-  - Redis hash—Use hashes when you have a large number of fields to store. For example, you can use hashes to store user information, such as name, email, address, and more.
-  - Redis list—Use lists when you want to store a list of items. For example, you can use lists to store a list of products, a list of users, and more.
-  - Redis set—Use sets when you want to store a unique list of items. For example, you can use sets to store a list of tags, a list of followers, and more.
-  - Redis sorted set—Use sorted sets when you want to store a list of items in a sorted order. For example, you can use sorted sets to store a list of products sorted by price, a list of users sorted by age, and more.
-  - Redis stream—Use streams when you want to store a list of items in a chronological order. For example, you can use streams to store a list of events, a list of messages, and more.
-  - Bitmap — Use bitmaps when you want to store a list of items in a chronological order. For example, you can use bitmaps to store a list of events, a list of messages, and more.
-  - Geo — Use geo when you want to store a list of items in a chronological order. For example, you can use geo to store a list of events, a list of messages, longitudes, latitudes, and more.
-  - Pub/Sub — Use pub/sub when you want to store a list of items in a chronological order. For example, you can use pub/sub to store a list of events, a list of messages, and more.
+    - Redis hash—Use hashes when you have a large number of fields to store. For example, you can use hashes to store user information, such as name, email, address, and more.
+    - Redis list—Use lists when you want to store a list of items. For example, you can use lists to store a list of products, a list of users, and more.
+    - Redis set—Use sets when you want to store a unique list of items. For example, you can use sets to store a list of tags, a list of followers, and more.
+    - Redis sorted set—Use sorted sets when you want to store a list of items in a sorted order. For example, you can use sorted sets to store a list of products sorted by price, a list of users sorted by age, and more.
+    - Redis stream—Use streams when you want to store a list of items in a chronological order. For example, you can use streams to store a list of events, a list of messages, and more.
+    - Bitmap — Use bitmaps when you want to store a list of items in a chronological order. For example, you can use bitmaps to store a list of events, a list of messages, and more.
+    - Geo — Use geo when you want to store a list of items in a chronological order. For example, you can use geo to store a list of events, a list of messages, longitudes, latitudes, and more.
+    - Pub/Sub — Use pub/sub when you want to store a list of items in a chronological order. For example, you can use pub/sub to store a list of events, a list of messages, and more.
 
 
-### Data Types
+## Data Types
 
-#### String Data Structure:
+### String Data Structure:
 
-##### Cli Commands
+#### Cli Commands
 - [**String Data Structure**](#1string-data-structure)
-  - [**1.1. set name**](#11set-name)
-  - [**1.2. get name**](#12get-name)
-  - [**1.3. setnx**](#13setnx)
-  - [**1.4. MSET**](#14mset)
-  - [**1.5. MGET**](#15mget)
-  - [**1.6. INCR**](#16incr)
-  - [**1.7. INCRBY**](#17incrby)
-  - [**1.8. GETRANGE**](#18getrange)
-  - [**1.9. SETRANGE**](#19setrange)
-  - [**1.10. GETRANGE**](#110getrange)
-  - [**1.11. STRLEN**](#111strlen)
-  - [**1.12. APPEND**](#112append)
-  - [**1.13. SETEX**](#113setex)
-  - [**1.14. SETNX**](#114setnx)
-  - [**1.15. MSETNX**](#115msetnx)
-  - [**1.16. SETRANGE**](#116setrange)
-  - [**1.17. GETRANGE**](#117getrange)
-  - [**1.18. STRLEN**](#118strlen)
-  - [**1.19. DECR**](#119decr)
-  - [**1.20. DECRBY**](#120decrby)
-  - [**1.23. PSETEX**](#121psetex)
+    - [**1.1. set name**](#11set-name)
+    - [**1.2. get name**](#12get-name)
+    - [**1.3. setnx**](#13setnx)
+    - [**1.4. MSET**](#14mset)
+    - [**1.5. MGET**](#15mget)
+    - [**1.6. INCR**](#16incr)
+    - [**1.7. INCRBY**](#17incrby)
+    - [**1.8. GETRANGE**](#18getrange)
+    - [**1.9. SETRANGE**](#19setrange)
+    - [**1.10. GETRANGE**](#110getrange)
+    - [**1.11. STRLEN**](#111strlen)
+    - [**1.12. APPEND**](#112append)
+    - [**1.13. SETEX**](#113setex)
+    - [**1.14. SETNX**](#114setnx)
+    - [**1.15. MSETNX**](#115msetnx)
+    - [**1.16. SETRANGE**](#116setrange)
+    - [**1.17. GETRANGE**](#117getrange)
+    - [**1.18. STRLEN**](#118strlen)
+    - [**1.19. DECR**](#119decr)
+    - [**1.20. DECRBY**](#120decrby)
+    - [**1.23. PSETEX**](#121psetex)
 
 
-##### 1.1.set name
+#### 1.1.set name
 Type `set name "subham"` to set a key-value pair in the Redis server.
-##### 1.2.get name
+#### 1.2.get name
 
 Type `get name` to retrieve the value of the key from the Redis server.
 
 Note: If you open your Redis stack in the browser, you will see the key and value set. You can also update the value from there. Just click on the key and update the value on the right side.
-The Best way to do this is 
+The Best way to do this is
 ```bash
 set user:1 "subham"
 
@@ -557,7 +157,7 @@ msg
     2: "hi"
     3: "hey"
 ```
-##### 1.3.setnx
+#### 1.3.setnx
 set if not exists(nx)
 ```bash
 set user:1 "subham" nx
@@ -567,14 +167,14 @@ if you don't use nx, then it will overwrite the value
 set user:1 "codexam"
 ```
 
-##### 1.4.MSET
+#### 1.4.MSET
 set multiple values
 
 ```bash
 mset user:1 "subham" user:2 "codexam" msg:1 "hello" msg:2 "hi"
 ```
 
-##### 1.5.MGET
+#### 1.5.MGET
 get multiple values
 
 ```bash
@@ -585,7 +185,7 @@ mget user:1 user:2 msg:1 msg:2
 3) "hello"
 4) "hi"
 ```
-##### 1.6.INCR
+#### 1.6.INCR
 increment the value by 1
 
 ```bash
@@ -596,7 +196,7 @@ incr user:1
 (integer) 11
 ```
 
-##### 1.7.INCRBY
+#### 1.7.INCRBY
 increment the value by 5
 
 ```bash
@@ -608,7 +208,7 @@ incrby user:1 5
 ```
 Note: By default a single Redis string can be a maximum of 512MB in size.
 
-##### 1.8.GETRANGE
+#### 1.8.GETRANGE
 get the value from the range(SUBSTRING)
 
 ```bash
@@ -618,7 +218,7 @@ getrange user:1 0 3
 
 "subh"
 ```
-##### 1.9.SETRANGE
+#### 1.9.SETRANGE
 set the value from the range(SUBSTRING)
 
 ```bash
@@ -633,7 +233,7 @@ get user:1
 "codexam"
 ```
 
-##### 1.10.GETRANGE
+#### 1.10.GETRANGE
 get the value from the range(SUBSTRING)
 
 ```bash
@@ -644,7 +244,7 @@ getrange user:1 0 3
 "subh"
 ```
 
-##### 1.11.STRLEN
+#### 1.11.STRLEN
 get the length of the value
 
 ```bash
@@ -655,7 +255,7 @@ strlen user:1
 (integer) 6
 ```
 
-##### 1.12.APPEND
+#### 1.12.APPEND
 append the value
 
 ```bash
@@ -670,7 +270,7 @@ get user:1
 "subham codexam"
 ```
 
-##### 1.13.SETEX
+#### 1.13.SETEX
 set the value with expiration time (in seconds)
 
 
@@ -688,7 +288,7 @@ get user:1
 (nil)
 ```
 
-##### 1.14.SETNX
+#### 1.14.SETNX
 set the value if the key doesn't exist
 
 ```bash
@@ -709,7 +309,7 @@ get user:1
 "subham"
 ```
 
-##### 1.15.MSETNX
+#### 1.15.MSETNX
 set multiple values if the key doesn't exist
 
 ```bash
@@ -736,7 +336,7 @@ get msg:2
 "hi"
 ```
 
-##### 1.16.SETRANGE
+#### 1.16.SETRANGE
 set the value from the range(SUBSTRING)
 
 ```bash
@@ -752,7 +352,7 @@ get user:1
 "codexam"
 ```
 
-##### 1.17.GETRANGE
+#### 1.17.GETRANGE
 get the value from the range(SUBSTRING)
 
 ```bash
@@ -765,7 +365,7 @@ getrange user:1 0 3
 ```
 
 
-##### 1.18.STRLEN
+#### 1.18.STRLEN
 get the length of the value
 
 ```bash
@@ -777,7 +377,7 @@ strlen user:1
 (integer) 6
 ```
 
-##### 1.19.DECR
+#### 1.19.DECR
 This command decreases the value of a key by 1. If the key does not exist, it is set to -1.
 
 ```bash
@@ -788,7 +388,7 @@ decr user:1
 (integer) 9
 ```
 
-##### 1.20.DECRBY
+#### 1.20.DECRBY
 This command decreases the value of a key by the given number. If the key does not exist, it is set to negative the given number.
 
 ```bash
@@ -800,7 +400,7 @@ decrby user:1 5
 ```
 
 
-##### 1.21.PSETEX
+#### 1.21.PSETEX
 This command sets the value and expiration in milliseconds of a key.
 
 ```bash
@@ -816,11 +416,11 @@ get user:1
 
 (nil)
 ```
-#### List Data Structure:
+### List Data Structure:
 
 A **list data structure** is a collection of elements in the order they are inserted. It is similar to an array in other programming languages. The list data structure is often used to implement other data structures like queues and stacks.
 
-##### List Operations
+#### List Operations
 
 Here are some operations performed on a list:
 
@@ -834,28 +434,28 @@ Here are some operations performed on a list:
 | Pop       | 1       |
 
 
-##### Cli Commands
+#### Cli Commands
 - [**List Data Structure**](#list-data-structure)
-  - [**2.1. LPUSH**](#21lpush)
-  - [**2.2. RPUSH**](#22rpush)
-  - [**2.3. LPOP**](#23lpop)
-  - [**2.4. RPOP**](#24rpop)
-  - [**2.5. LLEN**](#25llen)
-  - [**2.6. LRANGE**](#26lrange)
-  - [**2.7. LINDEX**](#27lindex)
-  - [**2.8. LSET**](#28lset)
-  - [**2.9. LINSERT**](#29linsert)
-  - [**2.10. LSET**](#210lset)
-  - [**2.11. LTRIM**](#211ltrim)
-  - [**2.12. LREM**](#212lrem)
-  - [**2.13. RPOPLPUSH**](#213rpoplpush)
-  - [**2.14. BRPOP**](#214brpop)
-  - [**2.15. BLPOP**](#215blpop)
-  - [**2.16.BRPOPLPUSH**](#216brpoplpush)
+    - [**2.1. LPUSH**](#21lpush)
+    - [**2.2. RPUSH**](#22rpush)
+    - [**2.3. LPOP**](#23lpop)
+    - [**2.4. RPOP**](#24rpop)
+    - [**2.5. LLEN**](#25llen)
+    - [**2.6. LRANGE**](#26lrange)
+    - [**2.7. LINDEX**](#27lindex)
+    - [**2.8. LSET**](#28lset)
+    - [**2.9. LINSERT**](#29linsert)
+    - [**2.10. LSET**](#210lset)
+    - [**2.11. LTRIM**](#211ltrim)
+    - [**2.12. LREM**](#212lrem)
+    - [**2.13. RPOPLPUSH**](#213rpoplpush)
+    - [**2.14. BRPOP**](#214brpop)
+    - [**2.15. BLPOP**](#215blpop)
+    - [**2.16.BRPOPLPUSH**](#216brpoplpush)
 
-  
 
-##### 2.1.LPUSH
+
+#### 2.1.LPUSH
 This command inserts the specified value at the head of the list.
 
 ```bash
@@ -871,7 +471,7 @@ Last In First Out (LIFO) (similar to stack)
 | 0     | codexam |
 | 1     | subham  |
 
-##### 2.2.RPUSH
+#### 2.2.RPUSH
 
 This command inserts the specified value at the tail of the list.
 
@@ -890,11 +490,11 @@ Visualize the list in the Redis Commander.
 
 
 ---
-###### Note
+#### Note
 
 *Redis can be used to implement a **stack** data structure, which follows a Last In, First Out (LIFO) principle. You can use the `lpush` command to insert elements at the head of the list, and the `lpop` command to remove elements from the head of the list.*
 
-###### Here's an example of how you can use Redis commands to implement a stack:
+#### Here's an example of how you can use Redis commands to implement a stack:
 
 ```bash
 lpush user:1 "subham"
@@ -904,7 +504,7 @@ lpop user:1  # Output: "codexam"
 lpop user:1  # Output: "subham"
 ```
 
-###### Visualization in Redis Commander
+#### Visualization in Redis Commander
 
 - After `lpush` operations:
 
@@ -929,7 +529,7 @@ lpop user:1  # Output: "subham"
 
 ---
 
-##### 2.3.LPOP
+#### 2.3.LPOP
 
 This command removes and returns the first element of the list.
 
@@ -944,7 +544,7 @@ lpop user:1
 "codexam"
 ```
 
-##### 2.4.RPOP
+#### 2.4.RPOP
 
 This command removes and returns the last element of the list.
 
@@ -959,7 +559,7 @@ rpop user:1
 "subham"
 ```
 
-##### 2.5.LLEN
+#### 2.5.LLEN
 
 This command returns the length of the list.
 
@@ -974,7 +574,7 @@ llen user:1
 (integer) 2
 ```
 
-##### 2.6.LRANGE
+#### 2.6.LRANGE
 
 This command returns the specified range of elements from the list.
 
@@ -991,7 +591,7 @@ lrange user:1 0 1
 2) "subham"
 ```
 
-##### 2.7.LINDEX
+#### 2.7.LINDEX
 
 This command returns the element at the specified index.
 
@@ -1005,7 +605,7 @@ lindex user:1 0
 "codexam"
 ```
 
-##### 2.8.LSET
+#### 2.8.LSET
 
 This command sets the value at the specified index.
 
@@ -1025,7 +625,7 @@ lrange user:1 0 1
 2) "subham"
 ```
 
-##### 2.9.LINSERT
+#### 2.9.LINSERT
 
 This command inserts the specified value before or after the specified pivot value.
 
@@ -1048,7 +648,7 @@ lrange user:1 0 1
 3) "subham"
 ```
 
-##### 2.10.LSET
+#### 2.10.LSET
 
 This command sets the value at the specified index.
 
@@ -1069,7 +669,7 @@ lrange user:1 0 1
 2) "subham"
 ```
 
-##### 2.11.LTRIM
+#### 2.11.LTRIM
 
 This command trims the list to the specified range.
 
@@ -1090,7 +690,7 @@ lrange user:1 0 1
 2) "subham"
 ```
 
-##### 2.12.LREM
+#### 2.12.LREM
 
 This command removes the specified number of occurrences of the specified value from the list.
 
@@ -1115,7 +715,7 @@ lrange user:1 0 1
 2) "codexam"
 ```
 
-##### 2.13.RPOPLPUSH
+#### 2.13.RPOPLPUSH
 
 This command removes the last element from the source list and pushes it to the destination list.
 
@@ -1139,7 +739,7 @@ lrange user:2 0 1
 ```
 
 
-##### 2.14.BRPOP
+#### 2.14.BRPOP
 
 This command is similar to `rpop`, but it blocks the connection until an element is available or the timeout is reached.
 
@@ -1159,7 +759,7 @@ brpop user:1 10
 It will block the connection for 10 seconds and then return the element. If no element is available, it will return `nil`.
 
 
-##### 2.15.BLPOP
+#### 2.15.BLPOP
 
 This command is similar to `lpop`, but it blocks the connection until an element is available or the timeout is reached.
 
@@ -1180,7 +780,7 @@ It will block the connection for 10 seconds and then return the element.
 If no element is available, it will return `nil`.
 
 
-##### 2.16.BRPOPLPUSH
+#### 2.16.BRPOPLPUSH
 
 This command is similar to `rpoplpush`, but it blocks the connection until an element is available or the timeout is reached.
 
@@ -1197,11 +797,11 @@ brpoplpush user:1 user:2 10
 
 It will block the connection for 10 seconds and then return the element. If no element is available, it will return `nil`.
 
-#### Set Data Structure:
+### Set Data Structure:
 
 A **set data structure** is a collection of unordered, unique elements. It is similar to a set in mathematics. The set data structure is often used to implement other data structures like queues and stacks.
 
-##### Set Operations
+#### Set Operations
 
 Here are some operations performed on a set:
 
@@ -1214,25 +814,25 @@ Here are some operations performed on a set:
 | Remove    | 2       |
 | Remove    | 1       |
 
-##### Cli Commands
+#### Cli Commands
 - [**Set Data Structure**](#set-data-structure)
-  - [**3.1. SADD**](#31sadd)
-  - [**3.2. SREM**](#32srem)
-  - [**3.3. SISMEMBER**](#33sismember)
-  - [**3.4. SMEMBERS**](#34smembers)
-  - [**3.5. SPOP**](#35spop)
-  - [**3.6. SRANDMEMBER**](#36srandmember)
-  - [**3.7. SMOVE**](#37smove)
-  - [**3.8. SCARD**](#38scard)
-  - [**3.9. SINTER**](#39sinter)
-  - [**3.10. SUNION**](#310sunion)
-  - [**3.11. SDIFF**](#311sdiff)
-  - [**3.12. SINTERSTORE**](#312sinterstore)
-  - [**3.13. SUNIONSTORE**](#313sunionstore)
-  - [**3.14. SDIFFSTORE**](#314sdiffstore)
-  - [**3.15. SSCAN**](#315sscan)
+    - [**3.1. SADD**](#31sadd)
+    - [**3.2. SREM**](#32srem)
+    - [**3.3. SISMEMBER**](#33sismember)
+    - [**3.4. SMEMBERS**](#34smembers)
+    - [**3.5. SPOP**](#35spop)
+    - [**3.6. SRANDMEMBER**](#36srandmember)
+    - [**3.7. SMOVE**](#37smove)
+    - [**3.8. SCARD**](#38scard)
+    - [**3.9. SINTER**](#39sinter)
+    - [**3.10. SUNION**](#310sunion)
+    - [**3.11. SDIFF**](#311sdiff)
+    - [**3.12. SINTERSTORE**](#312sinterstore)
+    - [**3.13. SUNIONSTORE**](#313sunionstore)
+    - [**3.14. SDIFFSTORE**](#314sdiffstore)
+    - [**3.15. SSCAN**](#315sscan)
 
-##### 3.1.SADD
+#### 3.1.SADD
 
 This command adds the specified member to the set.
 
@@ -1256,7 +856,7 @@ Visualize the set in the Redis Commander.
 | 0     | subham  |
 | 1     | codexam |
 
-##### 3.2.SREM
+#### 3.2.SREM
 
 This command removes the specified member from the set.
 
@@ -1271,7 +871,7 @@ smembers user:1
 1) "codexam"
 ```
 
-##### 3.3.SISMEMBER
+#### 3.3.SISMEMBER
 
 This command checks if the specified member is present in the set.
 
@@ -1284,7 +884,7 @@ sismember user:1 "subham"
 (integer) 1
 ```
 
-##### 3.4.SMEMBERS
+#### 3.4.SMEMBERS
 
 This command returns all the members of the set.
 
@@ -1300,7 +900,7 @@ smembers user:1
 2) "codexam"
 ```
 
-##### 3.5.SPOP
+#### 3.5.SPOP
 
 This command removes and returns a random member from the set.
 
@@ -1315,7 +915,7 @@ spop user:1
 "codexam"
 ```
 
-##### 3.6.SRANDMEMBER
+#### 3.6.SRANDMEMBER
 
 This command returns a random member from the set.
 
@@ -1330,7 +930,7 @@ srandmember user:1
 "codexam"
 ```
 
-##### 3.7.SMOVE
+#### 3.7.SMOVE
 
 This command moves the specified member from one set to another.
 
@@ -1356,9 +956,9 @@ smembers user:2
 ```
 
 
-##### 3.8.SCARD
+#### 3.8.SCARD
 
-This command returns the number of members in the set. 
+This command returns the number of members in the set.
 
 ```bash
 
@@ -1372,7 +972,7 @@ scard user:1
 (integer) 2
 ```
 
-##### 3.9.SINTER
+#### 3.9.SINTER
 
 This command returns the intersection of all the sets specified.
 
@@ -1390,7 +990,7 @@ sinter user:1 user:2
 ```
 
 
-##### 3.10.SUNION
+#### 3.10.SUNION
 
 This command returns the union of all the sets specified.
 
@@ -1411,7 +1011,7 @@ sunion user:1 user:2
 3) "xamcodexam"
 ```
 
-##### 3.11.SDIFF
+#### 3.11.SDIFF
 
 This command returns the difference between the first set and all the other sets specified.
 
@@ -1428,7 +1028,7 @@ sdiff user:1 user:2
 1) "codexam"
 ```
 
-##### 3.12.SINTERSTORE
+#### 3.12.SINTERSTORE
 
 This command stores the intersection of all the sets specified.
 
@@ -1449,7 +1049,7 @@ smembers user:3
 1) "subham"
 ```
 
-##### 3.13.SUNIONSTORE
+#### 3.13.SUNIONSTORE
 
 This command stores the union of all the sets specified.
 
@@ -1476,7 +1076,7 @@ smembers user:3
 ```
 
 
-##### 3.14.SDIFFSTORE
+#### 3.14.SDIFFSTORE
 
 This command stores the difference between the first set and all the other sets specified.
 
@@ -1494,7 +1094,7 @@ sdiffstore user:3 user:1 user:2
 
 ```
 
-##### 3.15.SSCAN
+#### 3.15.SSCAN
 
 This command scans the set for members matching the specified pattern.
 
@@ -1511,31 +1111,31 @@ sscan user:1 0 match "sub*"
 2) 1) "subham"
 ```
 
-##### Hash Data Structure:
+#### Hash Data Structure:
 
 A **hash data structure** is a collection of key-value pairs. It is similar to a hash table in other programming languages. The hash data structure is often used to implement other data structures like queues and stacks.
 
 
-##### Cli Commands
+#### Cli Commands
 
 - [**Hash Data Structure**](#hash-data-structure)
-  - [**4.1. HSET**](#41hset)
-  - [**4.2. HGET**](#42hget)
-  - [**4.3. HGETALL**](#43hgetall)
-  - [**4.4. HDEL**](#44hdel)
-  - [**4.5. HEXISTS**](#45hexists)
-  - [**4.6. HKEYS**](#46hkeys)
-  - [**4.7. HVALS**](#47hvals)
-  - [**4.8. HLEN**](#48hlen)
-  - [**4.9. HINCRBY**](#49hincrby)
-  - [**4.10. HINCRBYFLOAT**](#410hincrbyfloat)
-  - [**4.11. HMSET**](#411hmset)
-  - [**4.12. HMGET**](#412hmget)
-  - [**4.13. HSETNX**](#413hsetnx)
-  - [**4.14. HSTRLEN**](#414hstrlen)
-  - [**4.15. HSCAN**](#415hscan)
+    - [**4.1. HSET**](#41hset)
+    - [**4.2. HGET**](#42hget)
+    - [**4.3. HGETALL**](#43hgetall)
+    - [**4.4. HDEL**](#44hdel)
+    - [**4.5. HEXISTS**](#45hexists)
+    - [**4.6. HKEYS**](#46hkeys)
+    - [**4.7. HVALS**](#47hvals)
+    - [**4.8. HLEN**](#48hlen)
+    - [**4.9. HINCRBY**](#49hincrby)
+    - [**4.10. HINCRBYFLOAT**](#410hincrbyfloat)
+    - [**4.11. HMSET**](#411hmset)
+    - [**4.12. HMGET**](#412hmget)
+    - [**4.13. HSETNX**](#413hsetnx)
+    - [**4.14. HSTRLEN**](#414hstrlen)
+    - [**4.15. HSCAN**](#415hscan)
 
-##### 4.1.HSET
+#### 4.1.HSET
 
 This command sets the specified field in the hash to the specified value.
 
@@ -1554,7 +1154,7 @@ Visualize the hash in the Redis Commander.
 | name  | subham  |
 | email | codexam |
 
-##### 4.2.HGET
+#### 4.2.HGET
 
 This command returns the value of the specified field in the hash.
 
@@ -1569,7 +1169,7 @@ hget user:1 name
 "subham"
 ```
 
-##### 4.3.HGETALL
+#### 4.3.HGETALL
 
 This command returns all the fields and values of the hash.
 
@@ -1590,7 +1190,7 @@ hgetall user:1
 4) "subham@gmail.com"
 ```
 
-##### 4.4.HDEL
+#### 4.4.HDEL
 
 This command deletes the specified field from the hash.
 
@@ -1611,7 +1211,7 @@ hgetall user:1
 2) "subham"
 ```
 
-##### 4.5.HEXISTS
+#### 4.5.HEXISTS
 
 This command checks if the specified field exists in the hash.
 
@@ -1626,7 +1226,7 @@ hexists user:1 role
 (integer) 1
 ```
 
-##### 4.6.HKEYS
+#### 4.6.HKEYS
 
 This command returns all the fields of the hash.
 
@@ -1643,7 +1243,7 @@ hkeys user:1
 2) "role"
 ```
 
-##### 4.7.HVALS
+#### 4.7.HVALS
 
 This command returns all the values of the hash.
 
@@ -1660,7 +1260,7 @@ hvals user:1
 2) "admin"
 ```
 
-##### 4.8.HLEN
+#### 4.8.HLEN
 
 This command returns the number of fields in the hash.
 
@@ -1675,7 +1275,7 @@ hlen user:1
 (integer) 2
 ```
 
-##### 4.9.HINCRBY
+#### 4.9.HINCRBY
 
 This command increments the specified field by the specified value.
 
@@ -1688,7 +1288,7 @@ hincrby user:1 age 5
 (integer) 25
 ```
 
-##### 4.10.HINCRBYFLOAT
+#### 4.10.HINCRBYFLOAT
 
 This command increments the specified field by the specified value.
 
@@ -1701,7 +1301,7 @@ hincrbyfloat user:1 age 5.5
 "25.5"
 ```
 
-##### 4.11.HMSET
+#### 4.11.HMSET
 
 This command sets the specified fields to their respective values in the hash.
 
@@ -1720,7 +1320,7 @@ hgetall user:1
 4) "admin"
 ```
 
-##### 4.12.HMGET
+#### 4.12.HMGET
 
 This command returns the values of the specified fields in the hash.
 
@@ -1735,7 +1335,7 @@ hmget user:1 name role
 2) "admin"
 ```
 
-##### 4.13.HSETNX
+#### 4.13.HSETNX
 
 This command sets the specified field to the specified value if the field does not exist in the hash.
 
@@ -1749,7 +1349,7 @@ hsetnx user:1 name "codexam"
 
 ```
 
-##### 4.14.HSTRLEN
+#### 4.14.HSTRLEN
 
 This command returns the length of the value of the specified field in the hash.
 
@@ -1762,7 +1362,7 @@ hstrlen user:1 name
 (integer) 6
 ```
 
-##### 4.15.HSCAN
+#### 4.15.HSCAN
 
 This command scans the hash for fields matching the specified pattern.
 
@@ -1781,13 +1381,13 @@ hscan user:1 0 match "na*"
    2) "subham"
 ```
 
-#### Sorted Set Operations with Redis
+### Sorted Set Operations with Redis
 
-A **sorted set data structure** is a collection of unique elements sorted by a score. It is similar to a sorted list in other programming languages. Priority queues are often implemented using a sorted set data structure. 
+A **sorted set data structure** is a collection of unique elements sorted by a score. It is similar to a sorted list in other programming languages. Priority queues are often implemented using a sorted set data structure.
 
-##### Sorted Set Operations
+#### Sorted Set Operations
 
-Here are some operations performed on a sorted set: 
+Here are some operations performed on a sorted set:
 
 | Operation | Element | Score |
 |-----------|---------|-------|
@@ -1798,7 +1398,7 @@ Here are some operations performed on a sorted set:
 | Remove    | 2       | 2     |
 | Remove    | 1       | 1     |
 
-##### Cli Commands
+#### Cli Commands
 
 - [**Sorted Set Data Structure**](#sorted-set-data-structure)
     - [**5.1. ZADD**](#51zadd)
@@ -1823,7 +1423,7 @@ Here are some operations performed on a sorted set:
     - [**5.20. ZRANK**](#520zrank)
 
 
-##### 5.1.ZADD
+#### 5.1.ZADD
 
 This command adds the specified member to the sorted set with the specified score.
 
@@ -1860,7 +1460,7 @@ Visualize the sorted set in the Redis Commander.
 | 2     | xamcodexam | 3     |
 
 
-##### 5.2.ZREM
+#### 5.2.ZREM
 
 This command removes the specified member from the sorted set.
 
@@ -1885,7 +1485,7 @@ zrange user:1 0 -1 withscores
 4) "3"
 ```
 
-##### 5.3.ZSCORE
+#### 5.3.ZSCORE
 
 
 This command returns the score of the specified member in the sorted set.
@@ -1903,7 +1503,7 @@ zscore user:1 "subham"
 "1"
 ```
 
-##### 5.4.ZRANGE
+#### 5.4.ZRANGE
 
 This command returns the specified range of elements from the sorted set.
 
@@ -1930,7 +1530,7 @@ zrange user:1 0 -1 withscores
 6) "3"
 ```
 
-##### 5.5.ZREVRANGE
+#### 5.5.ZREVRANGE
 
 This command returns the specified range of elements from the sorted set in reverse order.
 
@@ -1957,7 +1557,7 @@ zrevrange user:1 0 -1 withscores
 6) "1"
 ```
 
-##### 5.6.ZRANGEBYSCORE
+#### 5.6.ZRANGEBYSCORE
 
 This command returns the specified range of elements from the sorted set by score.
 
@@ -1981,7 +1581,7 @@ zrangebyscore user:1 1 2 withscores
 4) "2"
 ```
 
-##### 5.7.ZREVRANGEBYSCORE
+#### 5.7.ZREVRANGEBYSCORE
 
 This command returns the specified range of elements from the sorted set by score in reverse order.
 
@@ -2005,7 +1605,7 @@ zrevrangebyscore user:1 2 1 withscores
 4) "1"
 ```
 
-##### 5.8.ZCARD
+#### 5.8.ZCARD
 
 This command returns the number of elements in the sorted set.
 
@@ -2023,7 +1623,7 @@ zcard user:1
 (integer) 3
 ```
 
-##### 5.9.ZCOUNT
+#### 5.9.ZCOUNT
 
 This command returns the number of elements in the sorted set with a score between the specified minimum and maximum.
 
@@ -2040,7 +1640,7 @@ zcount user:1 1 2
 (integer) 2
 ```
 
-##### 5.10.ZINCRBY
+#### 5.10.ZINCRBY
 
 This command increments the score of the specified member in the sorted set by the specified value.
 
@@ -2058,7 +1658,7 @@ zrange user:1 0 -1 withscores
 2) "3"
 ```
 
-##### 5.11.ZLEXCOUNT
+#### 5.11.ZLEXCOUNT
 
 This command returns the number of elements in the sorted set between the specified minimum and maximum.
 
@@ -2075,7 +1675,7 @@ zlexcount user:1 - +
 (integer) 3
 ```
 
-##### 5.12.ZRANGEBYLEX
+#### 5.12.ZRANGEBYLEX
 
 This command returns the specified range of elements from the sorted set by lexicographical order.
 
@@ -2096,7 +1696,7 @@ zrangebylex user:1 - +
 3) "xamcodexam"
 ```
 
-##### 5.13.ZREVRANGEBYLEX
+#### 5.13.ZREVRANGEBYLEX
 
 This command returns the specified range of elements from the sorted set by lexicographical order in reverse order.
 
@@ -2118,7 +1718,7 @@ zrevrangebylex user:1 + -
 3) "codexam"
 ```
 
-##### 5.14.ZREMRANGEBYLEX
+#### 5.14.ZREMRANGEBYLEX
 
 This command removes the specified range of elements from the sorted set by lexicographical order.
 
@@ -2136,7 +1736,7 @@ zremrangebylex user:1 - +
 (integer) 3
 ```
 
-##### 5.15.ZREMRANGEBYRANK
+#### 5.15.ZREMRANGEBYRANK
 
 This command removes the specified range of elements from the sorted set by index.
 
@@ -2154,7 +1754,7 @@ zremrangebyrank user:1 0 1
 (integer) 2
 ```
 
-##### 5.16.ZREMRANGEBYSCORE
+#### 5.16.ZREMRANGEBYSCORE
 
 This command removes the specified range of elements from the sorted set by score.
 
@@ -2186,7 +1786,7 @@ zrange score 0 -2 withscores
 4) "2"
 ```
 
-##### 5.17.ZUNIONSTORE
+#### 5.17.ZUNIONSTORE
 
 This command stores the union of all the sorted sets specified.
 
@@ -2217,7 +1817,7 @@ zrange user:3 0 -1 withscores
 6) "3"
 ```
 
-##### 5.18.ZINTERSTORE
+#### 5.18.ZINTERSTORE
 
 This command stores the intersection of all the sorted sets specified.
 
@@ -2240,7 +1840,7 @@ zrange user:3 0 -1 withscores
 2) "3"
 ```
 
-##### 5.19.ZSCAN
+#### 5.19.ZSCAN
 
 This command scans the sorted set for members matching the specified pattern.
 
@@ -2260,7 +1860,7 @@ zscan user:1 0 match "sub*"
 
    2) "1"
 ```
-##### 5.20.ZRANK
+#### 5.20.ZRANK
 
 This command returns the rank of the specified member in the sorted set.
 
@@ -2275,14 +1875,14 @@ zrank user:1 "subham"
 ```
 
 
-*Note: Normally, sets are used to store unique elements. However, sorted sets allow you to store duplicate elements. This is because each element in a sorted set is associated with a score, which makes it unique and normal sets are unordered.* 
+*Note: Normally, sets are used to store unique elements. However, sorted sets allow you to store duplicate elements. This is because each element in a sorted set is associated with a score, which makes it unique and normal sets are unordered.*
 
 
-#### REDIS STREAMS OPERATIONS
+### REDIS STREAMS OPERATIONS
 
 Redis Streams is a new feature in Redis 5.0 that allows you to store multiple fields and values in a single key. It is similar to a log file in other programming languages. Redis Streams is often used to implement other data structures like queues and stacks.
 
-##### Cli Commands
+#### Cli Commands
 
 - [**Redis Streams**](#redis-streams)
     - [**6.1. XADD**](#61xadd)
@@ -2301,11 +1901,11 @@ Redis Streams is a new feature in Redis 5.0 that allows you to store multiple fi
     - [**6.14. XREWRITE**](#614xrewrite)
 
 
-##### 6.1.XADD
+#### 6.1.XADD
 
 This command adds the specified fields and values to the stream.
 
-It returns time stamp of the message.  
+It returns time stamp of the message.
 
 ```bash
 
@@ -2350,7 +1950,7 @@ xrange user:1 - +
         4) "admin"
 ```
 
-##### 6.2.XLEN
+#### 6.2.XLEN
 
 This command returns the number of messages in the stream.
 
@@ -2368,7 +1968,7 @@ xlen user:1
 ```
 
 
-##### 6.3.XRANGE
+#### 6.3.XRANGE
 
 This command returns the specified range of messages from the stream.
 
@@ -2417,7 +2017,7 @@ xrange user:1 - +
 ```
 
 
-##### 6.4.XREVRANGE
+#### 6.4.XREVRANGE
 
 This command returns the specified range of messages from the stream in reverse order.
 
@@ -2467,7 +2067,7 @@ xrevrange user:1 + -
 ```
 
 
-##### 6.5.XREAD
+#### 6.5.XREAD
 
 This command reads the specified number of messages from the stream.
 
@@ -2517,8 +2117,8 @@ xread count 2 streams user:1 0-0
              
                   4) "admin"
 ```
-    
-##### 6.6.XREADGROUP
+
+#### 6.6.XREADGROUP
 
 
 This command reads the specified number of messages from the stream in a consumer group.
@@ -2573,9 +2173,9 @@ xreadgroup group user:1 user:1 count 2 streams user:1 0-0
                 
                     4) "admin"
 ```
-    
 
-##### 6.7.XGROUP
+
+#### 6.7.XGROUP
 
 
 This command creates a consumer group.
@@ -2594,7 +2194,7 @@ xgroup create user:1 user:1 0-0 mkstream
 OK
 ```
 
-##### 6.8.XACK
+#### 6.8.XACK
 
 This command acknowledges the specified messages in the stream.
 
@@ -2616,7 +2216,7 @@ xack user:1 user:1 1578060000000-0 1578060000001-0
 (integer) 2
 ```
 
-##### 6.9.XCLAIM
+#### 6.9.XCLAIM
 
 This command claims the specified messages in the stream.
 
@@ -2672,7 +2272,7 @@ xclaim user:1 user:1 0-0 1578060000000-0 1578060000001-0
                         4) "admin"
 ```
 
-##### 6.10.XDEL
+#### 6.10.XDEL
 
 This command deletes the specified messages in the stream.
 
@@ -2695,7 +2295,7 @@ xdel user:1 1578060000000-0 1578060000001-0
 (integer) 2
 ```
 
-##### 6.11.XTRIM
+#### 6.11.XTRIM
 
 This command trims the specified messages in the stream.
 
@@ -2714,7 +2314,7 @@ xtrim user:1 maxlen 2
 ```
 
 
-##### 6.12.XINFO
+#### 6.12.XINFO
 
 This command returns information about the stream.
 
@@ -2778,7 +2378,7 @@ xinfo stream user:1
           4) "admin"
 ```
 
-##### 6.13.XSETID
+#### 6.13.XSETID
 
 This command sets the id of the stream.
 
@@ -2801,7 +2401,7 @@ xsetid user:1 1578060000000-0
 OK
 ```
 
-##### 6.14.XREWRITE
+#### 6.14.XREWRITE
 
 This command rewrites the stream to optimize memory usage.
 
@@ -2824,11 +2424,11 @@ xrewrite user:1
 (integer) 1
 ```
 
-#### Redis Bitmaps
+### Redis Bitmaps
 
 A **bitmap data structure** is a collection of bits. It is similar to an array in other programming languages. Bitmaps are often used to implement other data structures like sets and bloom filters.
 
-##### Cli Commands
+#### Cli Commands
 
 - [**Redis Bitmaps**](#redis-bitmaps)
     - [**7.1. SETBIT**](#71setbit)
@@ -2839,7 +2439,7 @@ A **bitmap data structure** is a collection of bits. It is similar to an array i
     - [**7.6. BITFIELD**](#76bitfield)
 
 
-##### 7.1.SETBIT
+#### 7.1.SETBIT
 
 This command sets the bit at the specified index in the bitmap to either 1 or 0.
 
@@ -2854,7 +2454,7 @@ SETBIT pings:2024-01-01-00:00 456 1
 (integer) 0
 ```
 
-##### 7.2.GETBIT
+#### 7.2.GETBIT
 
 This command returns the value of the bit at the specified index in the bitmap.
 
@@ -2870,7 +2470,7 @@ GETBIT pings:2024-01-01-00:00 123
 (integer) 1
 ```
 
-##### 7.3.BITCOUNT
+#### 7.3.BITCOUNT
 
 This command returns the number of bits set to 1 in the bitmap.
 
@@ -2891,7 +2491,7 @@ BITCOUNT pings:2024-01-01-00:00
 (integer) 2
 ```
 
-##### 7.4.BITOP
+#### 7.4.BITOP
 
 This command performs a bitwise operation between the bitmaps and stores the result in the destination bitmap.
 
@@ -2912,7 +2512,7 @@ BITOP AND pings:2024-01-01-00:00 pings:2024-01-01-00:00 pings:2024-01-01-00:00
 (integer) 2
 ```
 
-##### 7.5.BITPOS
+#### 7.5.BITPOS
 
 This command returns the index of the first bit set to 1 or 0 in the bitmap.
 
@@ -2928,7 +2528,7 @@ BITPOS pings:2024-01-01-00:00 1
 (integer) 123
 ```
 
-##### 7.6.BITFIELD
+#### 7.6.BITFIELD
 
 This command performs a bitwise operation between the bitmaps and stores the result in the destination bitmap.
 
@@ -2946,12 +2546,12 @@ BITFIELD pings:2024-01-01-00:00 INCRBY i5 100 1 GET u4 0
 .....
 ```
 
-#### Geospatial Operations
+### Geospatial Operations
 
 A **geospatial data structure** is a collection of elements with a geospatial location. It is similar to a map in other programming languages. Geospatial data structures are often used to implement other data structures like geohashes and geofences.
 
 
-##### Cli Commands
+#### Cli Commands
 
 - [**Geospatial Data Structure**](#geospatial-data-structure)
     - [**8.1. GEOADD**](#81geoadd)
@@ -2964,7 +2564,7 @@ A **geospatial data structure** is a collection of elements with a geospatial lo
     - [**8.8. GEOSEARCHSTORE**](#88geosearchstore)
 
 
-##### 8.1.GEOADD
+#### 8.1.GEOADD
 
 This command adds the specified elements to the geospatial data structure.
 
@@ -2980,7 +2580,7 @@ geoadd user:1 88.3639 22.5726 "codexam"
 
 ```
 
-##### 8.2.GEOPOS
+#### 8.2.GEOPOS
 
 This command returns the longitude and latitude of the specified elements in the geospatial data structure.
 
@@ -3005,7 +2605,7 @@ geopos user:1 "subham" "codexam"
    2) "22.57260005994199279"
 ```
 
-##### 8.3.GEODIST
+#### 8.3.GEODIST
 
 This command returns the distance between the specified elements in the geospatial data structure.
 
@@ -3025,7 +2625,7 @@ geodist user:1 "subham" "codexam" km
 "0.0000"
 ```
 
-##### 8.4.GEORADIUS
+#### 8.4.GEORADIUS
 
 This command returns the elements within the specified radius in the geospatial data structure.
 
@@ -3046,7 +2646,7 @@ georadius user:1 88.3639 22.5726 100 km
 2) "codexam"
 ```
 
-##### 8.5.GEORADIUSBYMEMBER
+#### 8.5.GEORADIUSBYMEMBER
 
 This command returns the elements within the specified radius in the geospatial data structure.
 
@@ -3067,7 +2667,7 @@ georadiusbymember user:1 "subham" 100 km
 2) "codexam"
 ```
 
-##### 8.6.GEOHASH
+#### 8.6.GEOHASH
 
 This command returns the geohash of the specified elements in the geospatial data structure.
 
@@ -3088,7 +2688,7 @@ geohash user:1 "subham" "codexam"
 2) "tqg0y0y0y0y0"
 ```
 
-##### 8.7.GEOSEARCH
+#### 8.7.GEOSEARCH
 
 This command returns the elements matching the specified query in the geospatial data structure.
 
@@ -3117,7 +2717,7 @@ geosearch user:1 frommember "subham" count 2
       2) "22.57260005994199279"
 ```
 
-##### 8.8.GEOSEARCHSTORE
+#### 8.8.GEOSEARCHSTORE
 
 This command stores the elements matching the specified query in the geospatial data structure.
 
@@ -3136,27 +2736,27 @@ geosearchstore user:2 frommember "subham" count 2
 (integer) 2
 ```
 
-#### Probabilistic Data Structures 
+### Probabilistic Data Structures
 
 You can use **probabilistic data structures** to store elements with a probability of false positives. It is similar to a set in other programming languages. Probabilistic data structures are often used to implement other data structures like bloom filters.
 
 READ HERE: https://redis.io/docs/data-types/probabilistic/t-digest/
 
-#### Time Series Data Structures
+### Time Series Data Structures
 
 A **time series data structure** is a collection of elements with a timestamp. It is similar to a map in other programming languages. Time series data structures are often used to implement other data structures like time series.
 
 READ HERE: https://redis.io/docs/data-types/timeseries/
 
-### Pub/Sub 
+## Pub/Sub
 
 Redis Pub/Sub implements the messaging system where the senders (publishers) sends the messages while the receivers (subscribers) receive them. The link between the publishers and subscribers is called channel.
 
 - Step 1: Open two terminals.
 
 - Open redis-cli in the first terminal and also in the second terminal. (steps are the given below)
-  - docker ps (to get the container id)
-  - if not running then run the container using docker start container_id or `docker start redis-stack` and then `docker exec -it redis-stack redis-cli` or `docker exec -it container_id bash` and then `redis-cli` to open redis-cli.
+    - docker ps (to get the container id)
+    - if not running then run the container using docker start container_id or `docker start redis-stack` and then `docker exec -it redis-stack redis-cli` or `docker exec -it container_id bash` and then `redis-cli` to open redis-cli.
 
 - Now write the following command in the first terminal to subscribe to the channel.
 
@@ -3202,7 +2802,7 @@ Some Usecases of Redis Pub/Sub
 - Distributed system coordination
 - Distributed system configuration
 
-#### Cli Commands
+### Cli Commands
 
 - [**Pub/Sub**](#pubsub)
     - [**9.1. SUBSCRIBE**](#91subscribe)
@@ -3211,7 +2811,7 @@ Some Usecases of Redis Pub/Sub
     - [**9.4. PUBSUB**](#94pubsub)
 
 
-##### 9.1.SUBSCRIBE
+#### 9.1.SUBSCRIBE
 
 This command subscribes to the specified channels.
 
@@ -3228,7 +2828,7 @@ Reading messages... (press Ctrl-C to quit)
 3) (integer) 1
 ```
 
-##### 9.2.UNSUBSCRIBE
+#### 9.2.UNSUBSCRIBE
 
 This command unsubscribes from the specified channels.
 
@@ -3255,7 +2855,7 @@ Reading messages... (press Ctrl-C to quit)
 3) (integer) 0
 ```
 
-##### 9.3.PUBLISH
+#### 9.3.PUBLISH
 
 This command publishes the specified message to the specified channel.
 
@@ -3282,7 +2882,7 @@ PUBLISH notifications "Hello, World!"
 3) "Hello, World!"
 ```
 
-##### 9.4.PUBSUB
+#### 9.4.PUBSUB
 
 This command returns information about the channels.
 
@@ -3305,16 +2905,16 @@ PUBSUB CHANNELS
 
 There are a lot of other commands in redis-cli. You can check them out by typing `help` in redis-cli.
 
-### Scale A Node.js Application With Redis
+## Scale A Node.js Application With Redis
 
 1. Step 1. Initialize a Node.js project.
-  - Copy the template what I already created for you.
-  - `npm i`
-  - replace the .env file with your own database credentials.
-  - `npm start` to run the project.
+- Copy the template what I already created for you.
+- `npm i`
+- replace the .env file with your own database credentials.
+- `npm start` to run the project.
 2. Third party api: https://jsonplaceholder.typicode.com/todos
-  - We will try to speed up the api response time using redis.
-  -  `npm i axios` to install axios.
+- We will try to speed up the api response time using redis.
+-  `npm i axios` to install axios.
 3. Open server/src folder makes a new file todos.ts
 
 ```ts
@@ -3343,122 +2943,52 @@ export default todos;
 app.use("/api/v1/", todos);
 ```
 
-5. now run `npm run dev` and go to http://localhost:5050/api/v1/todos to see the response. 
+5. now run `npm run dev` and go to http://localhost:5050/api/v1/todos to see the response.
 
 6. I have already setup Morgan for logging for response times, however, you can open Postman and check the response times.
 7. In the first fetching it takes 403ms to fetch the data from the api, and after multiple requests, it takes 120ms–351ms to fetch the data from the api.
 
 8. Now try to implement caching using redis.
-   - you can find the client.ts file in the server/src folder.
-      ```ts 
-       import Redis from "ioredis";
-     
-       const client = new Redis(
-         {
-          host: 'localhost', // replace with your host, if not localhost
-          port: 6379  // replace with your port, if not 6379
-         }
-        );
-       export default client;
-     ```
-   - Now open server/src/todos.ts and import the redis client.
-     ```ts
-      import client from "./client";
-        
-      todos.get("/todos", async (req, res) => {
-           try {
-             const todos = await client.get("todos");
-             if (todos) {
-               console.log("Fetching from redis");
-               return res.json(JSON.parse(todos));
-             }
-             const { data } = await axios.get("https://jsonplaceholder.typicode.com/todos");
-             client.set("todos", JSON.stringify(data));
-             console.log("Fetching from api");
-             res.json(data);
-           } catch (error:any) {
-             console.error("Error fetching todos:", error.message);
-             res.status(500).json({ error: "Internal Server Error" });
-           }
-      });
+    - you can find the client.ts file in the server/src folder.
+       ```ts 
+        import Redis from "ioredis";
       
-     ```
-   - Now run `npm run dev` and go to http://localhost:5050/api/v1/todos to see the response. 
-   - In the first fetching it takes 403ms to fetch the data from the api, and after multiple requests, it takes 0ms–1ms to fetch the data from the redis. 
-   - you can also add `client.set("todos", JSON.stringify(data), "EX", 10)` to set the expiration time of the key.
-   - Now open you redis-cli and run `keys *` to see the keys and `ttl todos` to see the expiration time of the key.
-   - If you open redis-stack container, you can see the todos with data.
-   - Now you can scale your application by adding multiple instances of the application and using redis to cache the data.
-
-
-
-
-
-
- 
- 
-
-
-
-
-
-
-
-    
-    
-    
-    
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        const client = new Redis(
+          {
+           host: 'localhost', // replace with your host, if not localhost
+           port: 6379  // replace with your port, if not 6379
+          }
+         );
+        export default client;
+      ```
+    - Now open server/src/todos.ts and import the redis client.
+      ```ts
+       import client from "./client";
+         
+       todos.get("/todos", async (req, res) => {
+            try {
+              const todos = await client.get("todos");
+              if (todos) {
+                console.log("Fetching from redis");
+                return res.json(JSON.parse(todos));
+              }
+              const { data } = await axios.get("https://jsonplaceholder.typicode.com/todos");
+              client.set("todos", JSON.stringify(data));
+              console.log("Fetching from api");
+              res.json(data);
+            } catch (error:any) {
+              console.error("Error fetching todos:", error.message);
+              res.status(500).json({ error: "Internal Server Error" });
+            }
+       });
+       
+      ```
+    - Now run `npm run dev` and go to http://localhost:5050/api/v1/todos to see the response.
+    - In the first fetching it takes 403ms to fetch the data from the api, and after multiple requests, it takes 0ms–1ms to fetch the data from the redis.
+    - you can also add `client.set("todos", JSON.stringify(data), "EX", 10)` to set the expiration time of the key.
+    - Now open you redis-cli and run `keys *` to see the keys and `ttl todos` to see the expiration time of the key.
+    - If you open redis-stack container, you can see the todos with data.
+    - Now you can scale your application by adding multiple instances of the application and using redis to cache the data.
 
 
 

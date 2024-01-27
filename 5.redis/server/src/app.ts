@@ -23,6 +23,7 @@ import { corsUrl } from "../config/default";
 
 //Importing ioredis
 import Redis from 'ioredis';
+import todos from "./todos";
 
 /*❗~~~~CONFIG~~~~❗*/
 // Loading environment variables from .env file
@@ -103,10 +104,7 @@ app.use(globalErrorHandler);
 /*❗~~~~ROUTES~~~~❗*/
 
 //Stateful routes
-//Example: http://localhost:5000/api/v1/auth
-// app.use("/api/v1/auth", statelful.authentication);
-
-
+app.use("/api/v1/", todos);
 // Default route for the API - This will be used to test if the API is live
 app.get("/", (_: Request, res: Response) => {
   res.send("Yes you are connected to the app! 🚀");
