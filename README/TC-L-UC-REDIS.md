@@ -1,0 +1,29 @@
+
+
+- Time Complexity
+    - Hashes: O(1) for each key-value pair, O(N) for N key-value pairs.
+    - Lists: O(1) for each push/pop operation, O(N) for N items in the list.
+    - Sets: O(1) for each add/remove operation, O(N) for N items in the set.
+    - Sorted Sets: O(1) for each add/remove operation, O(log(N)+M) for N items in the sorted set and M elements returned.
+    - Streams: O(1) for each item added to the stream, O(N) for N items in the stream.
+    - Bitmaps: O(1) for each set bit, O(N) for N bits set.
+    - Geo: O(log(N)) for each item added to the sorted set, where N is the number of elements in the sorted set.
+    - Pub/Sub: O(N+M) for N channels and M subscribers.
+- Limitations
+    - Hashes: The maximum number of fields is (2^32 - 1)4294967295, more than 4 billion of fields per hash).
+    - Lists: The maximum number of elements is (2^32 - 1)4294967295, more than 4 billion of elements per list).
+    - Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per set).
+    - Sorted Sets: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per sorted set).
+    - Streams: The maximum number of entries is (2^64 - 1)18446744073709551615, more than 18 quintillion of entries per stream).
+    - Bitmaps: The maximum number of bits is (2^32 - 1)4294967295, more than 4 billion of bits per bitmap).
+    - geo: The maximum number of members is (2^32 - 1)4294967295, more than 4 billion of elements per geo set).
+    - Pub/Sub: The maximum number of channels is 2^32 - 1)4294967295, more than 4 billion of channels per Redis instance).
+- Use cases
+    - Redis hash—Use hashes when you have a large number of fields to store. For example, you can use hashes to store user information, such as name, email, address, and more.
+    - Redis list—Use lists when you want to store a list of items. For example, you can use lists to store a list of products, a list of users, and more.
+    - Redis set—Use sets when you want to store a unique list of items. For example, you can use sets to store a list of tags, a list of followers, and more.
+    - Redis sorted set—Use sorted sets when you want to store a list of items in a sorted order. For example, you can use sorted sets to store a list of products sorted by price, a list of users sorted by age, and more.
+    - Redis stream—Use streams when you want to store a list of items in a chronological order. For example, you can use streams to store a list of events, a list of messages, and more.
+    - Bitmap — Use bitmaps when you want to store a list of items in a chronological order. For example, you can use bitmaps to store a list of events, a list of messages, and more.
+    - Geo — Use geo when you want to store a list of items in a chronological order. For example, you can use geo to store a list of events, a list of messages, longitudes, latitudes, and more.
+    - Pub/Sub — Use pub/sub when you want to store a list of items in a chronological order. For example, you can use pub/sub to store a list of events, a list of messages, and more.
