@@ -2,9 +2,9 @@
     - **execution context**✅
     - **call stack**✅
     - **hoisting**✅
-    - **Function work flow**
-    - **Windows and this**
-    - **Undefined and not defined**
+    - **Function work flow**✅
+    - **Windows and this**✅
+    - **Undefined and not defined**✅
     - **scope and lexical environment**
     - **function scope and lexical object**
     - **block scope and shadowing**
@@ -171,8 +171,26 @@ function b() {
 ```
 ![](../images/funtioninvocation.png)
 
+### Windows and this
 
+- In JavaScript, the `window` object is the global object in a browser environment. It's created by the JavaScript engine when you run a script in the browser.
+- When you run a JavaScript file, even if it's empty, an execution context is created with the `window` as the global object.
+- Any variable or function declared outside a function is in the global space, and is attached to the `window` object.
+- Variables declared inside a function are not in the global space. They are local to the function and cannot be accessed outside the function.
 
+Here's a small example:
 
+```javascript
+var a = 10; // This is a global variable
 
+function b() {
+  var x = 10; // This is a local variable
+}
 
+console.log(window.a); // Outputs: 10
+console.log(this.a); // Outputs: 10
+console.log(window.x); // Outputs: undefined
+console.log(this.x); // Outputs: undefined
+```
+
+In this example, `a` is a global variable and can be accessed as a property of the `window` object or with `this` keyword. However, `x` is a local variable inside function `b` and is not accessible as a property of the `window` object or with `this` keyword. It's `undefined` in the global context.
