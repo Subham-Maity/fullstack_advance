@@ -171,6 +171,7 @@ function b() {
 ```
 ![](../images/funtioninvocation.png)
 
+----
 ### Windows and this
 
 - In JavaScript, the `window` object is the global object in a browser environment. It's created by the JavaScript engine when you run a script in the browser.
@@ -194,3 +195,24 @@ console.log(this.x); // Outputs: undefined
 ```
 
 In this example, `a` is a global variable and can be accessed as a property of the `window` object or with `this` keyword. However, `x` is a local variable inside function `b` and is not accessible as a property of the `window` object or with `this` keyword. It's `undefined` in the global context.
+
+----
+
+
+### Undefined and not defined
+
+
+- `undefined` in JavaScript means a variable has been declared, but has not yet been assigned a value. If you try to log an undefined variable, it will output `undefined`.
+
+```javascript
+var a;
+console.log(a); // Outputs: undefined
+```
+
+- `not defined` error in JavaScript means you are trying to access a variable that has not been declared at all. If you try to log a not defined variable, it will throw an error.
+
+```javascript
+console.log(b); // Uncaught ReferenceError: b is not defined
+```
+
+In the first example, `a` is declared but not assigned a value, so it's `undefined`. In the second example, `b` is not declared at all, so trying to access it results in a `ReferenceError`.
