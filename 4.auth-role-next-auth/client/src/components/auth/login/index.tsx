@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import LoginSkeleton from "@/loading/skeleton/auth/login";
+import LoginSkeleton from "@/loading/skeleton/auth-login-skeleton";
 import LoginForm from "@/components/auth/login/login-form";
 
 const Login = () => {

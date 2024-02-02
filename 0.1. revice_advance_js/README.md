@@ -123,7 +123,7 @@ var sum = (a, b) => {
 
 ____
 
-### Extra
+### Extra Info 1
 
 #### Object Creation Techniques
 
@@ -146,7 +146,30 @@ let abc = {[price]: asc}; // Now, abc is {price: 'asc'}
 
 In both cases, you end up with an object `abc` that has a property `price` with a value of `'asc'`. The difference is in when and how you use each syntax. The first is used for modifying existing objects, and the second is used for creating new objects with dynamic properties.
 
+----
+### Function work flow
 
+- Function Invocation
+```js
+var x = 1;
+
+a()
+b()
+
+console.log(x)
+
+function a() {
+    var x = 10;
+    console.log(x)
+}
+
+function b() {
+    var x =  100;
+    console.log(x)
+}
+
+```
+![](../images/funtioninvocation.png)
 
 
 
