@@ -263,19 +263,104 @@ export class UsersModule {}
 ```
 
 - go to `users.controller.ts` file and add the following code
+
 ```ts
-
-import { Controller } from '@nestjs/common';
-
 @Controller('users')
 export class UsersController {
-@Get()
-  getUsers(): string {
-    return 'Hello World!';
+  @Get()
+  findAll() {
+    return [];
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return { id };
+  }
+  @Get('interns')
+  findAllInterns() {
+    return [];
   }
 }
-
-
-
-
+```
+If you want to get GET /users/:id and GET /users/interns, you can use the following code
+```JSON
+{
+    "id": "interns"
 }
+```
+
+But if you declare interns before :id, it will give you and empty array
+```JSON
+[]
+```
+
+> When a request comes in, it is matched against the routes in the order they are declared. If you declare a dynamic route (:id) before a static route (interns), the dynamic route will match first and the static route will never be reached.
+
+> So, declaring the static route (interns) before the dynamic route (:id) is indeed the correct way to avoid conflicts.
+
+so, the correct order should be
+```ts
+@Controller('users')
+
+export class UsersController {
+  @Get('interns')
+  findAllInterns() {
+    return [];
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return { id };
+  }
+}
+```
+
+- Let's do a crud operation
+```ts
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+
+@Controller('users')
+/*
+POST /users
+GET /users
+PATCH /users/:id
+DELETE /users/:id
+*/
+export class UsersController {
+  @Get()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  findAll(@Query('role') role: 'admin' | 'user') {
+    // TODO: Use 'role' for filtering in the future
+    return [];
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return { id };
+  }
+
+  @Post()
+  create(@Body() user: NonNullable<unknown>) {
+    return user;
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() user: NonNullable<unknown>) {
+    return { id, ...user };
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return { id };
+  }
+}
+```
