@@ -602,8 +602,18 @@ app.use("/api/v1/", todos);
    - If you open redis-stack container, you can see the todos with data.
    - Now you can scale your application by adding multiple instances of the application and using redis to cache the data.
 
+### [**6. NestJS**]()
+
+### Introduction:
+
+NestJS is a progressive Node.js framework used to build efficient, reliable, and scalable server-side applications. It uses TypeScript and is heavily inspired by Angular. NestJS provides a modular structure and a powerful CLI that makes it easy to build and maintain applications.
 
 
+### Installation 
+
+```
+npm i -g @nestjs/cli
+```
 
 
 
