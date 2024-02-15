@@ -338,7 +338,7 @@ DELETE /users/:id
 export class UsersController {
   @Get()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  findAll(@Query('role') role: 'admin' | 'user') {
+  findAll(@Query('role') _role: 'admin' | 'user') {
     // TODO: Use 'role' for filtering in the future
     return [];
   }
@@ -363,4 +363,5 @@ export class UsersController {
     return { id };
   }
 }
+
 ```
