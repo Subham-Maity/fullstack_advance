@@ -58,7 +58,7 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: INITIAL_FORM_STATE_REGISTER,
-    validate: registerValidate,
+    // validate: registerValidate,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit,
@@ -149,27 +149,8 @@ const Register = () => {
                     alt="avatar"
                   />
                 )}
-                {/*{imageUrl && imageUrl ? (*/}
-                {/*  <Image*/}
-                {/*    src={imageUrl || avatar}*/}
-                {/*    className={styles.profile_img}*/}
-                {/*    alt="avatar"*/}
-                {/*    width={100}*/}
-                {/*    height={100}*/}
-                {/*  />*/}
-                {/*) : (*/}
-                {/*  <Image*/}
-                {/*    src={avatar}*/}
-                {/*    className={styles.profile_img}*/}
-                {/*    alt="avatar"*/}
-                {/*    width={100}*/}
-                {/*    height={100}*/}
-                {/*  />*/}
-                {/*)}*/}
               </label>
-
               <input
-                // onChange={onUpload}
                 onChange={handleUpload}
                 required={true}
                 className={styles.customFileInput}
