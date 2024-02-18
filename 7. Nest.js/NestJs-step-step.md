@@ -1,4 +1,7 @@
-### Let's create a restful API using NestJS(Lesson 2)
+## Let's create a restful API using NestJS(Lesson 2)
+
+### Basic Start with NestJS
+
 #### Let's make a module
 - You can follow my commit after [This](https://github.com/Subham-Maity/fullstack_advance/tree/854c3e32d596f0d92b48b5e1b478ed51a89d3afb)
 1. Let's create a basic module
@@ -56,3 +59,43 @@ import { BookmarksModule } from './bookmarks/bookmarks.module';
 })
 export class AppModule {}
 ```
+
+#### Let's make a controller
+
+
+- create a file called `auth.controller.ts` inside the auth folder and service file called `auth.service.ts` inside the auth folder
+
+Initial structure of the controller
+> - `auth.controller.ts`
+```ts 
+import { Controller } from '@nestjs/common';
+
+@Controller()
+export class AppController {}
+```
+
+> - `auth.service.ts`
+```ts
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AuthService {}
+```
+
+- Now you have to add the `AuthController` and `AuthService` to the `AuthModule` by adding them to the providers array of the `AuthModule`
+```ts
+import { Module } from '@nestjs/common';
+
+import { AuthController } from './auth.controller';
+
+import { AuthService } from './auth.service';
+
+@Module({
+  controllers: [AuthController],
+  providers: [AuthService],
+})
+
+export class AuthModule {}
+```
+
+> The Controller will receive the request from the internet and pass it to the service, and the service will do the business logic and return the response to the controller, and the controller will send the response to the internet. 
