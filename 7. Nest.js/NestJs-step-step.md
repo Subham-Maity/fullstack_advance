@@ -235,3 +235,37 @@ export class AuthController {
 ```
 
 In this setup, the `AuthController` handles the HTTP requests and responses, while the `AuthService` contains the business logic for signup and login. This separation of concerns makes your code more organized and maintainable.
+
+### 3. Setting up DB with docker
+
+- Create a `docker-compose.yml` file in the root of your project with the following content:
+
+```yml
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+  test-db:
+    image: postgres:13
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+```
+- Then run `docker compose up dev-db -d` to start the database.
+- Then `docker ps` to check container id 
+- Then `docker logs <container_id>` to check logs of the container
+
+```bash 
+2024-02-18 19:22:56.603 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2024-02-18 19:22:56.607 UTC [27] LOG:  database system was shut down at 2024-02-18 19:22:52 UTC
+2024-02-18 19:22:56.614 UTC [1] LOG:  database system is ready to accept connections
+```
