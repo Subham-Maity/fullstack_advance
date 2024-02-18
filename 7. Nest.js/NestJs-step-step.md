@@ -269,3 +269,84 @@ services:
 2024-02-18 19:22:56.607 UTC [27] LOG:  database system was shut down at 2024-02-18 19:22:52 UTC
 2024-02-18 19:22:56.614 UTC [1] LOG:  database system is ready to accept connections
 ```
+### 4. Setting up TypeORM with NestJS (Prisma)
+
+- Install the Prisma CLI globally by running the following command in your terminal:
+
+```bash
+npm install -g prisma
+```
+
+- Also install the Prisma client as a development dependency in your NestJS project:
+
+```bash
+npm install @prisma/client
+```
+
+- Now run the following command to initialize Prisma in your project:
+
+```bash
+npx prisma init
+```
+
+- It will create postgres by default, you can change it to mysql or sqlite
+
+- Open prisma in your project now paste the following on schema.prisma
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  email     String
+  hash      String
+  firstName String?
+  lastName  String?
+}
+
+model Bookmarks {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  title       String
+  Description String
+  link        String
+}
+
+```
+
+- Now modify the .env file's `DATABASE_URL`
+
+`default`
+```bash
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+```
+
+`change to`
+```bash
+DATABASE_URL="postgresql://postgres:123@localhost:5434/nest?schema=public"
+```
+
+- Now migrate the database by running the following command:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+- You can use prisma studio to check the database by running the following command:
+
+```bash
+npx prisma studio
+```
