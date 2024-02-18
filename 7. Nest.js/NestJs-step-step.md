@@ -1,22 +1,23 @@
 ## Let's create a restful API using NestJS(Lesson 2)
 
-### Basic Start with NestJS
+### 1. Basic Understanding and Setup
 
-#### Let's make a module
-- You can follow my commit after [This](https://github.com/Subham-Maity/fullstack_advance/tree/854c3e32d596f0d92b48b5e1b478ed51a89d3afb)
-1. Let's create a basic module
-- create a folder called auth inside src folder
-- create a file called `auth.module.ts` inside the auth folder
-> Basic module structure
+#### 1.1 Let's make a module
+
+1. **Create a Basic Module**: Start by creating a new folder called `auth` inside the `src` folder. In the `auth` folder, create a new file called `auth.module.ts`.
+
+2. **Define the Module**: In `auth.module.ts`, define the `AuthModule` class and decorate it with `@Module({})`. This decorator tells NestJS that this class is a module.
+
 ```ts
 import { Module } from '@nestjs/common';
 
 @Module({})
-export class AppModule {}
+export class AuthModule {}
 ```
-- we can use this module in our application by adding it to the import array of the `AppModule` or any other module that we want to use it in.
 
--`before`
+3. **Use the Module**: You can use this module in your application by adding it to the `imports` array of the `AppModule` or any other module where you want to use it.
+
+Before:
 ```ts
 import { Module } from '@nestjs/common';
 
@@ -24,30 +25,35 @@ import { Module } from '@nestjs/common';
   imports: [],
 })
 export class AppModule {}
-
 ```
-`after`
+
+After:
 ```ts
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-    imports: [AuthModule],//add the AuthModule to the imports array
+  imports: [AuthModule], // Add the AuthModule to the imports array
 })
 export class AppModule {}
 ```
-- Let's create another module called `user` by using terminal
+
+4. **Create More Modules**: You can create more modules using the NestJS CLI. For example, to create a `user` module, you can use the following command in the terminal:
+
 ```bash
 nest g module user
 ```
-- It will create a folder called `user` and a file called `user.module.ts` inside the user folder and also import the `UserModule` to the `AppModule` automatically.
 
-- Create another one called `bookmarks`
+This command will create a new folder called `user` and a new file called `user.module.ts` inside the `user` folder. It will also automatically import the `UserModule` into the `AppModule`.
+
+5. **Create a `bookmarks` Module**: Similarly, you can create a `bookmarks` module using the following command:
+
 ```bash
 nest g module bookmarks
 ```
 
-- Now app.module.ts looks like this
+6. **Final Structure**: After creating the `auth`, `user`, and `bookmarks` modules, your `app.module.ts` file should look like this:
+
 ```ts
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
@@ -60,21 +66,24 @@ import { BookmarksModule } from './bookmarks/bookmarks.module';
 export class AppModule {}
 ```
 
-#### Let's make a controller
+This structure allows you to organize your application into distinct modules, each responsible for a specific feature. This modular approach makes your application easier to understand, develop, and test.
+
+#### 1.2 Let's make a basic controller and service
 
 
-- create a file called `auth.controller.ts` inside the auth folder and service file called `auth.service.ts` inside the auth folder
+1. **Create the Controller and Service files**: In the `auth` folder, create two files: `auth.controller.ts` and `auth.service.ts`.
 
-Initial structure of the controller
-> - `auth.controller.ts`
-```ts 
+2. **Define the Controller**: In `auth.controller.ts`, define the `AuthController` class and decorate it with `@Controller('auth')`. This decorator tells NestJS that this class is a controller and maps any incoming requests with the path `/auth` to this controller.
+
+```ts
 import { Controller } from '@nestjs/common';
 
-@Controller()
-export class AppController {}
+@Controller('auth')
+export class AuthController {}
 ```
 
-> - `auth.service.ts`
+3. **Define the Service**: In `auth.service.ts`, define the `AuthService` class and decorate it with `@Injectable()`. This decorator will allow NestJS to manage this class as a provider that can be injected into other classes.
+
 ```ts
 import { Injectable } from '@nestjs/common';
 
@@ -82,51 +91,36 @@ import { Injectable } from '@nestjs/common';
 export class AuthService {}
 ```
 
-- Now you have to add the `AuthController` and `AuthService` to the `AuthModule` by adding them to the providers array of the `AuthModule`
+4. **Register the Controller and Service in the Module**: In the `AuthModule`, import `AuthController` and `AuthService` and add them to the `controllers` and `providers` arrays respectively. This will allow NestJS to recognize them as part of the module.
+
 ```ts
 import { Module } from '@nestjs/common';
-
 import { AuthController } from './auth.controller';
-
 import { AuthService } from './auth.service';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
 })
-
 export class AuthModule {}
 ```
 
-> - The Controller will receive the request from the internet and pass it to the service, and the service will do the business logic and return the response to the controller, and the controller will send the response to the internet. 
-> - Auth controller instance the Auth service and use the service to do the business logic.
+5. **Inject the Service into the Controller**: In `AuthController`, inject an instance of `AuthService` through the constructor. This allows you to use the service's methods in the controller.
 
 ```ts
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
-
 export class AuthController {
   constructor(private authService: AuthService) {}
 }
 ```
-Upper one is the shorthand of the below one nestJs handle it for you
-```ts
-import { Controller } from '@nestjs/common';
-import { AuthService } from './auth.service';
 
-@Controller('auth')
+Note: The above code is a shorthand for manually creating a new instance of `AuthService` in the constructor.
 
-export class AuthController {
-    authService: AuthService;
-  constructor() {
-    this.authService = new AuthService();
-  }
-}
-```
+6. **Use the Service's methods in the Controller**: If you have a method in `AuthService`, you can use it in `AuthController`. For example, if `AuthService` has a `test()` method:
 
-For example, we declare in auth.service.ts
 ```ts
 import { Injectable } from '@nestjs/common';
 
@@ -136,16 +130,108 @@ export class AuthService {
 }
 ```
 
-We can use the `test` method in the `AuthController` like this
+You can call this method in `AuthController` like this:
+
 ```ts
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {
-        this.authService.test();
-    }
+  constructor(private authService: AuthService) {
+    this.authService.test();
+  }
 }
 ```
 
+This is a basic pattern in NestJS for separating the handling of HTTP requests (in the controller) from the business logic (in the service). The controller's job is to receive the request and send the response, while the service performs the business logic.
+
+### 2. Setting Up the Auth Controller
+
+#### 2.1 Creating Basic Endpoints
+
+1. **Create Basic Endpoints**: Login and Signup are two common endpoints for authentication. Let's create these basic endpoints in the `AuthController`.
+
+```ts
+import { Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Post('signup')
+  signup() {
+    return 'I am a signup';
+  }
+
+  @Post('login')
+  login() {
+    return 'I am a login';
+  }
+}
+```
+
+Now, if you make a POST request to `/auth/signup` or `/auth/login`, you will receive the corresponding response.
+
+2. **Data Types and JSON**: With NestJS, you don't have to worry about the data type you send or receive. If you return an object, it will be automatically converted to JSON. If you send a JSON object, it will be automatically parsed. For example:
+
+```ts
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Post('signup')
+  signup() {
+    return { message: 'I am a signup' }; // This will be converted to JSON
+  }
+
+  @Post('login')
+  login() {
+    return { message: 'I am a login' }; // This will be converted to JSON
+  }
+}
+```
+
+3. **Using the AuthService**: You can use the `AuthService` to handle the logic for the `signup` and `login` methods. This keeps your controller and service clean and readable.
+
+In `auth.service.ts`:
+
+```ts
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AuthService {
+  signup() {
+    return 'I am a signup';
+  }
+
+  login() {
+    return 'I am a login';
+  }
+}
+```
+
+In `auth.controller.ts`:
+
+```ts
+import { Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Post('signup')
+  signup() {
+    return this.authService.signup();
+  }
+
+  @Post('login')
+  login() {
+    return this.authService.login();
+  }
+}
+```
+
+In this setup, the `AuthController` handles the HTTP requests and responses, while the `AuthService` contains the business logic for signup and login. This separation of concerns makes your code more organized and maintainable.
