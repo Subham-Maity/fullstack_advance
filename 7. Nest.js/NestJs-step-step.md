@@ -98,4 +98,54 @@ import { AuthService } from './auth.service';
 export class AuthModule {}
 ```
 
-> The Controller will receive the request from the internet and pass it to the service, and the service will do the business logic and return the response to the controller, and the controller will send the response to the internet. 
+> - The Controller will receive the request from the internet and pass it to the service, and the service will do the business logic and return the response to the controller, and the controller will send the response to the internet. 
+> - Auth controller instance the Auth service and use the service to do the business logic.
+
+```ts
+import { Controller } from '@nestjs/common';
+import { AuthService } from './auth.service';
+
+@Controller('auth')
+
+export class AuthController {
+  constructor(private authService: AuthService) {}
+}
+```
+Upper one is the shorthand of the below one nestJs handle it for you
+```ts
+import { Controller } from '@nestjs/common';
+import { AuthService } from './auth.service';
+
+@Controller('auth')
+
+export class AuthController {
+    authService: AuthService;
+  constructor() {
+    this.authService = new AuthService();
+  }
+}
+```
+
+For example, we declare in auth.service.ts
+```ts
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AuthService {
+  test() {}
+}
+```
+
+We can use the `test` method in the `AuthController` like this
+```ts
+import { Controller } from '@nestjs/common';
+import { AuthService } from './auth.service';
+
+@Controller()
+export class AuthController {
+    constructor(private authService: AuthService) {
+        this.authService.test();
+    }
+}
+```
+
