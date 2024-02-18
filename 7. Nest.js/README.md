@@ -215,5 +215,4 @@ nest -g gateway <gateway-name>
 nest -g resolver <resolver-name>
 ```
 
-### Let's create a restful API using NestJS(Lesson 2)
-```bash
+
