@@ -497,6 +497,10 @@ npm i argon2
 #### 7.2 Basic Signup Logic
 
 Here is the basic signup logic:
+- Get the email and password from the request body
+- Hash the password using an algorithm 
+- Create a new user in the database with the email and hashed password
+- Return the user data
 
 ```ts
 import { Injectable } from '@nestjs/common';
@@ -711,4 +715,13 @@ export class AuthService {
   }
 }
 ```
+
+### 8. Implementing Login Logic
+Here is the basic login logic:
+- Find the user by email
+- If a user does not exist, throw exception
+- Compare the password
+- If password does not match throw exception
+- Return the user
+
 
