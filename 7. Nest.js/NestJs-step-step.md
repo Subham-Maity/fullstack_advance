@@ -236,7 +236,7 @@ export class AuthController {
 
 In this setup, the `AuthController` handles the HTTP requests and responses, while the `AuthService` contains the business logic for signup and login. This separation of concerns makes your code more organized and maintainable.
 
-### 3. Setting up DB with docker
+### 3. Setting up DB with docker(Prisma)
 
 - Create a `docker-compose.yml` file in the root of your project with the following content:
 
@@ -350,3 +350,365 @@ npx prisma migrate dev --name init
 ```bash
 npx prisma studio
 ```
+
+
+- In your bash run the following command:
+
+```bash
+nest g module prisma
+```
+
+- Now create a prisma service by running the following command:
+
+```bash
+nest g service prisma --no-spec
+``` 
+
+- Now modify the prisma.service.ts file to look like this:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+@Injectable()
+export class PrismaService extends PrismaClient {
+  constructor() {
+    super({
+      datasources: {
+        db: {
+          url: 'postgresql://postgres:123@localhost:5434/nest?schema=public',
+        },
+      },
+    });
+  }
+}
+```
+
+- Now modify the prisma.module.ts file to look like this:
+
+```ts
+
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Global() //It will make the service available to all modules
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],//you need to export the service to use it in other modules
+})
+export class PrismaModule {}
+```
+
+### 6. Understanding DTOs and Class-Validator in NestJS
+
+Data Transfer Objects (DTOs) are used to structure and validate the data that is sent over the network. They ensure that the data adheres to a specific format and meets certain validation criteria. In NestJS, we often use DTOs with the `class-validator` package for this purpose.
+
+#### 6.1 Installing Class-Validator
+
+First, install the `class-validator` and `class-transformer` packages using npm:
+
+```bash
+npm i class-validator class-transformer
+```
+
+#### 6.2 Creating and Validating DTOs
+
+Create a `dto` folder inside the `auth` folder. Inside the `dto` folder, create a file named `auth.dto.ts`. This file will define the data structure and validation rules for the authentication data.
+
+```ts
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
+export class AuthDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
+```
+
+In the above code, `@IsEmail()`, `@IsNotEmpty()`, and `@IsString()` are decorators provided by `class-validator`. They specify that the email should be a valid email address, and both the email and password should be non-empty strings.
+
+#### 6.3 Using DTOs in Controllers
+
+You can now use this DTO in your controller. The `@Body()` decorator in combination with the DTO type will automatically validate the incoming request data and throw an error if the data is invalid.
+
+```ts
+import { Body, Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthDto } from './dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Post('signup')
+  signup(@Body() dto: AuthDto) {
+    return this.authService.signup(dto);
+  }
+
+  @Post('login')
+  login() {
+    return this.authService.login();
+  }
+}
+```
+
+#### 6.4 Global Validation Pipe
+
+To enable automatic validation globally, you can add a global pipe in your main.ts file:
+
+```ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+  }));
+  await app.listen(3333);
+}
+bootstrap();
+```
+
+The `whitelist: true` option will strip any properties that don't have any decorators in the DTO.
+
+
+This way, you can ensure that all incoming request data is validated according to the rules defined in your DTOs.
+This helps to maintain data integrity and security in your application.
+
+
+### 7. Implementing Signup Logic with Argon2 and Prisma
+
+In this section, we will create a signup logic using NestJS, Prisma, and argon2 for password hashing.
+
+#### 7.1 Installing Argon2
+
+Argon2 is a password hashing algorithm that is considered to be very secure. It's a better choice than bcrypt. Install it using npm:
+
+```bash
+npm i argon2
+```
+
+#### 7.2 Basic Signup Logic
+
+Here is the basic signup logic:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthDto } from './dto';
+import * as argon from 'argon2';
+
+@Injectable()
+export class AuthService {
+  constructor(private prisma: PrismaService) {}
+
+  async signup(dto: AuthDto) {
+    const hash = await argon.hash(dto.password); //hashing the password
+    const user = await this.prisma.user.create({ //creating the user
+      data: { //data to be created
+        email: dto.email, //email field from the dto
+        hash, //hashed password
+      },
+    });
+    return user;
+  }
+}
+```
+
+This will return the following response:
+
+```bash
+{
+    "id": 4,
+    "createdAt": "2024-02-28T04:38:40.804Z",
+    "updatedAt": "2024-02-28T04:38:40.804Z",
+    "email": "subham@gmail.com",
+    "hash": "$argon2id$......",
+    "firstName": null,
+    "lastName": null
+}
+```
+
+However, we don't want the hash to be returned to the user. We can modify the signup function to select only the necessary fields:
+
+```ts
+async signup(dto: AuthDto) {
+    const hash = await argon.hash(dto.password); //hashing the password
+    const user = await this.prisma.user.create({ //creating the user
+      data: { //data to be created
+        email: dto.email, //email field from the dto
+        hash, //hashed password
+      },
+        select: { //selecting the fields to be returned
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+    });
+    return user;
+  }
+```
+
+Or, you can directly delete the hash:
+
+```ts
+async signup(dto: AuthDto) {
+    const hash = await argon.hash(dto.password);
+    const user = await this.prisma.user.create({
+        data: {
+            email: dto.email,
+            hash,
+        },
+    });
+    delete user.hash; //directly delete
+    return user;
+}
+```
+
+#### 7.3 Handling Unique Email Validation
+
+If we sign up multiple times with the same email, it will create multiple users with the same email. We need to check if the user already exists or not.
+
+First, modify the schema.prisma file to make the email field unique:
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now())
+  email     String      @unique//making the email field unique
+  hash      String
+  firstName String?
+  lastName  String?
+  Bookmarks Bookmarks[]
+
+  @@map("users") //mapping the table name
+}
+
+model Bookmarks {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  title       String
+  Description String
+  link        String
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id]) //relation with the user table
+
+  @@map("bookmarks")//mapping the table name
+}
+```
+
+Now run `npx prisma migrate dev` to migrate the database and enter a name for the migration ex: `make email unique`. Now run `npx prisma studio` to check the database, and you will see the email field is unique now.
+
+#### 7.4 Handling Errors
+
+If you try to sign up with an email that already exists, you will get an error. This is because we are not handling the error, so let's handle the error:
+
+```ts
+ async signup(dto: AuthDto) {
+    const hash = await argon.hash(dto.password);
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          hash,
+        },
+      });
+      delete user.hash;
+      return user;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('Credentials taken');
+        }
+      }
+      throw error;
+    }
+  }
+```
+
+Now you can see the error message in the postman:
+
+```bash
+{
+    "statusCode": 403,
+    "message": "Credentials taken",
+    "error": "Forbidden"
+}
+```
+
+#### 7.5 Creating a Custom Exception Filter
+
+If you want to make it more production-ready, you can create a custom exception filter to handle the error. Make a higher-order function to handle the error:
+
+```ts
+//async-error-handler.ts
+
+import { ForbiddenException } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
+export const asyncErrorHandler = (asyncFun: (...args: any[]) => Promise<any>) => {
+    return async (...args: any[]) => {
+        try {
+            return await asyncFun(...args);
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+                throw new ForbiddenException('Credentials taken');
+            }
+            throw error;
+        }
+    };
+};
+```
+
+Now you can use this and without try-catch block:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthDto } from './dto';
+import * as argon from 'argon2';
+import { asyncErrorHandler } from '../errors/async-error-handler';
+
+@Injectable()
+export class AuthService {
+  signup = asyncErrorHandler(async (dto: AuthDto) => {
+    const hash = await argon.hash(dto.password);
+    const user = await this.prisma.user.create({
+      data: {
+        email: dto.email,
+        hash,
+      },
+    });
+    delete user.hash;
+    return user;
+  });
+
+  constructor(private prisma: PrismaService) {}
+
+  login() {
+    return 'I am a login';
+  }
+}
+```
+
