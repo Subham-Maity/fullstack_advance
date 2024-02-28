@@ -724,4 +724,21 @@ Here is the basic login logic:
 - If password does not match throw exception
 - Return the user
 
-
+```ts
+  signin = asyncErrorHandler(async (dto: AuthDto) => {
+    const user = await this.prisma.user.findUnique({
+        where: {
+            email: dto.email,
+        },
+    });
+    if (!user) {
+        throw new NotFoundException('User not found');
+    }
+    const match = await argon.verify(user.hash, dto.password);
+    if (!match) {
+        throw new UnauthorizedException('Invalid credentials');
+    }
+    delete user.hash;
+    return user;
+});
+```
