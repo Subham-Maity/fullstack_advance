@@ -35,6 +35,9 @@
 - [7. Implementing Login Logic](#7-implementing-login-logic)
 - [8.Automate postgres restart & prisma migrations](#8-automating-postgres-restart--prisma-migrations)
 - [9.NestJs config module](#9-nestjs-config-module)
+- [10. Passport & JWT module setup](#10-passport--jwt-module-setup)
+  - [10.1 Basic Setup of Passport & JWT](#101-basic-setup-of-passport--jwt) 
+  - [10.2 Let's setup strategy](#102-lets-setup-strategy-)
   
 
 
@@ -919,3 +922,178 @@ export class AppModule {}
 ```
 In the above code, `load: [configuration]` tells `ConfigModule` to load the configuration from the `configuration` function.
 
+
+### 10. Passport & JWT module setup
+
+#### 10.1 Basic Setup of Passport & JWT
+
+- Install the passport and jwt module using npm:
+
+```bash
+yarn add @nestjs/passport passport @nestjs/jwt passport-jwt
+
+yarn add -D @types/passport-jwt
+```
+
+- Now open `auth.module.ts` and modify it to look like this:
+
+```ts
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { JwtModule } from '@nestjs/jwt';
+
+@Module({
+  imports: [JwtModule.register({})],//import the jwt module
+  //controllers, providers, etc...
+})
+export class AuthModule {}
+```
+> Purpose is to sing the token and verify the token
+
+- Now open `auth.service.ts` and modify it to look like this:
+
+```ts
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthDto } from './dto';
+//other...
+import { JwtService } from '@nestjs/jwt';
+
+@Injectable()
+export class AuthService {
+  signup = asyncErrorHandler(async (dto: AuthDto) => {
+   //previous code..
+  });
+  signin = asyncErrorHandler(async (dto: AuthDto) => {
+    //previous code..
+  });
+
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,//dependency injection
+  ) {}
+}
+```
+
+> so we have injected the jwt service in the constructor, so now we can use it in the service
+- We need to return the token when user signs in, and send the token when user signs up
+
+- let's make a function which will take the payload and options and return the token
+
+```tsx
+  signToken = asyncErrorHandler(async (userId: number, email: string) => {
+    const payload = {
+        sub: userId,//sub is the subject of the token 
+        email,//optional
+    };
+    const secret = this.config.get('JWT_SECRET');
+    //token will expire in 15 minutes
+    //payload is the data you want to store in the token
+    const token = this.jwt.sign(payload, {
+        expiresIn: '15m',
+        secret: secret,
+    });
+    return { access_token: token };//return the token
+});
+```
+
+- `this.config.get('JWT_SECRET');` import the config service and get the JWT_SECRET from the .env file
+- and call this function in the signin function and signup function
+
+```ts
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthDto } from './dto';
+import * as argon from 'argon2';
+import { asyncErrorHandler } from '../errors/async-error-handler';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class AuthService {
+    signToken = asyncErrorHandler(async (userId: number, email: string) => {
+        const payload = {
+            sub: userId,
+            email,
+        };
+        const secret = this.config.get('JWT_SECRET');
+        const token = this.jwt.sign(payload, {
+            expiresIn: '15m',
+            secret: secret,
+        });
+        return { access_token: token };
+    });
+    signup = asyncErrorHandler(async (dto: AuthDto) => {
+        const hash = await argon.hash(dto.password);
+        const user = await this.prisma.user.create({
+            data: {
+                email: dto.email,
+                hash,
+            },
+        });
+        return this.signToken(user.id, user.email); //return the token
+    });
+    signin = asyncErrorHandler(async (dto: AuthDto) => {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: dto.email,
+            },
+        });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+        const match = await argon.verify(user.hash, dto.password);
+        if (!match) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+        return this.signToken(user.id, user.email); //return the token
+    });
+
+    constructor(
+        private prisma: PrismaService,
+        private jwt: JwtService,
+        private config: ConfigService,//call the ConfigService in the constructor
+    ) {}
+}
+```
+
+#### 10.2 Let's setup strategy 
+
+- We need to validate the token when a user sends the token in the header, and we need to extract the token from the header and validate it 
+- So create a folder called `strategies` in the `auth` folder and create a file called `jwt.strategy.ts` in it and index.ts file in the `strategies` folder
+
+- You can copy this code from [here:](#https://docs.nestjs.com/recipes/passport#implementing-passport-local)
+
+`jwt.strategy.ts`
+```ts
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PrismaService } from '../../prisma/prisma.service';
+
+@Injectable()//injectable means it can be injected in other classes as a dependency
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') { //extend means it is a subclass of the Strategy class
+  constructor(//constructor means the strategy is dependent on the prisma service and the config service
+    config: ConfigService,
+    private prisma: PrismaService, //private means it is a private property of the class
+  ) {
+    super({//super means it is calling the constructor of the parent class which is the Strategy class
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //it says to extract the token from the header
+      secretOrKey: config.get('JWT_SECRET'), //get the secret from the .env file
+    });
+  }
+}
+```
+
+`index.ts`
+```ts
+export * from './jwt.strategy';
+```
+
+> It also a provider, so we need to add it to the providers array in the `auth.module.ts` file
+
+```ts
+providers: [AuthService, JwtStrategy],//add the JwtStrategy to the providers array
+```
