@@ -1,4 +1,41 @@
-## Let's create a restful API using NestJS(Lesson 2)
+# Let's create a restful API using NestJS
+
+## TOC
+
+- [1. Basic Understanding and Setup](#1-basic-understanding-and-setup)
+    - [1.1 Let's make a module](#11-lets-make-a-module)
+        - [1. Create a Basic Module](#)
+        - [2. Define the Module](#)
+        - [3. Use the Module](#)
+        - [4. Create More Modules](#)
+        - [5. Create a `bookmarks` Module](#)
+        - [6. Final Structure](#)
+    - [1.2 Let's make a basic controller and service](#12-lets-make-a-basic-controller-and-service)
+        - [1. Create the Controller and Service files](#)
+        - [2. Define the Controller](#)
+        - [3. Define the Service](#)
+        - [4. Register the Controller and Service in the Module](#)
+        - [5. Inject the Service into the Controller](#)
+        - [6. Use the Service's methods in the Controller](#)
+- [2. Setting Up the Auth Controller](#2-setting-up-the-auth-controller)
+    - [2.1 Creating Basic Endpoints](#21-creating-basic-endpoints)
+- [3. Setting up DB with docker(Prisma)](#3-setting-up-db-with-dockerprisma)
+- [4. Setting up TypeORM with NestJS (Prisma)](#4-setting-up-typeorm-with-nestjs-prisma)
+- [5. Understanding DTOs and Class-Validator in NestJS](#5-understanding-dtos-and-class-validator-in-nestjs)
+  - [5.1 Installing Class-Validator](#51-installing-class-validator)
+  - [5.2 Creating and Validating DTOs](#52-creating-and-validating-dtos)
+  - [5.3 Using DTOs in Controllers](#53-using-dtos-in-controllers)
+  - [5.4 Global Validation Pipe](#54-global-validation-pipe)
+- [6. Implementing Signup Logic with Argon2 and Prisma](#6-implementing-signup-logic-with-argon2-and-prisma)
+  - [6.1 Installing Argon2](#61-installing-argon2)
+  - [6.2 Basic Signup Logic](#62-basic-signup-logic)
+  - [6.3 Handling Unique Email Validation](#63-handling-unique-email-validation)
+  - [6.4 Handling Errors](#64-handling-errors)
+  - [6.5 Creating a Custom Exception Filter](#65-creating-a-custom-exception-filter)
+- [7. Implementing Login Logic](#7-implementing-login-logic)
+- [8.Automate postgres restart & prisma migrations](#8-automating-postgres-restart--prisma-migrations)
+  
+
 
 ### 1. Basic Understanding and Setup
 
@@ -399,11 +436,11 @@ import { PrismaService } from './prisma.service';
 export class PrismaModule {}
 ```
 
-### 6. Understanding DTOs and Class-Validator in NestJS
+### 5. Understanding DTOs and Class-Validator in NestJS
 
 Data Transfer Objects (DTOs) are used to structure and validate the data that is sent over the network. They ensure that the data adheres to a specific format and meets certain validation criteria. In NestJS, we often use DTOs with the `class-validator` package for this purpose.
 
-#### 6.1 Installing Class-Validator
+#### 5.1 Installing Class-Validator
 
 First, install the `class-validator` and `class-transformer` packages using npm:
 
@@ -411,7 +448,7 @@ First, install the `class-validator` and `class-transformer` packages using npm:
 npm i class-validator class-transformer
 ```
 
-#### 6.2 Creating and Validating DTOs
+#### 5.2 Creating and Validating DTOs
 
 Create a `dto` folder inside the `auth` folder. Inside the `dto` folder, create a file named `auth.dto.ts`. This file will define the data structure and validation rules for the authentication data.
 
@@ -431,7 +468,7 @@ export class AuthDto {
 
 In the above code, `@IsEmail()`, `@IsNotEmpty()`, and `@IsString()` are decorators provided by `class-validator`. They specify that the email should be a valid email address, and both the email and password should be non-empty strings.
 
-#### 6.3 Using DTOs in Controllers
+#### 5.3 Using DTOs in Controllers
 
 You can now use this DTO in your controller. The `@Body()` decorator in combination with the DTO type will automatically validate the incoming request data and throw an error if the data is invalid.
 
@@ -456,7 +493,7 @@ export class AuthController {
 }
 ```
 
-#### 6.4 Global Validation Pipe
+#### 5.4 Global Validation Pipe
 
 To enable automatic validation globally, you can add a global pipe in your main.ts file:
 
@@ -482,11 +519,11 @@ This way, you can ensure that all incoming request data is validated according t
 This helps to maintain data integrity and security in your application.
 
 
-### 7. Implementing Signup Logic with Argon2 and Prisma
+### 6. Implementing Signup Logic with Argon2 and Prisma
 
 In this section, we will create a signup logic using NestJS, Prisma, and argon2 for password hashing.
 
-#### 7.1 Installing Argon2
+#### 6.1 Installing Argon2
 
 Argon2 is a password hashing algorithm that is considered to be very secure. It's a better choice than bcrypt. Install it using npm:
 
@@ -494,7 +531,7 @@ Argon2 is a password hashing algorithm that is considered to be very secure. It'
 npm i argon2
 ```
 
-#### 7.2 Basic Signup Logic
+#### 6.2 Basic Signup Logic
 
 Here is the basic signup logic:
 - Get the email and password from the request body
@@ -576,7 +613,7 @@ async signup(dto: AuthDto) {
 }
 ```
 
-#### 7.3 Handling Unique Email Validation
+#### 6.3 Handling Unique Email Validation
 
 If we sign up multiple times with the same email, it will create multiple users with the same email. We need to check if the user already exists or not.
 
@@ -624,7 +661,7 @@ model Bookmarks {
 
 Now run `npx prisma migrate dev` to migrate the database and enter a name for the migration ex: `make email unique`. Now run `npx prisma studio` to check the database, and you will see the email field is unique now.
 
-#### 7.4 Handling Errors
+#### 6.4 Handling Errors
 
 If you try to sign up with an email that already exists, you will get an error. This is because we are not handling the error, so let's handle the error:
 
@@ -661,7 +698,7 @@ Now you can see the error message in the postman:
 }
 ```
 
-#### 7.5 Creating a Custom Exception Filter
+#### 6.5 Creating a Custom Exception Filter
 
 If you want to make it more production-ready, you can create a custom exception filter to handle the error. Make a higher-order function to handle the error:
 
@@ -716,16 +753,21 @@ export class AuthService {
 }
 ```
 
-### 8. Implementing Login Logic
-Here is the basic login logic:
-- Find the user by email
-- If a user does not exist, throw exception
-- Compare the password
-- If password does not match throw exception
-- Return the user
+
+### 7. Implementing Login Logic
+
+In this section, we will create a login logic using NestJS, Prisma, and argon2 for password verification. The basic login logic involves the following steps:
+
+1. Find the user by email.
+2. If a user does not exist, throw an exception.
+3. Compare the password.
+4. If the password does not match, throw an exception.
+5. Return the user.
+
+Here is the corresponding code:
 
 ```ts
-  signin = asyncErrorHandler(async (dto: AuthDto) => {
+signin = asyncErrorHandler(async (dto: AuthDto) => {
     const user = await this.prisma.user.findUnique({
         where: {
             email: dto.email,
@@ -742,3 +784,24 @@ Here is the basic login logic:
     return user;
 });
 ```
+
+### 8. Automating Postgres Restart & Prisma Migrations
+
+In this section, we will automate the process of restarting Postgres and running Prisma migrations. Follow these steps:
+
+1. Delete the `package-lock.json` file and run `yarn` to install the dependencies.
+2. Modify the script and add the following lines to the `package.json`:
+
+```json
+"prisma:dev:deploy": "prisma migrate deploy",
+"db:dev:rm": "docker compose rm dev-db -s -f -v",
+"db:dev:up": "docker compose up dev-db -d",
+"db:dev:restart": "yarn db:dev:rm && yarn db:dev:up && node -e \"setTimeout(() => console.log('Done waiting'), 1000)\" && yarn prisma:dev:deploy",
+```
+
+The `prisma:dev:deploy` command will migrate the database to our dev database. The `docker compose rm dev-db -s -f -v` command will remove, stop, and remove the volume of the container. The `docker compose up dev-db -d` command will start the container in the background. The `db:dev:restart` command will remove the container, start the container, wait for 1 second, and then migrate the database to our dev database.
+
+3. Run `yarn db:dev:restart` to restart the database and migrate the database to our dev database.
+4. Run `npx prisma studio` to check the database.
+5. Run `yarn start:dev` to start the server.
+
