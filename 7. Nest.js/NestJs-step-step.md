@@ -34,6 +34,7 @@
   - [6.5 Creating a Custom Exception Filter](#65-creating-a-custom-exception-filter)
 - [7. Implementing Login Logic](#7-implementing-login-logic)
 - [8.Automate postgres restart & prisma migrations](#8-automating-postgres-restart--prisma-migrations)
+- [9.NestJs config module](#9-nestjs-config-module)
   
 
 
@@ -804,4 +805,117 @@ The `prisma:dev:deploy` command will migrate the database to our dev database. T
 3. Run `yarn db:dev:restart` to restart the database and migrate the database to our dev database.
 4. Run `npx prisma studio` to check the database.
 5. Run `yarn start:dev` to start the server.
+
+### 9. NestJs config module
+
+#### 9.1 Basic Config Setup
+
+- Install the config module using npm:
+
+```bash
+yarn add @nestjs/config
+```
+- import in app.module.ts
+
+```ts
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,//this is same as @Global() decorator
+    }),
+  ],
+})
+```
+
+- Now open the `prisma.service.ts` file and modify it to look like this:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+@Injectable()
+export class PrismaService extends PrismaClient {
+    constructor() {
+        super({
+            datasources: {
+                db: {
+                    url: 'postgresql://postgres:123@localhost:5434/nest?schema=public',
+                },
+            },
+        });
+    }
+}
+
+
+```
+
+To simply change
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable() //inject the config service in the constructor
+export class PrismaService extends PrismaClient {
+    constructor(config: ConfigService) {//inject the config service in the constructor
+        super({
+            datasources: {
+                db: {
+                    url: config.get('DATABASE_URL'),//getting the database url from the .env file
+                },
+            },
+        });
+    }
+}
+
+```
+
+- make sure in you .env file you have the following:
+
+```bash
+DATABASE_URL="postgresql://postgres:123@localhost:5434/nest?schema=public"
+```
+
+- Now run `yarn start:dev` to start the server.
+
+#### 9.2 Production Config Setup
+
+- Let's try to make it production ready so add a `config` folder in the root of your project and add a `config.ts` file in it.
+
+
+1. **Update your `config.ts` file**: Your `config.ts` file should return an object with the configuration for your application. Here's an example:
+
+```typescript
+// config.ts
+export default () => ({
+  database: {
+    url: process.env.DATABASE_URL,
+  },
+});
+```
+In this example, `config.ts` exports a function that returns an object with your database configuration. The `DATABASE_URL` is read from the environment variables.
+
+2. **Update your `app.module.ts` file**: In your `app.module.ts` file, import `ConfigModule` from `@nestjs/config`, import your configuration from `config.ts`, and add `ConfigModule` to the `imports` array in the module metadata. Here's how you can do it:
+
+```typescript
+// app.module.ts
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/config';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
+    // other modules...
+  ],
+  // controllers, providers, etc...
+})
+export class AppModule {}
+```
+In the above code, `load: [configuration]` tells `ConfigModule` to load the configuration from the `configuration` function.
 
