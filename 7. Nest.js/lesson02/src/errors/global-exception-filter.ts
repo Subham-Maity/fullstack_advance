@@ -32,9 +32,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   handlePrismaError(error: PrismaClientKnownRequestError): number {
     if (error.code === 'P2002') {
-      return HttpStatus.FORBIDDEN; // Forbidden
+      return HttpStatus.FORBIDDEN;
     }
     // handle other Prisma errors
-    return HttpStatus.INTERNAL_SERVER_ERROR; // Internal Server Error
+    return HttpStatus.INTERNAL_SERVER_ERROR;
   }
 }

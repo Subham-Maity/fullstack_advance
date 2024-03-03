@@ -1,4 +1,4 @@
-# Let's create a restful API using NestJS
+# V1.0.0 - Step by Step Guide
 
 ## TOC
 
@@ -43,6 +43,9 @@
   - [11.2 Providers](#112-providers)
   - [11.3 Return User Payload](#113-return-user-payload)
   - [11.4 JWT Guard](#114-jwt-guard)
+- [12. Custom Param Decorator](#12-custom-param-decorator)
+  - [12.1 Creating a GetUser Decorator](#121-creating-a-getuser-decorator)
+  - [12.2 Http Decorator](#122-http-decorator)
 
 
 ### 1. Basic Understanding and Setup
@@ -1249,4 +1252,135 @@ export class UserController {
     return req.user;
   }
 }
+```
+
+### 12. Custom Param Decorator
+
+#### 12.1 Creating a GetUser Decorator
+
+- the purpose is to get the user from the request object and use it in the controller
+
+> Decorators are a powerful feature in TypeScript and JavaScript that allow you to add metadata to classes, methods, and properties. In NestJS, decorators are used to define routes, inject dependencies, and more. You can also create custom decorators to add your own functionality to your application.
+
+First make a folder called `decorators` in the `auth` folder and then make a file called `get-user.decorator.ts` and `index.ts` in the `decorators` folder
+
+`get-user.decorator.ts`
+```ts
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const GetUser = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+    const request: Express.Request = ctx.switchToHttp().getRequest();
+    return request.user;
+});
+
+```
+
+`index.ts`
+```ts
+export * from './get-user.decorator';
+```
+
+`user.controller.ts`
+```ts
+
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
+import { JwtGuard } from '../auth/guard';
+
+@Controller('user')
+export class UserController {
+    @UseGuards(JwtGuard)
+    @Get('me')
+    getMe(@Req() req: Request) {
+        return req.user;
+    }
+}
+
+
+// Replace with .....
+
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../auth/guard';
+import { GetUser } from '../auth/decorator';
+import { User } from '@prisma/client';
+
+@UseGuards(JwtGuard) //place it here so that our entire controller is protected
+@Controller('user')
+export class UserController {
+  @Get('me')
+  getMe(@GetUser() user: User) { //use the GetUser decorator
+    return user;
+  }
+}
+```
+
+- let's return the user id instead of the entire user object
+> Modify the `get-user.decorator.ts` file to look like this:
+
+```ts
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const GetUser = createParamDecorator((data: string | undefined, ctx: ExecutionContext) => {
+  const request: Express.Request = ctx.switchToHttp().getRequest();
+  if (data) { //if data is provided then return the user[data]
+    return request.user[data];
+  }
+  return request.user;
+});
+```
+> If you provide a string, it will return the user[data] else it will return the entire user object
+
+
+- Now let's say you want the email of the user, then you can use the GetUser decorator like this:
+
+```ts
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../auth/guard';
+import { GetUser } from '../auth/decorator';
+import { User } from '@prisma/client';
+
+@UseGuards(JwtGuard)
+@Controller('user')
+export class UserController {
+  @Get('me')
+  getMe(@GetUser() user: User, @GetUser('email') email: string) { //use the GetUser decorator with the email
+    console.log({
+      email,
+    });
+    return user;
+  }
+}
+```
+
+#### 12.2 Http Decorator
+
+- You can pass you status code which you want to return in the response
+
+`auth.controller.ts`
+
+```ts
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthDto } from './dto';
+
+@Controller('auth')
+export class AuthController {
+    constructor(private authService: AuthService) {}
+
+    @HttpCode(201) //use the @HttpCode decorator
+    @Post('signup')
+    signup(@Body() dto: AuthDto) {
+        return this.authService.signup(dto);
+    }
+
+    @Post('signin')
+    signin(@Body() dto: AuthDto) {
+        return this.authService.signin(dto);
+    }
+}
+
+// Or you can use it like this
+
+@HttpCode(HttpStatus.OK) //use the @HttpCode decorator
+
 ```
