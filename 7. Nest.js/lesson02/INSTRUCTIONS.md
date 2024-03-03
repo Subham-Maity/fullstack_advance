@@ -38,7 +38,11 @@
 - [10. Passport & JWT module setup](#10-passport--jwt-module-setup)
   - [10.1 Basic Setup of Passport & JWT](#101-basic-setup-of-passport--jwt) 
   - [10.2 Let's setup strategy](#102-lets-setup-strategy-)
-  
+- [11. NestGuard](#11-nestguard)  
+  - [11.1 Protecting Routes with Guards](#111-protecting-routes-with-guards)
+  - [11.2 Providers](#112-providers)
+  - [11.3 Return User Payload](#113-return-user-payload)
+  - [11.4 JWT Guard](#114-jwt-guard)
 
 
 ### 1. Basic Understanding and Setup
@@ -1084,7 +1088,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') { //extend me
       secretOrKey: config.get('JWT_SECRET'), //get the secret from the .env file
     });
   }
+
+    validate(payload: any) { //validate the token and return the payload
+        return payload;
+    }
 }
+
 ```
 
 `index.ts`
@@ -1092,8 +1101,152 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') { //extend me
 export * from './jwt.strategy';
 ```
 
-> It also a provider, so we need to add it to the providers array in the `auth.module.ts` file
+> It also a provider, so we need to add it to the provider array in the `auth.module.ts` file
 
 ```ts
 providers: [AuthService, JwtStrategy],//add the JwtStrategy to the providers array
+```
+
+### 11. NestGuard
+
+
+#### 11.1 Protecting Routes with Guards
+
+- Now we need to protect the routes with the guards, make a user module and a user controller and a user service and a user entity
+`user module`
+```ts
+@Module({
+    controllers: [UserController]
+})
+```
+
+`user controler`
+
+
+```ts
+import { Controller, Get, UseGuards } from '@nestjs/common';
+
+import { AuthGuard } from '@nestjs/passport';
+
+
+
+@Controller('user')
+
+export class UserController {
+
+  @UseGuards(AuthGuard('jwt')) //use the jwt guard
+
+  @Get('me')
+
+  getMe() {
+
+    return 'This is the user me';
+
+  }
+
+}
+```
+
+#### 11.2 Providers
+`auth.module.ts`
+```ts
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtStrategy } from './strategy';
+
+@Module({
+  imports: [JwtModule.register({})],
+  controllers: [AuthController],
+  providers: [AuthService, JwtService, JwtStrategy],//add the JwtStrategy to the providers array
+})
+export class AuthModule {}
+```
+
+#### 11.3 Return User Payload
+
+`jwt.strategy.ts`
+```ts
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PrismaService } from '../../prisma/prisma.service';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  constructor(
+    config: ConfigService,
+    private prisma: PrismaService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.get('JWT_SECRET'),
+    });
+  }
+
+  async validate(payload: { sub: number; email: string }) { //return the payload
+    const user = await this.prisma.user.findUnique({ //find the user by the id
+      where: {
+        id: payload.sub,
+      },
+    });
+    delete user.hash; //delete the hash
+    return user; //return the user
+  }
+}
+```
+
+#### 11.4 JWT Guard
+
+Make a folder in auth name it guard and here use `jwt.guard.ts` and `index.ts` and then use it in the `user.controller.ts` file
+
+`jwt.guard.ts`
+```ts
+import { AuthGuard } from '@nestjs/passport';
+
+export class JwtGuard extends AuthGuard('jwt') {
+  constructor() {
+    super();
+  }
+}
+```
+`index.ts`
+```ts
+export * from './jwt.guard';
+```
+
+`user.controller.ts`
+```ts
+
+
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
+
+@Controller('user')
+export class UserController {
+    @UseGuards(AuthGuard('jwt'))
+    @Get('me')
+    getMe(@Req() req: Request) {
+        return req.user;
+    }
+}
+
+
+// Replace with .....
+
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
+import { JwtGuard } from '../auth/guard';
+
+@Controller('user')
+export class UserController {
+  @UseGuards(JwtGuard) //use the jwt guard
+  @Get('me')
+  getMe(@Req() req: Request) {
+    return req.user;
+  }
+}
 ```
