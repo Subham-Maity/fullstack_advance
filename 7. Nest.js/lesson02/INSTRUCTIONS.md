@@ -51,7 +51,10 @@
 - [13. E2E Testing](#13-e2e-testing)
 - [14. Setting Up Test Database](#14-setting-up-test-database)
 - [15. Dotenv for Development and Testing](#15-dotenv-for-development-and-testing-)
-
+- [16. Database Tear Down](#16-database-tear-down)
+  - [16.1 Cleaning the Database](#161-cleaning-the-database)
+  - [16.2 Database Tear Down in E2E Tests](#162-database-tear-down-in-e2e-tests)
+  - [16.3 Create the test](#163-create-the-test)
 
 ### 1. Basic Understanding and Setup
 
@@ -1538,14 +1541,13 @@ DATABASE_URL="postgresql://postgres:123@localhost:5435/nest?schema=public"
 "test:e2e": "dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json"
 
 ```            
->- "pretest:e2e": "yarn db:test:restart", will restart the test database before running the test
+>- `pretest:e2e": "yarn db:test:restart`, will restart the test database before running the test
 >- Just add `dotenv -e .env.test --` before the jest command so that it will use the .env.test file for the test database 
->- It's mean that it will use the .env.test file for the test database and the .env file for the development database
+>- It means that it will use the .env.test file for the test database and the .env file for the development database
 
-- For checking the migration in the test database run the following command:
+- For checking the migration in the test database, run the following command:
 
 ```bash
-
 yarn test:e2e  
 
 docker ps   //two container should be running
@@ -1560,3 +1562,121 @@ npx dotenv -e .env.test prisma studio
 npx prisma studio 
 
 ```
+
+### 16. Database Tear Down
+
+#### 16.1 Cleaning the Database
+>  We need to clean the database after the test, but we don't want to restart docker-compose every time, because it takes time to restart the database
+
+- Open `prisma.service.ts` and modify it to look like this:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class PrismaService extends PrismaClient {
+  constructor(config: ConfigService) {
+    super({
+      datasources: {
+        db: {
+          url: config.get('DATABASE_URL'),
+        },
+      },
+    });
+  }
+
+  cleanDb() { //add the cleanDb function
+    return this.$transaction([this.bookmarks.deleteMany(), this.user.deleteMany()]);
+  }
+}
+```
+
+The `cleanDb` function is used to clean up the database. It's often used in testing (like before running end-to-end tests) to ensure a consistent starting state for each test run. Here's what it does:
+
+1. **Deletes all bookmarks**: `this.bookmarks.deleteMany()` deletes all records from the `bookmarks` table. This is done first because the `bookmarks` table likely has a foreign key constraint on the `user` table. If we tried to delete the users first, the database would throw an error because there would still be bookmarks in the database referencing those users.
+
+2. **Deletes all users**: `this.user.deleteMany()` deletes all records from the `user` table. This is done after deleting all bookmarks to avoid violating any foreign key constraints.
+
+Both deletion operations are wrapped in a transaction (`this.$transaction([])`) to ensure atomicity. This means if one operation fails, the other won't be executed, leaving your database in a consistent state.
+
+In summary, `cleanDb` is a utility function that helps maintain a clean, predictable state in your database, which is especially useful when running tests. It first deletes bookmarks and then users to respect the foreign key relationship from bookmarks to users.
+
+#### 16.2 Database Tear Down in E2E Tests
+
+- Open the `app.e2e-spec.ts` file and modify it to look like this:
+
+```ts
+import { AppModule } from '../src/app.module';
+import { Test } from '@nestjs/testing';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { PrismaService } from '../src/prisma/prisma.service';
+
+describe('App e2e', () => {
+  let app: INestApplication;
+  let prisma: PrismaService;//declare the prisma service
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+      }),
+    );
+    await app.init();
+    prisma = app.get(PrismaService); //get the prisma service from the app
+    await prisma.cleanDb();//clean the database before running the test
+  });
+
+  afterAll(() => { //if you close the app the datebase will be cleaned up
+    app.close();
+  });
+
+  it.todo('should pass');
+});
+
+```
+
+#### 16.3 Create the test
+
+- First declare this
+
+```ts
+  describe('Auth', () => {});
+  describe('User', () => {});
+  describe('Bookmarks', () => {});
+```
+- Now define this properly 
+
+```ts
+
+describe('Auth', () => {
+    describe('Signup', () => {
+        it.todo('should signup');
+    });
+    describe('Signin', () => {
+        it.todo('should signin');
+    });
+});
+describe('User', () => {
+    describe('Get me', () => {});
+    describe('Edit user', () => {});
+});
+describe('Bookmarks', () => {
+    describe('Create bookmarks', () => {});
+    describe('Get bookmarks', () => {});
+    describe('Get bookmark by id', () => {});
+    describe('Edit bookmark', () => {});
+    describe('Delete bookmark', () => {});
+});
+```
+- Now run the test
+
+```bash
+yarn test:e2e
+```
+> `it` is a function used to define a test in Jest. `it.todo` is a special version of `it` used when you want to plan a test but aren't ready to write it yet. So, `it.todo('should signup')` means you're planning to write a test for the signup functionality, but haven't written the test code yet. When Jest runs, it will remind you that this test still needs to be written.
+
