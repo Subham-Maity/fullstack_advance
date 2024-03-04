@@ -50,7 +50,7 @@
   - [12.2 Http Decorator](#122-http-decorator)
 - [13. E2E Testing](#13-e2e-testing)
 - [14. Setting Up Test Database](#14-setting-up-test-database)
-- 
+- [15. Dotenv for Development and Testing](#15-dotenv-for-development-and-testing-)
 
 
 ### 1. Basic Understanding and Setup
@@ -1475,14 +1475,88 @@ services:
 > Replicate the script
 
 ```json
-
+"prisma:dev:deploy": "prisma migrate deploy",
 "db:dev:rm": "docker compose rm dev-db -s -f -v",
 "db:dev:up": "docker compose up dev-db -d",
 "db:dev:restart": "yarn db:dev:rm && yarn db:dev:up && node -e \"setTimeout(() => console.log('Done waiting'), 1000)\" && yarn prisma:dev:deploy",
 "prisma:test:deploy": "dotenv -e .env.test -- prisma migrate deploy",
 "db:test:rm": "docker compose rm test-db -s -f -v",
 "db:test:up": "docker compose up test-db -d",
-"db:test:restart": "yarn db:test:rm && yarn db:test:up && sleep 1 && yarn prisma:test:deploy",
+"db:test:restart": "yarn db:test:rm && yarn db:test:up && node -e \"setTimeout(() => console.log('Done waiting'), 1000)\" && yarn prisma:test:deploy",
+```
+
+### 15. Dotenv for Development and Testing 
+
+
+- Installation
+
+```bash
+yarn add -D dotenv-cli
 ```
 
 
+- Make a file name `.env.test` and add the following:
+
+
+- Now modify the `package.json` file to look like this:
+
+```json
+"prisma:test:deploy": "prisma migrate deploy",
+
+[//]: # (change it to something like this)
+
+"prisma:test:deploy": "dotenv -e .env.test -- prisma migrate deploy",
+```
+
+> just add `dotenv -e .env.test --` before the prisma migrate deploy
+> It's mean that it will use the .env.test file for the test database and the .env file for the development database
+
+
+Now modify the .env.test file just copy the`DATABASE_URL` from the .env file and change the port(which is declared in the docker-compose.yml file)
+
+```bash
+DATABASE_URL="postgresql://postgres:123@localhost:5435/nest?schema=public"
+```
+
+
+- Now we add this 
+```json
+"prebuild": "rimraf dist",
+```
+
+> It will remove the dist folder before building the project 
+
+
+- Now change the `test:e2e` script in the `package.json` file to look like this:
+
+```json
+"test:e2e": "jest --watch --no-cache --config ./test/jest-e2e.json"
+
+[//]: # (change it to something like this)
+
+"pretest:e2e": "yarn db:test:restart",
+"test:e2e": "dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json"
+
+```            
+>- "pretest:e2e": "yarn db:test:restart", will restart the test database before running the test
+>- Just add `dotenv -e .env.test --` before the jest command so that it will use the .env.test file for the test database 
+>- It's mean that it will use the .env.test file for the test database and the .env file for the development database
+
+- For checking the migration in the test database run the following command:
+
+```bash
+
+yarn test:e2e  
+
+docker ps   //two container should be running
+
+//for check the prisma studio for the test database
+
+npx dotenv -e .env.test prisma studio
+
+
+//for check the prisma studio for the dev database
+
+npx prisma studio 
+
+```

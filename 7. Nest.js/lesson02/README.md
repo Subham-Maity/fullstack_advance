@@ -13,6 +13,17 @@ npx prisma studio
 yarn start:dev
 
 yarn test:e2e  
+
+docker ps   //two container should be running
+
+//for check the prisma studio for the test database
+
+npx dotenv -e .env.test prisma studio
+
+
+//for check the prisma studio for the dev database
+
+npx prisma studio 
 ```
 
 - Run `yarn db:dev:restart` to restart the database and migrate the database to our dev database.
