@@ -49,6 +49,8 @@
   - [12.1 Creating a GetUser Decorator](#121-creating-a-getuser-decorator)
   - [12.2 Http Decorator](#122-http-decorator)
 - [13. E2E Testing](#13-e2e-testing)
+- [14. Setting Up Test Database](#14-setting-up-test-database)
+- 
 
 
 ### 1. Basic Understanding and Setup
@@ -298,14 +300,6 @@ services:
     image: postgres:13
     ports:
       - 5434:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nest
-  test-db:
-    image: postgres:13
-    ports:
-      - 5435:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
@@ -1448,3 +1442,47 @@ describe('App e2e', () => {
 });
 
 ```
+
+### 14. Setting Up Test Database
+
+-  Open the docker-compose.yml file and modify it to look like this:
+
+> Just replicate the dev-db and change the port 
+
+```yml
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+  test-db:
+    image: postgres:13
+    ports:
+      - 5435:5432 #this should be different from the dev-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+```
+
+- Similarly modify the script for test database in the `package.json` file
+
+> Replicate the script
+
+```json
+
+"db:dev:rm": "docker compose rm dev-db -s -f -v",
+"db:dev:up": "docker compose up dev-db -d",
+"db:dev:restart": "yarn db:dev:rm && yarn db:dev:up && node -e \"setTimeout(() => console.log('Done waiting'), 1000)\" && yarn prisma:dev:deploy",
+"prisma:test:deploy": "dotenv -e .env.test -- prisma migrate deploy",
+"db:test:rm": "docker compose rm test-db -s -f -v",
+"db:test:up": "docker compose up test-db -d",
+"db:test:restart": "yarn db:test:rm && yarn db:test:up && sleep 1 && yarn prisma:test:deploy",
+```
+
+
