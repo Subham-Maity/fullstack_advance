@@ -1,5 +1,7 @@
 # V1.0.0 - Step by Step Guide
 
+> **Written By**: [ﾒΛM](https://github.com/Subham-Maity)
+
 ## TOC
 
 - [1. Basic Understanding and Setup](#1-basic-understanding-and-setup)
@@ -46,6 +48,7 @@
 - [12. Custom Param Decorator](#12-custom-param-decorator)
   - [12.1 Creating a GetUser Decorator](#121-creating-a-getuser-decorator)
   - [12.2 Http Decorator](#122-http-decorator)
+- [13. E2E Testing](#13-e2e-testing)
 
 
 ### 1. Basic Understanding and Setup
@@ -1382,5 +1385,66 @@ export class AuthController {
 // Or you can use it like this
 
 @HttpCode(HttpStatus.OK) //use the @HttpCode decorator
+
+```
+### 13. E2E Testing
+
+#### 13.1 Setting up Pactum JS
+> https://pactumjs.github.io/
+
+- Install the pactum js using yarn:
+
+```bash
+yarn add -D pactum
+```
+
+- Open the `test` folder and clear the app.e2e-spec.ts file and modify it to look like this:
+
+- Open your script in the `package.json` file and add the following:
+
+```json
+"test:e2e": "jest --watch --no-cache --config ./test/jest-e2e.json"
+```
+This script allows you to run your end-to-end tests using Jest. The --watch flag means Jest will watch your files for changes and rerun tests when necessary. The --no-cache flag disables caching, ensuring that your tests always run with the latest changes. The --config flag specifies the configuration file for Jest.
+```ts
+// Import necessary modules
+import { AppModule } from '../src/app.module';
+import { Test } from '@nestjs/testing';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+
+// Declare a test suite named 'App e2e'
+describe('App e2e', () => {
+    // Declare a variable to hold our app instance
+    let app: INestApplication;
+
+    // Before all tests, create and initialize the app
+    beforeAll(async () => {
+        // Create a module for testing
+        const moduleRef = await Test.createTestingModule({
+            imports: [AppModule],
+        }).compile();//compile the module 
+
+        // Create an instance of the app
+        app = moduleRef.createNestApplication();
+
+        // Apply a global validation pipe
+        app.useGlobalPipes(
+            new ValidationPipe({
+                whitelist: true,
+            }),
+        );
+
+        // Initialize the app
+        await app.init();
+    });
+
+    // After all tests, close the app
+    afterAll(() => {
+        app.close();
+    });
+
+    // Placeholder for a test case
+    it.todo('should pass');
+});
 
 ```
