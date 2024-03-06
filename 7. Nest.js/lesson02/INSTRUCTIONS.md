@@ -61,6 +61,13 @@
   - [17.3 Error handling](#173--error-handling)
   - [17.4 Multiple Error handling](#174-multiple-error-handling)
   - [17.5 Storing the token](#175-storing-the-token)
+- [18. User E2E Testing with Pactum](#18-user-e2e-testing-with-pactum)
+  - [18.1 Get User with Bearer Token](#181-get-user-with-bearer-token)
+  - [18.2 Edit User with Bearer Token](#182-edit-user-with-bearer-token)
+    - [18.2.1 DTO for Edit User](#1821-dto-for-edit-user)
+    - [18.2.2 Service for Edit User](#1822-service-for-edit-user)
+    - [18.2.3 Controller for Edit User](#1823-controller-for-edit-user)
+    - [18.2.4 Pactum Test for Edit User](#1824-pactum-test-for-edit-user)
   
 
 ### 1. Basic Understanding and Setup
@@ -1955,4 +1962,141 @@ describe('Auth', () => {
       });
     });
   });
+```
+
+
+### 18. User E2E Testing with Pactum
+
+#### 18.1 Get User with Bearer Token
+
+```ts
+describe('User', () => {
+    describe('Get me', () => {
+      it('should get current user', () => {
+        return pactum
+          .spec()
+          .get('/user/me')
+          .withHeaders({//send the token in the header 
+            Authorization: 'Bearer $S{userAt}',//herer userAt is the variable name and access_token is the key  
+          })
+          .expectStatus(200);
+      });
+    });
+    describe('Edit user', () => {});
+  });
+```
+
+
+#### 18.2 Edit User with Bearer Token
+
+##### 18.2.1 DTO for Edit User
+- First write the controller and service for the edit user
+
+> - nest g service user --no-spec
+
+`user dto edit`
+
+> dto use for the validation of the data
+```ts
+import { IsEmail, IsOptional, IsString } from 'class-validator';
+export class EditUserDto {
+  @IsEmail() //the email should be a valid email
+  @IsOptional()//optional
+  email?: string;
+
+  @IsString()//the first name should be a string
+  @IsOptional()//optional
+  firstName?: string;
+
+  @IsString()//the last name should be a string
+  @IsOptional()//optional   
+  lastName?: string;
+}
+
+```
+
+##### 18.2.2 Service for Edit User
+`user service`
+
+> service use for the business logic
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { EditUserDto } from './dto';
+
+@Injectable()
+export class UserService {
+    constructor(private prisma: PrismaService) {} //inject the prisma service
+
+    async editUser(userId: number, dto: EditUserDto) { //It will take the user id and the dto 
+        
+        //update the user by the user id 
+        const user = await this.prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                ...dto,
+            },
+        });
+
+        delete user.hash;//delete the hash
+
+        return user;
+    }
+}
+```
+##### 18.2.3 Controller for Edit User
+`user.controller.ts`
+
+```ts
+import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../auth/guard';
+import { GetUser } from '../auth/decorator';
+import { User } from '@prisma/client';
+import { EditUserDto } from './dto';
+import { UserService } from './user.service';
+
+@UseGuards(JwtGuard)
+@Controller('user')
+export class UserController {
+    constructor(private userService: UserService) {}// UserService from the service
+    @Get('me')
+    getMe(@GetUser() user: User) {
+        return user;
+    }
+
+    @Patch() //use the patch method 
+    editUser(@GetUser('id') userId: number, @Body() dto: EditUserDto) { // use the GetUser decorator to get the user id and the dto  
+        return this.userService.editUser(userId, dto); //call the editUser function from the service 
+    }
+}
+
+```
+
+##### 18.2.4 Pactum Test for Edit User
+
+- Now write the test for the edit user
+
+```ts
+describe('Edit user', () => {
+    it('should edit user', () => {
+        const dto: EditUserDto = {
+            firstName: 'Subham',
+            email: 'subham1@gmail.com',
+            lastName: 'Maity'
+        };
+        return pactum
+            .spec()
+            .patch('/users')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .withBody(dto)
+            .expectStatus(200)
+            .expectBodyContains(dto.firstName)
+            .expectBodyContains(dto.email);;
+    });
+});
 ```
