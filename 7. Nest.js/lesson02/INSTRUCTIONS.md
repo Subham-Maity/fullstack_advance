@@ -68,7 +68,9 @@
     - [18.2.2 Service for Edit User](#1822-service-for-edit-user)
     - [18.2.3 Controller for Edit User](#1823-controller-for-edit-user)
     - [18.2.4 Pactum Test for Edit User](#1824-pactum-test-for-edit-user)
-  
+> **⭐ Let's Revise the concepts and implement bookmarks [CRUD]**
+- [19. Bookmarks Crud with Testing E2E](#19-bookmarks-crud-with-testing-e2e)
+
 
 ### 1. Basic Understanding and Setup
 
@@ -122,16 +124,16 @@ This command will create a new folder called `user` and a new file called `user.
 nest g module bookmarks
 ```
 
-6. **Final Structure**: After creating the `auth`, `user`, and `bookmarks` modules, your `app.module.ts` file should look like this:
+6. **Final Structure**: After creating the `auth`, `user`, and `bookmark` modules, your `app.module.ts` file should look like this:
 
 ```ts
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { BookmarksModule } from './bookmarks/bookmarks.module';
+import { BookmarkModule } from './bookmark/bookmark.module';
 
 @Module({
-  imports: [AuthModule, UserModule, BookmarksModule],
+  imports: [AuthModule, UserModule, BookmarkModule],
 })
 export class AppModule {}
 ```
@@ -1602,14 +1604,14 @@ export class PrismaService extends PrismaClient {
   }
 
   cleanDb() { //add the cleanDb function
-    return this.$transaction([this.bookmarks.deleteMany(), this.user.deleteMany()]);
+    return this.$transaction([this.bookmark.deleteMany(), this.user.deleteMany()]);
   }
 }
 ```
 
 The `cleanDb` function is used to clean up the database. It's often used in testing (like before running end-to-end tests) to ensure a consistent starting state for each test run. Here's what it does:
 
-1. **Deletes all bookmarks**: `this.bookmarks.deleteMany()` deletes all records from the `bookmarks` table. This is done first because the `bookmarks` table likely has a foreign key constraint on the `user` table. If we tried to delete the users first, the database would throw an error because there would still be bookmarks in the database referencing those users.
+1. **Deletes all bookmark**: `this.bookmark.deleteMany()` deletes all records from the `bookmarks` table. This is done first because the `bookmarks` table likely has a foreign key constraint on the `user` table. If we tried to delete the users first, the database would throw an error because there would still be bookmarks in the database referencing those users.
 
 2. **Deletes all users**: `this.user.deleteMany()` deletes all records from the `user` table. This is done after deleting all bookmarks to avoid violating any foreign key constraints.
 
@@ -2099,4 +2101,641 @@ describe('Edit user', () => {
             .expectBodyContains(dto.email);;
     });
 });
+```
+
+### 19. Bookmarks Crud with Testing E2E
+
+> ✅ **Step 0:** Schema Define
+
+- Open prisma folder and modify the schema.prisma file to look like this:
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash  String
+
+  firstName String?
+  lastName  String?
+
+  bookmarks Bookmark[]
+
+  @@map("users")
+}
+//Bookmark model
+model Bookmark {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+  link        String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
+}
+
+```
+
+
+> ✅ **Step 1:** Installation
+
+First, we need to generate the service and controller for bookmarks. Run the following commands:
+
+```sh
+nest g service bookmark --no-spec
+nest g controller bookmark --no-spec
+```
+
+> ✅ **Step 2:** Controller Structure
+
+Next, we will set up the structure of our controller. Here are the steps:
+
+1. Declare the `UseGuards` for authentication.
+2. The constructor should be called inside `BookmarkController` with `private bookmarksService: BookmarksService`.
+3. `BookmarksService` should have `private prisma: PrismaService` inside it.
+4. Declare all the routes in the `bookmark.controller.ts` file.
+
+Here's an example of what your `bookmark.controller.ts` file might look like:
+
+```ts
+import { Controller, Delete, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../auth/guard';
+import { BookmarksService } from './bookmark.service';
+
+@UseGuards(JwtGuard)
+@Controller('bookmarks')
+export class BookmarkController {
+    constructor(private bookmarkService: BookmarkService) {}
+    
+    @Get()
+    getBookmarks() {}
+    
+    @Get()
+    getBookmarkById() {}
+    
+    @Post()
+    createBookmark() {}
+    
+    @Patch()
+    editBookmarkById() {}
+    
+    @Delete()
+    deleteBookmarkById() {}
+}
+```
+
+
+> ✅ **Step 3:** - Decorators for the Bookmarks
+
+- use `Param decorator` for those routes which need the id of the bookmark 
+
+_info: we already created a get-user.decorator.ts file in the auth folder, so we can use it here_
+
+```ts
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const GetUser = createParamDecorator((data: string | undefined, ctx: ExecutionContext) => {
+  const request: Express.Request = ctx.switchToHttp().getRequest();
+  if (data) {
+    return request.user[data];
+  }
+  return request.user;
+});
+```
+
+```ts
+export class BookmarkController {
+    constructor(private bookmarkService: BookmarkService) {}
+    @Get()
+    getBookmarks(@GetUser('id') userId: number) { //a.
+        console.log(userId);
+    }
+    @Get(':id') 
+    getBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {//b.
+        console.log(userId, bookmarkId);
+    }
+    @Post()
+    createBookmark(@GetUser('id') userId: number, @Body() dto: CreateBookmarkDto) {//c.
+        console.log(userId, dto);
+    }
+    @Patch(':id')
+    editBookmarkById(//d.
+        @GetUser('id') userId: number,
+        @Param('id', ParseIntPipe) bookmarkId: number,
+        @Body() dto: EditBookmarkDto,
+    ) {
+        console.log(userId, bookmarkId, dto);
+    }
+    @HttpCode(HttpStatus.NO_CONTENT)//e.
+    @Delete(':id')
+    deleteBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {
+        console.log(userId, bookmarkId);
+    }
+}
+```
+- **a.** `getBookmarks(@GetUser('id') userId: number)`: This route fetches all bookmark for a user. The `@GetUser('id')` decorator retrieves the user's ID.
+
+
+
+- **b.** `getBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number)`: This route fetches a specific bookmark by its ID for a user. The `@GetUser('id')` decorator retrieves the user's ID, and `@Param('id', ParseIntPipe)` retrieves and parses the bookmark ID from the URL.
+
+
+
+- **c.** `createBookmark(@GetUser('id') userId: number, @Body() dto: CreateBookmarkDto)`: This route creates a new bookmark for a user. The `@GetUser('id')` decorator retrieves the user's ID, and `@Body()` retrieves the request body data with validation applied.
+
+
+
+- **d.** `editBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number, @Body() dto: EditBookmarkDto)`: This route edits a specific bookmark by its ID for a user. The `@GetUser('id')` decorator retrieves the user's ID, `@Param('id', ParseIntPipe)` retrieves and parses the bookmark ID from the URL, and `@Body()` retrieves the request body data with validation applied.
+
+
+
+- **e.** `deleteBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number)`: This route deletes a specific bookmark by its ID for a user. The `@GetUser('id')` decorator retrieves the user's ID, and `@Param('id', ParseIntPipe)` retrieves and parses the bookmark ID from the URL. The `@HttpCode(HttpStatus.NO_CONTENT)` decorator sets the HTTP status code to 204 (No Content) when the operation is successful.
+
+> ✅ **Step 4:** - DTO for Bookmarks
+
+- Make a folder named `dto` inside the `bookmarks` folder and then make a file called `create-bookmark.dto.ts`,`edit-bookmark.dto.ts` and `index.ts` inside the `dto` folder
+
+`create-bookmark.dto.ts`
+```ts
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
+export class CreateBookmarkDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  link: string;
+}
+```
+
+`edit-bookmark.dto.ts`
+```ts
+import { IsOptional, IsString } from 'class-validator';
+
+export class EditBookmarkDto {
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsString()
+  @IsOptional()
+  link?: string;
+}
+```
+
+`index.ts`
+```ts
+export * from './create-bookmark.dto';
+export * from './edit-bookmark.dto';
+```
+
+> ✅ **Step 5:** - Service Structure for Bookmarks
+
+- Construct the `BookmarksService` with `private prisma: PrismaService` inside it.
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateBookmarkDto, EditBookmarkDto } from './dto';
+
+@Injectable()
+export class BookmarkService {
+    constructor(private prisma: PrismaService) {}
+
+    getBookmarks(userId: number) {
+        console.log(userId);
+    }
+
+    getBookmarkById(userId: number, bookmarkId: number) {
+        console.log(userId, bookmarkId);
+    }
+
+    createBookmark(userId: number, dto: CreateBookmarkDto) {
+        console.log(userId, dto);
+    }
+
+    editBookmarkById(userId: number, bookmarkId: number, dto: EditBookmarkDto) {
+        console.log(userId, bookmarkId, dto);
+    }
+
+    deleteBookmarkById(userId: number, bookmarkId: number) {
+        console.log(userId, bookmarkId);
+    }
+}
+
+
+```
+> ✅ **Step 6:** - Bookmarks Service in the Controller
+
+
+- Inject the `BookmarksService` inside the `BookmarkController` and call the service methods inside the routes.
+
+```ts
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
+
+import { JwtGuard } from '../auth/guard';
+
+import { GetUser } from '../auth/decorator';
+
+import { CreateBookmarkDto, EditBookmarkDto } from './dto';
+import { BookmarkService } from './bookmark.service';
+
+@UseGuards(JwtGuard)
+@Controller('bookmarks')
+export class BookmarkController {
+    constructor(private bookmarksService: BookmarkService) {}
+
+    @Get()
+    getBookmarks(@GetUser('id') userId: number) {
+        return this.bookmarksService.getBookmarks(userId);
+    }
+
+    @Get(':id')
+    getBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {
+        return this.bookmarksService.getBookmarkById(userId, bookmarkId);
+    }
+
+    @Post()
+    createBookmark(@GetUser('id') userId: number, @Body() dto: CreateBookmarkDto) {
+        return this.bookmarksService.createBookmark(userId, dto);
+    }
+
+    @Patch(':id')
+    editBookmarkById(
+        @GetUser('id') userId: number,
+
+        @Param('id', ParseIntPipe) bookmarkId: number,
+
+        @Body() dto: EditBookmarkDto,
+    ) {
+        return this.bookmarksService.editBookmarkById(userId, bookmarkId, dto);
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete(':id')
+    deleteBookmarkById(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {
+        return this.bookmarksService.deleteBookmarkById(userId, bookmarkId);
+    }
+}
+
+```
+
+
+> ✅ **Step 7:** - E2E Testing With Business Logic (Service)
+
+
+- For testing `yarn test:e2e`
+
+
+1. ⇨ **Get Empty Bookmarks**
+
+`app.e2e-spec.ts`
+```ts
+
+describe('Get empty bookmarks', () => {
+    it('should get empty bookmarks', () => {
+        return pactum
+            .spec()
+            .get('/bookmarks')
+            .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+            .expectStatus(200)
+            .expectBody([]); //body should be an array and length should be 0
+    });
+});
+```
+
+`bookmark.service.ts`
+```ts
+
+@Injectable()
+export class BookmarksService {
+  constructor(private prisma: PrismaService) {}
+
+  getBookmarks(userId: number) {
+    return this.prisma.bookmark.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+}
+```
+
+2. ⇨ **Create Bookmarks**
+
+`app.e2e-spec.ts`
+```ts
+describe('Create bookmarks', () => {
+    const dto: CreateBookmarkDto = {
+        title: 'NestJS',
+        link: 'https://nestjs.com/',
+    };
+    it('should create bookmark', () => {
+        return pactum
+            .spec()
+            .post('/bookmarks')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .withBody(dto)
+            .expectStatus(201)
+            .stores('bookmarkId', 'id')//store the bookmark id in the variable bookmarkId 
+            .expectBodyContains(dto.title)
+            .expectBodyContains(dto.link)
+            
+    });
+});
+```
+
+`bookmark.service.ts`
+```ts
+@Injectable()
+export class BookmarksService {
+  constructor(private prisma: PrismaService) {}
+
+    createBookmark(userId: number, dto: CreateBookmarkDto) {
+        return this.prisma.bookmark.create({
+            data: {
+                userId,
+                ...dto,
+            },
+        });
+    }
+}
+```
+3. ⇨ **Get Bookmarks**
+
+> First it expects nothing in the get request, and then it creates a bookmark, and then it expects the length of the array to be 1
+
+`app.e2e-spec.ts`
+```ts
+   describe('Get bookmarks', () => {
+    it('should get bookmarks', () => {
+        return pactum
+            .spec()
+            .get('/bookmarks')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .expectStatus(200)
+            .expectJsonLength(1);//body should be an array and length should be 1
+    });
+});
+```
+
+
+4. ⇨ **Get Bookmark by ID**
+
+> `.stores('bookmarkId', 'id')` when we create the bookmark we store the id in the variable bookmarkId, and then we use it here
+`app.e2e-spec.ts`
+```ts
+
+describe('Get bookmark by id', () => {
+    it('should get bookmark by id', () => {
+        return pactum
+            .spec()
+            .get('/bookmarks/{id}')
+            .withPathParams('id', '$S{bookmarkId}')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .expectStatus(200)
+            .expectBodyContains('$S{bookmarkId}');//expect the body to contain the bookmark id 
+    });
+});
+```
+
+`bookmark.service.ts`
+```ts
+@Injectable()
+export class BookmarksService {
+    constructor(private prisma: PrismaService) {}
+
+    getBookmarkById(userId: number, bookmarkId: number) {
+        return this.prisma.bookmark.findFirst({
+            where: {
+                id: bookmarkId,
+                userId,
+            },
+        });
+    }
+}
+```
+
+5. ⇨ **Edit Bookmark by ID**
+
+`app.e2e-spec.ts`
+```ts
+ describe('Edit bookmark by id', () => {
+    const dto: EditBookmarkDto = {
+        title: 'Kubernetes Course - Full Beginners Tutorial (Containerize Your Apps!)',
+        description:
+            'Learn how to use Kubernetes in this complete course. Kubernetes makes it possible to containerize applications and simplifies app deployment to production.',
+    };
+    it('should edit bookmark', () => {
+        return pactum
+            .spec()
+            .patch('/bookmarks/{id}')
+            .withPathParams('id', '$S{bookmarkId}')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .withBody(dto)
+            .expectStatus(200)
+            .expectBodyContains(dto.title)
+            .expectBodyContains(dto.description);
+    });
+});
+```
+
+`bookmark.service.ts`
+```ts
+async editBookmarkById(userId: number, bookmarkId: number, dto: EditBookmarkDto) {
+    // get the bookmark by id
+    const bookmark = await this.prisma.bookmark.findUnique({
+        where: {
+            id: bookmarkId,
+        },
+    });
+
+    // check if user owns the bookmark
+    if (!bookmark || bookmark.userId !== userId)
+        throw new ForbiddenException('Access to resources denied');
+
+    return this.prisma.bookmark.update({
+        where: {
+            id: bookmarkId,
+        },
+        data: {
+            ...dto,
+        },
+    });
+}
+```
+
+
+6. ⇨ **Delete Bookmark by ID**
+
+> First it expects the length of the array to be 1, then it deletes the bookmark, and then it expects the length of the array to be 0
+`app.e2e-spec.ts`
+
+```ts
+describe('Delete bookmark by id', () => {
+    it('should delete bookmark', () => {
+        return pactum
+            .spec()
+            .delete('/bookmarks/{id}')
+            .withPathParams('id', '$S{bookmarkId}')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .expectStatus(204);
+    });
+
+    it('should get empty bookmarks', () => {
+        return pactum
+            .spec()
+            .get('/bookmarks')
+            .withHeaders({
+                Authorization: 'Bearer $S{userAt}',
+            })
+            .expectStatus(200)
+            .expectJsonLength(0);
+    });
+});
+```
+
+`bookmark.service.ts`
+```ts
+async deleteBookmarkById(userId: number, bookmarkId: number) {
+    const bookmark = await this.prisma.bookmark.findUnique({
+        where: {
+            id: bookmarkId,
+        },
+    });
+
+    // check if user owns the bookmark
+    if (!bookmark || bookmark.userId !== userId)
+        throw new ForbiddenException('Access to resources denied');
+
+    await this.prisma.bookmark.delete({
+        where: {
+            id: bookmarkId,
+        },
+    });
+}
+```
+
+
+It will give you this output:
+```bash
+PS > yarn test:e2e  
+yarn run v1.22.19
+$ docker compose rm test-db -s -f -v
+[+] Stopping 1/1
+ ✔ Container lesson02-test-db-1  Stopped                                                                                                                                                                                                                       0.3s 
+Going to remove lesson02-test-db-1
+[+] Removing 1/0
+ ✔ Container lesson02-test-db-1  Removed                                                                                                                                                                                                                       0.0s 
+$ docker compose up test-db -d
+[+] Running 1/1
+ ✔ Container lesson02-test-db-1  Started                                                                                                                                                                                                                       0.0s 
+Done waiting
+$ dotenv -e .env.test -- prisma migrate deploy
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "nest", schema "public" at "localhost:5435"
+
+1 migration found in prisma/migrations
+
+Applying migration `20240307030332_init`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20240307030332_init/
+    └─ migration.sql
+      
+All migrations have been successfully applied.
+$ dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json
+ PASS  test/app.e2e-spec.ts (5.369 s)
+  App e2e
+    Auth
+      Signup
+        √ should throw if email empty (56 ms)
+        √ should throw if password empty (5 ms)
+        √ should throw if no body provided (4 ms)
+        √ should signup (80 ms)
+      Signin
+        √ should throw if email empty (3 ms)
+        √ should throw if password empty (2 ms)
+        √ should throw if no body provided (2 ms)
+        √ should signin (66 ms)
+    User
+      Get me
+        √ should get current user (8 ms)
+      Edit user
+        √ should edit user (8 ms)
+    Bookmarks
+      Get empty bookmarks
+        √ should get bookmarks (6 ms)
+      Create bookmark
+        √ should create bookmark (8 ms)
+      Get bookmarks
+        √ should get bookmarks (5 ms)
+      Get bookmark by id
+        √ should get bookmark by id (5 ms)
+      Edit bookmark by id
+        √ should edit bookmark (10 ms)
+      Delete bookmark by id
+        √ should delete bookmark (9 ms)
+        √ should get empty bookmarks (5 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        5.8 s
+Ran all test suites related to changed files.
+
 ```
