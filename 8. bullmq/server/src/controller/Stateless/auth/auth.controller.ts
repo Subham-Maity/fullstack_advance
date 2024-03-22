@@ -18,6 +18,7 @@ import {
 import { saveToken } from "../../../utils/Stateless/token/tokenSave/saveToken";
 import { CookieOptions } from "express";
 import AppError from "../../../middleware/error/appError";
+import MailController from "../../../utils/Stateless/mailer/Gmail-OAuth2/mailController";
 
 /** REGISTER USER */
 
@@ -34,58 +35,67 @@ import AppError from "../../../middleware/error/appError";
  }
  */
 export const register = catchAsyncError(
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
-    // Destructure the request body to get the username, password, profile, and email.
-    const { username, password, profile, email } = req.body;
-    // Check if the password is provided. If not, return an error message.
-    if (!password) {
-      return next(new AppError("Password is required", 400));
-    }
-
-    try {
-      //this function is defined in the model file
-      //it checks if the user already exists in the database
-      const userExists = await userExistsByUsername(username);
-      // If a user with the provided username exists, return an error message.
-      if (userExists) {
-        return next(new AppError("Username already exists", 400));
+    async (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction,
+    ) => {
+      // Destructure the request body to get the username, password, profile, and email.
+      const { username, password, profile, email } = req.body;
+      // Check if the password is provided. If not, return an error message.
+      if (!password) {
+        return next(new AppError("Password is required", 400));
       }
 
-      //this function is defined in the model file
-      //it checks if the user already exists in the database
-      const emailExists = await userExistsByEmail(email);
-      // If a user with the provided email exists, return an error message.
-      if (emailExists) {
-        return next(new AppError("Email already exists", 400));
-      }
-      //this function is defined in the model file
-      const hashedPassword = await bcryptHash(password, CUSTOM_SALT_ROUNDS);
+      try {
+        //this function is defined in the model file
+        //it checks if the user already exists in the database
+        const userExists = await userExistsByUsername(username);
+        // If a user with the provided username exists, return an error message.
+        if (userExists) {
+          return next(new AppError("Username already exists", 400));
+        }
 
-      const user = await saveUser({
-        username,
-        password: hashedPassword,
-        profile: profile || "", //if a profile is not provided, it will be set to an empty string
-        email,
-      });
-      return res.status(201).send({
-        message: "User created successfully",
-        user,
-      });
-    } catch (error: any) {
-      // Specific error handling for different cases
-      if (error.code === 11000) {
-        // Handle a specific error case differently
-        return next(new AppError("Unable to register user", 500));
-      } else {
-        // General error handling
-        return next(new AppError("Unable to register user", 500));
+        //this function is defined in the model file
+        //it checks if the user already exists in the database
+        const emailExists = await userExistsByEmail(email);
+        // If a user with the provided email exists, return an error message.
+        if (emailExists) {
+          return next(new AppError("Email already exists", 400));
+        }
+        //this function is defined in the model file
+        const hashedPassword = await bcryptHash(password, CUSTOM_SALT_ROUNDS);
+
+        const user = await saveUser({
+          username,
+          password: hashedPassword,
+          profile: profile || "", //if a profile is not provided, it will be set to an empty string
+          email,
+        });
+
+        const emailBody = {
+          body: {
+            name: username,
+            intro: "Welcome to our community!",
+          },
+        };
+        await MailController.sendMail(email, "Welcome!", emailBody);
+
+        return res.status(201).send({
+          message: "User created successfully",
+          user,
+        });
+      } catch (error: any) {
+        // Specific error handling for different cases
+        if (error.code === 11000) {
+          // Handle a specific error case differently
+          return next(new AppError("Unable to register user", 500));
+        } else {
+          // General error handling
+          return next(new AppError("Unable to register user", 500));
+        }
       }
-    }
-  },
+    },
 );
 
 /** LOGIN USER */
