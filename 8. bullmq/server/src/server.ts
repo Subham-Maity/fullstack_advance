@@ -4,7 +4,7 @@ import http from "http";
 import app from "./app";
 import swaggerDocs from "./utils/documentation/swagger";
 import { port } from "../config/default";
-
+import "./../src/utils/Stateless/mailer/Gmail-OAuth2/mailController"; // import the MailController
 const server = http.createServer(app);
 (async () => {
   try {
